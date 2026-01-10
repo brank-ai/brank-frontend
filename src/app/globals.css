@@ -7,7 +7,8 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
-  --accent-teal: #4dd0e1;
+  --accent-teal: #06B6D4;
+  --accent-cyan: #06B6D4;
   --card-bg: #1a1a1a;
   --header-bg: #000000;
 }

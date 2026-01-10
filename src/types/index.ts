@@ -37,7 +37,7 @@ export interface BaseComponentProps {
   children?: React.ReactNode;
 }
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'white';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends BaseComponentProps {

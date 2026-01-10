@@ -16,6 +16,8 @@ const config: Config = {
         'header-bg': "var(--header-bg)",
       },
       fontFamily: {
+        'serif': ['Georgia', 'Times New Roman', 'serif'],
+        'sans': ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         'mackinac': ['P22 Mackinac Pro', 'serif'],
         'roboto': ['Roboto Flex', 'sans-serif'],
       },
