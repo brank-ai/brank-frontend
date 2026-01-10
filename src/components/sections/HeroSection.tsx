@@ -17,7 +17,7 @@ export default function HeroSection() {
   const [isPaused, setIsPaused] = useState(false);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <section className="relative h-[calc(100vh-12rem)] w-full overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -65,7 +65,7 @@ export default function HeroSection() {
 
       {/* Brand Scroll Marquee */}
       <div
-        className="absolute bottom-72 left-0 right-0 z-20 py-4 bg-black/50 overflow-hidden"
+        className="absolute bottom-0 left-0 right-0 z-20 py-4 bg-black/50"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => {
           setIsPaused(false);
@@ -86,14 +86,14 @@ export default function HeroSection() {
             >
               {/* Tooltip */}
               {hoveredBrand === `${brand.name}-${index}` && (
-                <div className="absolute -top-28 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-xl rounded-xl px-5 py-4 border border-white/30 min-w-[160px] animate-fadeIn z-30 shadow-lg shadow-black/20">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-white/10 backdrop-blur-xl rounded-xl px-5 py-4 border border-white/30 min-w-[160px] animate-fadeIn z-50 shadow-lg shadow-black/20">
                   <div className="text-white text-base font-medium mb-3 text-center">{brand.name}</div>
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between gap-4 text-sm">
                       <span className="text-white/60">Mentions</span>
                       <span className="text-white font-semibold">{brand.mentions}%</span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between gap-4 text-sm">
                       <span className="text-white/60">Citations</span>
                       <span className="text-white font-semibold">{brand.citations}%</span>
                     </div>

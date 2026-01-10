@@ -1,7 +1,6 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/sections/HeroSection';
-import BrandMetricsSection from '@/components/sections/BrandMetricsSection';
 import VisibilitySection from '@/components/sections/VisibilitySection';
 import IconsSection from '@/components/sections/IconsSection';
 import AIExposureSection from '@/components/sections/AIExposureSection';
@@ -12,7 +11,6 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
-        <BrandMetricsSection />
         <VisibilitySection />
         <IconsSection />
         <AIExposureSection />
