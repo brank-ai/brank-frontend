@@ -86,20 +86,28 @@ export default function HeroSection() {
             >
               {/* Tooltip */}
               {hoveredBrand === `${brand.name}-${index}` && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-white/10 backdrop-blur-xl rounded-xl px-5 py-4 border border-white/30 min-w-[160px] animate-fadeIn z-50 shadow-lg shadow-black/20">
-                  <div className="text-white text-base font-medium mb-3 text-center">{brand.name}</div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between gap-4 text-sm">
-                      <span className="text-white/60">Mentions</span>
-                      <span className="text-white font-semibold">{brand.mentions}%</span>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-6 animate-fadeIn z-50">
+                  <div className="relative bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-2xl px-8 py-6 border border-white/20 min-w-[220px] shadow-2xl shadow-black/40">
+                    {/* Glow effect */}
+                    <div className="absolute inset-0 rounded-2xl bg-teal-400/10 blur-xl -z-10" />
+
+                    <div className="text-white text-xl font-semibold mb-4 text-center tracking-wide">{brand.name}</div>
+
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between gap-8">
+                        <span className="text-white/50 text-base">Mentions</span>
+                        <span className="text-teal-400 text-xl font-bold">{brand.mentions}%</span>
+                      </div>
+                      <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                      <div className="flex items-center justify-between gap-8">
+                        <span className="text-white/50 text-base">Citations</span>
+                        <span className="text-teal-400 text-xl font-bold">{brand.citations}%</span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between gap-4 text-sm">
-                      <span className="text-white/60">Citations</span>
-                      <span className="text-white font-semibold">{brand.citations}%</span>
-                    </div>
+
+                    {/* Tooltip arrow */}
+                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[12px] border-transparent border-t-white/20" />
                   </div>
-                  {/* Tooltip arrow */}
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-white/10" />
                 </div>
               )}
 
