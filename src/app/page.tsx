@@ -2,7 +2,6 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/sections/HeroSection';
 import VisibilitySection from '@/components/sections/VisibilitySection';
-import IconsSection from '@/components/sections/IconsSection';
 import AIExposureSection from '@/components/sections/AIExposureSection';
 
 export default function Home() {
@@ -12,7 +11,6 @@ export default function Home() {
       <main>
         <HeroSection />
         <VisibilitySection />
-        <IconsSection />
         <AIExposureSection />
       </main>
       <Footer />

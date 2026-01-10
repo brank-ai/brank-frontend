@@ -46,6 +46,15 @@ body {
   }
 }
 
+@keyframes loader {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
@@ -57,4 +66,8 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out forwards;
+}
+
+.animate-loader {
+  animation: loader 5s linear;
 }
