@@ -120,10 +120,10 @@ export default function VisibilitySection() {
           {/* Metric Text */}
           <div className="text-left flex-1">
             <h3 className="text-white text-3xl font-light mb-4 transition-opacity duration-300">
-              {metrics[activeMetric].name}
+              {metrics[activeMetric]?.name}
             </h3>
             <p className="text-gray-400 text-base max-w-md transition-opacity duration-300">
-              {metrics[activeMetric].description}
+              {metrics[activeMetric]?.description}
             </p>
           </div>
         </div>
