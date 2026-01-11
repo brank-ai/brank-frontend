@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -15,6 +15,15 @@ function AnalyticsContent() {
   const searchParams = useSearchParams();
   const brandName = searchParams.get('brand') || 'Unknown Brand';
   const [isRankingProModalOpen, setIsRankingProModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const shouldShowRankingProButton = (llmName: string) => {
     return llmName === 'Grok' || llmName === 'Perplexity';
@@ -25,7 +34,7 @@ function AnalyticsContent() {
       <Header />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12 relative">
         {/* Page Header */}
         <div className="mb-12">
           <h1 className="text-white text-4xl md:text-5xl font-light mb-4">
@@ -39,45 +48,52 @@ function AnalyticsContent() {
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-          <MetricCard
-            label="Total Mentions"
-            value={mockAnalyticsData.metrics.totalMentions}
-            info="Total number of mentions across all LLMs"
-          />
-          <MetricCard
-            label="Total Citations"
-            value={mockAnalyticsData.metrics.totalCitations}
-            info="Total number of citations from sources"
-          />
-          <MetricCard
-            label="Avg Sentiment"
-            value={mockAnalyticsData.metrics.avgSentiment}
-            info="Average sentiment score across platforms"
-          />
-          <MetricCard
-            label="Avg Ranking"
-            value={mockAnalyticsData.metrics.avgRanking}
-            info="Average ranking position"
-          />
+          {[
+            { label: "Total Mentions", value: mockAnalyticsData.metrics.totalMentions, info: "Total number of mentions across all LLMs" },
+            { label: "Total Citations", value: mockAnalyticsData.metrics.totalCitations, info: "Total number of citations from sources" },
+            { label: "Avg Sentiment", value: mockAnalyticsData.metrics.avgSentiment, info: "Average sentiment score across platforms" },
+            { label: "Avg Ranking", value: mockAnalyticsData.metrics.avgRanking, info: "Average ranking position" }
+          ].map((metric, index) => (
+            <div key={index} className="relative">
+              <div className={isLoading ? 'blur-sm' : ''}>
+                <MetricCard
+                  label={metric.label}
+                  value={metric.value}
+                  info={metric.info}
+                />
+              </div>
+              {isLoading && (
+                <div className="absolute inset-0 bg-[#2F2F2F33] border border-gray-800 animate-shimmer" />
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Comparison Sections - Stacked Vertically */}
         <div className="space-y-8 mb-16">
-          <ComparisonCard
-            title="Mentions Rate"
-            comparisons={mockAnalyticsData.mentionsRate.comparisons}
-            insight={mockAnalyticsData.mentionsRate.insight}
-          />
-          <ComparisonCard
-            title="Sentiment Score"
-            comparisons={mockAnalyticsData.sentimentScore.comparisons}
-            insight={mockAnalyticsData.sentimentScore.insight}
-          />
+          {[
+            { title: "Mentions Rate", comparisons: mockAnalyticsData.mentionsRate.comparisons, insight: mockAnalyticsData.mentionsRate.insight },
+            { title: "Sentiment Score", comparisons: mockAnalyticsData.sentimentScore.comparisons, insight: mockAnalyticsData.sentimentScore.insight }
+          ].map((card, index) => (
+            <div key={index} className="relative">
+              <div className={isLoading ? 'blur-sm' : ''}>
+                <ComparisonCard
+                  title={card.title}
+                  comparisons={card.comparisons}
+                  insight={card.insight}
+                />
+              </div>
+              {isLoading && (
+                <div className="absolute inset-0 bg-[#0a0a0a] border border-[#2a2a2a] animate-shimmer" />
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Ranking Overview */}
-        <div className="mb-16">
-          <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-12">
+        <div className="mb-16 relative">
+          <div className={isLoading ? 'blur-sm' : ''}>
+            <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Left Side: Title + AI Insight */}
               <div className="flex flex-col justify-between pr-6 bg-[#2F2F2F33] -m-12 p-12 mr-0">
@@ -189,6 +205,10 @@ function AnalyticsContent() {
               </div>
             </div>
           </div>
+          </div>
+          {isLoading && (
+            <div className="absolute inset-0 bg-[#0a0a0a] border border-[#2a2a2a] animate-shimmer" />
+          )}
         </div>
 
         {/* Citation Overview */}
@@ -228,7 +248,14 @@ function AnalyticsContent() {
           {/* Citation Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {mockAnalyticsData.citations.llms.map((llm, index) => (
-              <CitationCard key={index} llm={llm} />
+              <div key={index} className="relative">
+                <div className={isLoading ? 'blur-sm' : ''}>
+                  <CitationCard llm={llm} />
+                </div>
+                {isLoading && (
+                  <div className="absolute inset-0 bg-[#2F2F2F33] border border-gray-800 animate-shimmer" />
+                )}
+              </div>
             ))}
           </div>
         </div>

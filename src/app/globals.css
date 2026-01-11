@@ -46,6 +46,15 @@ body {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 @keyframes loader {
   0% {
     transform: scaleX(0);
@@ -70,4 +79,15 @@ body {
 
 .animate-loader {
   animation: loader 5s linear;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    to right,
+    rgba(47, 47, 47, 0.2) 0%,
+    rgba(80, 80, 80, 0.4) 50%,
+    rgba(47, 47, 47, 0.2) 100%
+  );
+  background-size: 1000px 100%;
 }

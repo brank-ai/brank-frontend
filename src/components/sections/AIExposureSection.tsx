@@ -27,17 +27,17 @@ export default function AIExposureSection() {
         {/* Platform Logos */}
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           {llmPlatforms.map((platform) => (
-            <div key={platform.name} className="flex flex-col items-center gap-3">
-              <div className="w-24 h-24 border border-gray-700 flex items-center justify-center">
-                <Image
-                  src={platform.logo}
-                  alt={`${platform.name} logo`}
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
-              <span className="text-gray-400 text-xs uppercase tracking-wider">{platform.name}</span>
+            <div 
+              key={platform.name}
+              className="w-24 h-24 border border-gray-700 flex items-center justify-center"
+            >
+              <Image
+                src={platform.logo}
+                alt={`${platform.name} logo`}
+                width={40}
+                height={40}
+                className="object-contain"
+              />
             </div>
           ))}
         </div>
