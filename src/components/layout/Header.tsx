@@ -12,15 +12,15 @@ export default function Header() {
     <>
       <header className="w-full bg-black px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 cursor-pointer group">
+          <Link href="/" className="flex items-center gap-3 cursor-pointer group">
             <Image 
               src="/images/brank-logo.svg"
               alt="Brank Logo"
-              width={20}
-              height={20}
+              width={24}
+              height={24}
               className="text-white"
             />
-            <span className="text-white text-base font-normal group-hover:bg-gradient-to-r group-hover:from-[#00FFBB] group-hover:to-[#00B7FF] group-hover:bg-clip-text group-hover:text-transparent transition-all">
+            <span className="text-white text-xl font-semibold tracking-tight group-hover:bg-gradient-to-r group-hover:from-[#00FFBB] group-hover:to-[#00B7FF] group-hover:bg-clip-text group-hover:text-transparent transition-all">
               Brank
             </span>
           </Link>
