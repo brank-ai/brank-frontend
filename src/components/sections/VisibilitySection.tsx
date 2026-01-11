@@ -64,7 +64,7 @@ export default function VisibilitySection() {
         {/* Main headline */}
         <h2 className="text-white text-4xl md:text-5xl font-light leading-tight mb-4 text-center">
           Learn what you can do for{' '}
-          <span className="text-teal-400 italic">your brand's visibility.</span>
+          <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent italic">your brand's visibility.</span>
         </h2>
         
         {/* Subtitle */}

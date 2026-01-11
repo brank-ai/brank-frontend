@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const brands = [
   { name: 'Asics', logo: '/images/brand-logos/Asics.svg', mentions: 82, citations: 76 },
@@ -15,6 +16,15 @@ const brands = [
 export default function HeroSection() {
   const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [brandName, setBrandName] = useState('');
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (brandName.trim()) {
+      router.push(`/analytics?brand=${encodeURIComponent(brandName.trim())}`);
+    }
+  };
 
   return (
     <section className="relative min-h-[70vh] w-full overflow-hidden">
@@ -40,7 +50,7 @@ export default function HeroSection() {
             Measure and improve how
           </h1>
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-normal leading-tight">
-            <span className="text-cyan-500 italic">AI recommends</span>
+            <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent italic">AI recommends</span>
             <span className="text-white"> your brand.</span>
           </h1>
         </div>
@@ -51,18 +61,29 @@ export default function HeroSection() {
         </p>
 
         {/* Search Bar - Dark style with cyan arrow */}
-        <div className="flex items-center bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden w-full max-w-md border border-white/10">
+        <form onSubmit={handleSubmit} className="flex items-center bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden w-full max-w-md border border-white/10">
           <input
             type="text"
             placeholder="What's your brand?"
+            value={brandName}
+            onChange={(e) => setBrandName(e.target.value)}
             className="flex-1 bg-transparent text-white placeholder-gray-400 px-5 py-3 text-sm focus:outline-none"
           />
-          <button className="bg-transparent text-gray-400 px-4 py-3 hover:text-cyan-500 transition-colors">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7" />
+          <button 
+            type="submit"
+            className="bg-transparent text-gray-400 px-4 py-3 hover:[&>svg]:stroke-[url(#arrowGradient)] transition-colors group"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="stroke-current group-hover:stroke-[#00FFBB]" strokeWidth="2">
+              <defs>
+                <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style={{ stopColor: '#00FFBB', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#00B7FF', stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
+              <path d="M5 12h14M12 5l7 7-7 7" className="group-hover:stroke-[url(#arrowGradient)]" />
             </svg>
           </button>
-        </div>
+        </form>
       </div>
 
 
@@ -92,17 +113,17 @@ export default function HeroSection() {
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-8 animate-fadeIn z-50">
                   <div className="relative bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-lg px-3 py-2 border border-white/20 min-w-[110px] shadow-2xl shadow-black/50">
                     {/* Glow effect */}
-                    <div className="absolute inset-0 rounded-lg bg-cyan-500/10 blur-xl -z-10" />
+                    <div className="absolute inset-0 rounded-lg bg-[#00FFBB]/10 blur-xl -z-10" />
 
                     <div className="flex flex-col gap-1.5">
                       <div className="flex items-center justify-between gap-4">
                         <span className="text-white/60 text-xs">Mentions</span>
-                        <span className="text-cyan-500 text-sm font-bold">{brand.mentions}%</span>
+                        <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent text-sm font-bold">{brand.mentions}%</span>
                       </div>
                       <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                       <div className="flex items-center justify-between gap-4">
                         <span className="text-white/60 text-xs">Citations</span>
-                        <span className="text-cyan-500 text-sm font-bold">{brand.citations}%</span>
+                        <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent text-sm font-bold">{brand.citations}%</span>
                       </div>
                     </div>
 

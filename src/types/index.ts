@@ -54,3 +54,103 @@ export interface CalendlyModalProps {
   onClose: () => void;
   url?: string;
 }
+
+// Analytics types
+export interface LLMComparison {
+  llm: string;
+  value: number;
+  icon: string;
+}
+
+export interface LLMSource {
+  url: string;
+  count: number;
+}
+
+export interface CitationLLM {
+  name: string;
+  icon: string;
+  total: number;
+  subtitle: string;
+  sources: LLMSource[];
+}
+
+export interface BrandRank {
+  name: string;
+  rank: number;
+  isUser?: boolean;
+}
+
+export interface LLMRank {
+  name: string;
+  icon: string;
+  rank: number;
+}
+
+export interface MetricData {
+  totalMentions: number;
+  totalCitations: number;
+  avgSentiment: number;
+  avgRanking: number;
+}
+
+export interface ComparisonData {
+  insight: string;
+  comparisons: LLMComparison[];
+}
+
+export interface CitationData {
+  insight: string;
+  llms: CitationLLM[];
+}
+
+export interface RankingData {
+  insight: string;
+  amongBrands: {
+    title: string;
+    subtitle: string;
+    brands: BrandRank[];
+  };
+  byLLMs: {
+    title: string;
+    subtitle: string;
+    llms: LLMRank[];
+  };
+}
+
+export interface AnalyticsData {
+  brand: string;
+  metrics: MetricData;
+  mentionsRate: ComparisonData;
+  sentimentScore: ComparisonData;
+  citations: CitationData;
+  rankings: RankingData;
+}
+
+// Component prop types for analytics
+export interface MetricCardProps {
+  label: string;
+  value: number | string;
+  info?: string;
+  className?: string;
+}
+
+export interface ComparisonCardProps {
+  title: string;
+  comparisons: LLMComparison[];
+  insight: string;
+  className?: string;
+}
+
+export interface CitationCardProps {
+  llm: CitationLLM;
+  className?: string;
+}
+
+export interface RankingCardProps {
+  title: string;
+  subtitle?: string;
+  items: (BrandRank | LLMRank)[];
+  type: 'brand' | 'llm';
+  className?: string;
+}

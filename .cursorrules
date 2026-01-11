@@ -3,6 +3,9 @@
 ## Primary Reference
 **IMPORTANT**: Always refer to `SKILL.md` for comprehensive frontend development best practices, patterns, and guidelines. This file contains the complete knowledge base for building this project.
 
+## Git Workflow
+**IMPORTANT**: DO NOT automatically add, commit, or push files to git. The user will handle all git operations manually. Only make code changes and let the user manage version control.
+
 ## Project Overview
 This is a Next.js 14+ frontend application for Brank - a brand tracking and analytics platform. The project uses:
 - **Framework**: Next.js with App Router
@@ -132,6 +135,7 @@ src/
 - Mock external dependencies appropriately
 
 ## Development Workflow (Reference SKILL.md lines 406-428)
+- **Git Operations**: User handles all git commands (add, commit, push) manually
 - Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `style:`, `test:`
 - Keep commits atomic and focused
 - Write meaningful commit messages
