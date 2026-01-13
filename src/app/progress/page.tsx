@@ -70,6 +70,8 @@ function ProgressContent() {
     };
   }, [router, brand]);
 
+  const currentStepData = steps[currentStep] || steps[0];
+
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center px-6">
       <div className="max-w-2xl w-full">
@@ -88,12 +90,12 @@ function ProgressContent() {
 
         {/* Current Step Name - Larger and Bold */}
         <h2 className="text-white text-xl font-semibold mb-8">
-          {steps[currentStep].name}
+          {currentStepData.name}
         </h2>
 
         {/* Insight Paragraph */}
         <p className="text-gray-400 text-base leading-relaxed">
-          {steps[currentStep].insight}
+          {currentStepData.insight}
         </p>
       </div>
     </div>
