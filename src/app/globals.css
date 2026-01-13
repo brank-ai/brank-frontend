@@ -64,6 +64,15 @@ body {
   }
 }
 
+@keyframes progressBar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
@@ -90,4 +99,8 @@ body {
     rgba(47, 47, 47, 0.2) 100%
   );
   background-size: 1000px 100%;
+}
+
+.animate-progress {
+  animation: progressBar 8s linear forwards;
 }

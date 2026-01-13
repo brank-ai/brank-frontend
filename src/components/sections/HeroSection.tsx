@@ -22,7 +22,7 @@ export default function HeroSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (brandName.trim()) {
-      router.push(`/analytics?brand=${encodeURIComponent(brandName.trim())}`);
+      router.push(`/progress?brand=${encodeURIComponent(brandName.trim())}`);
     }
   };
 
@@ -66,7 +66,7 @@ export default function HeroSection() {
           />
           <button 
             type="submit"
-            className="bg-transparent text-gray-400 px-4 py-3 hover:[&>svg]:stroke-[url(#arrowGradient)] transition-colors group"
+            className="bg-transparent text-gray-400 px-4 py-3 hover:[&>svg]:stroke-[url(#arrowGradient)] transition-all duration-150 group active:scale-95"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="stroke-current group-hover:stroke-[#00FFBB]" strokeWidth="2">
               <defs>

@@ -54,7 +54,7 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-all duration-150 active:scale-95"
           aria-label="Close modal"
         >
           <svg
@@ -95,7 +95,7 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
                 </div>
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-sm font-medium hover:opacity-90 transition-opacity rounded-md"
+                  className="px-6 py-3 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-sm font-medium hover:opacity-90 transition-all duration-150 rounded-md active:scale-95"
                 >
                   Submit
                 </button>

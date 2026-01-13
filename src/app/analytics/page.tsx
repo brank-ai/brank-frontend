@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -15,15 +15,6 @@ function AnalyticsContent() {
   const searchParams = useSearchParams();
   const brandName = searchParams.get('brand') || 'Unknown Brand';
   const [isRankingProModalOpen, setIsRankingProModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const shouldShowRankingProButton = (llmName: string) => {
     return llmName === 'Grok' || llmName === 'Perplexity';
@@ -54,18 +45,12 @@ function AnalyticsContent() {
             { label: "Avg Sentiment", value: mockAnalyticsData.metrics.avgSentiment, info: "Average sentiment score across platforms" },
             { label: "Avg Ranking", value: mockAnalyticsData.metrics.avgRanking, info: "Average ranking position" }
           ].map((metric, index) => (
-            <div key={index} className="relative">
-              <div className={isLoading ? 'blur-md opacity-30' : ''}>
-                <MetricCard
-                  label={metric.label}
-                  value={metric.value}
-                  info={metric.info}
-                />
-              </div>
-              {isLoading && (
-                <div className="absolute inset-0 bg-[#2F2F2FCC] border border-gray-800 animate-shimmer" />
-              )}
-            </div>
+            <MetricCard
+              key={index}
+              label={metric.label}
+              value={metric.value}
+              info={metric.info}
+            />
           ))}
         </div>
 
@@ -75,25 +60,18 @@ function AnalyticsContent() {
             { title: "Mentions Rate", comparisons: mockAnalyticsData.mentionsRate.comparisons, insight: mockAnalyticsData.mentionsRate.insight },
             { title: "Sentiment Score", comparisons: mockAnalyticsData.sentimentScore.comparisons, insight: mockAnalyticsData.sentimentScore.insight }
           ].map((card, index) => (
-            <div key={index} className="relative">
-              <div className={isLoading ? 'blur-md opacity-30' : ''}>
-                <ComparisonCard
-                  title={card.title}
-                  comparisons={card.comparisons}
-                  insight={card.insight}
-                />
-              </div>
-              {isLoading && (
-                <div className="absolute inset-0 bg-[#0a0a0aDD] border border-[#2a2a2a] animate-shimmer" />
-              )}
-            </div>
+            <ComparisonCard
+              key={index}
+              title={card.title}
+              comparisons={card.comparisons}
+              insight={card.insight}
+            />
           ))}
         </div>
 
         {/* Ranking Overview */}
-        <div className="mb-16 relative">
-          <div className={isLoading ? 'blur-md opacity-30' : ''}>
-            <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-12">
+        <div className="mb-16">
+          <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Left Side: Title + AI Insight */}
               <div className="flex flex-col justify-between pr-6 bg-[#2F2F2F33] -m-12 p-12 mr-0">
@@ -101,7 +79,7 @@ function AnalyticsContent() {
                 <div className="flex items-center gap-2 mb-8">
                   <h3 className="text-white text-2xl font-normal">Ranking Overview</h3>
                   <button
-                    className="text-gray-600 hover:text-gray-500 transition-colors"
+                    className="text-gray-600 hover:text-gray-500 transition-all duration-150 active:scale-95"
                     title="Information about Ranking Overview"
                   >
                     <svg
@@ -190,7 +168,7 @@ function AnalyticsContent() {
                       {shouldShowRankingProButton(llm.name) ? (
                         <button
                           onClick={() => setIsRankingProModalOpen(true)}
-                          className="px-4 py-1.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-xs font-medium hover:opacity-90 transition-opacity rounded-md"
+                          className="px-4 py-1.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-xs font-medium hover:opacity-90 transition-all duration-150 rounded-md active:scale-95"
                         >
                           Pro
                         </button>
@@ -205,10 +183,6 @@ function AnalyticsContent() {
               </div>
             </div>
           </div>
-          </div>
-          {isLoading && (
-            <div className="absolute inset-0 bg-[#0a0a0aDD] border border-[#2a2a2a] animate-shimmer" />
-          )}
         </div>
 
         {/* Citation Overview */}
@@ -248,14 +222,7 @@ function AnalyticsContent() {
           {/* Citation Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {mockAnalyticsData.citations.llms.map((llm, index) => (
-              <div key={index} className="relative">
-                <div className={isLoading ? 'blur-md opacity-30' : ''}>
-                  <CitationCard llm={llm} />
-                </div>
-                {isLoading && (
-                  <div className="absolute inset-0 bg-[#2F2F2FCC] border border-gray-800 animate-shimmer" />
-                )}
-              </div>
+              <CitationCard key={index} llm={llm} />
             ))}
           </div>
         </div>

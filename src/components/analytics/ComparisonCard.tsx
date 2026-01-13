@@ -28,7 +28,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
           <div className="flex items-center gap-2 mb-8">
             <h3 className="text-white text-2xl font-normal">{title}</h3>
             <button
-              className="text-gray-600 hover:text-gray-500 transition-colors"
+              className="text-gray-600 hover:text-gray-500 transition-all duration-150 active:scale-95"
               title={`Information about ${title}`}
             >
               <svg
@@ -114,7 +114,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
                 {shouldShowProButton(comparison.llm) ? (
                   <button
                     onClick={() => setIsProModalOpen(true)}
-                    className="px-4 py-1.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-xs font-medium hover:opacity-90 transition-opacity rounded-md"
+                    className="px-4 py-1.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-xs font-medium hover:opacity-90 transition-all duration-150 rounded-md active:scale-95"
                   >
                     Pro
                   </button>

@@ -5,7 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button, CalendlyModal } from '@/components/ui';
 
-export default function Header() {
+interface HeaderProps {
+  showAnalyticsButton?: boolean;
+}
+
+export default function Header({ showAnalyticsButton = false }: HeaderProps) {
   const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
   return (
@@ -24,6 +28,30 @@ export default function Header() {
               Brank
             </span>
           </Link>
+          
+          {/* Centered Analytics Button */}
+          {showAnalyticsButton && (
+            <Link 
+              href="/progress?brand=Apple"
+              className="inline-flex px-10 py-3 text-sm font-medium text-black bg-white rounded-md hover:bg-gray-100 transition-all duration-150 items-center gap-3 [&:active]:scale-95"
+            >
+              <span>Check out Brank Analytics</span>
+              
+              {/* Right arrow icon */}
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+          )}
           
           <div>
             <Button 

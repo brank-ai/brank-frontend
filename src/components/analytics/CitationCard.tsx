@@ -69,7 +69,7 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none">
               <button
                 onClick={() => setIsProModalOpen(true)}
-                className="px-6 py-2.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-sm font-medium hover:opacity-90 transition-opacity rounded-md pointer-events-auto"
+                className="px-6 py-2.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-sm font-medium hover:opacity-90 transition-all duration-150 rounded-md pointer-events-auto active:scale-95"
               >
                 Pro
               </button>
