@@ -14,7 +14,7 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
     <>
       <div
         className={cn(
-          'bg-[#2F2F2F33] border border-gray-800 p-6 relative',
+          'bg-[#2F2F2F33] border border-gray-800 p-4 sm:p-6 relative',
           className
         )}
       >
@@ -23,11 +23,11 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
           <Image
             src={llm.icon}
             alt={llm.name}
-            width={24}
-            height={24}
+            width={20}
+            height={20}
             className="object-contain"
           />
-          <h4 className="text-white text-lg font-medium">{llm.name}</h4>
+          <h4 className="text-white text-base sm:text-lg font-medium">{llm.name}</h4>
         </div>
 
         {/* Content Container with Blur */}
@@ -42,7 +42,7 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
                 key={index}
                 className="flex items-center justify-between py-2"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
                   <svg
                     width="14"
                     height="14"
@@ -57,9 +57,9 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
                     <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                     <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                   </svg>
-                  <span className="text-gray-300 text-sm">{source.url}</span>
+                  <span className="text-gray-300 text-xs sm:text-sm truncate">{source.url}</span>
                 </div>
-                <span className="text-gray-400 text-sm">{source.count}</span>
+                <span className="text-gray-400 text-xs sm:text-sm flex-shrink-0 pl-2">{source.count}</span>
               </div>
             ))}
           </div>
@@ -69,7 +69,7 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none">
               <button
                 onClick={() => setIsProModalOpen(true)}
-                className="px-6 py-2.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-sm font-medium hover:opacity-90 transition-all duration-150 rounded-md pointer-events-auto active:scale-95"
+                className="px-5 py-2 sm:px-6 sm:py-2.5 bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] text-black text-sm font-medium hover:opacity-90 transition-all duration-150 rounded-md pointer-events-auto active:scale-95"
               >
                 Pro
               </button>

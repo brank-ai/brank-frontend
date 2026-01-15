@@ -20,20 +20,20 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
 
   return (
     <>
-    <div className={cn('bg-[#0a0a0a] border border-[#2a2a2a] p-12', className)}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className={cn('bg-[#0a0a0a] border border-[#2a2a2a] p-4 sm:p-6 md:p-12', className)}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
         {/* Left Side: Title + AI Insight */}
-        <div className="flex flex-col justify-between pr-6 bg-[#2F2F2F33] -m-12 p-12 mr-0">
+        <div className="flex flex-col bg-[#2F2F2F33] -m-4 p-4 sm:-m-6 sm:p-6 md:-m-12 md:p-12 mr-0 md:pr-6 md:justify-between">
           {/* Title with Info Icon */}
-          <div className="flex items-center gap-2 mb-8">
-            <h3 className="text-white text-2xl font-normal">{title}</h3>
+          <div className="flex items-center gap-2 mb-4 sm:mb-6 md:mb-8">
+            <h3 className="text-white text-lg sm:text-xl md:text-2xl font-normal">{title}</h3>
             <button
               className="text-gray-600 hover:text-gray-500 transition-all duration-150 active:scale-95"
               title={`Information about ${title}`}
             >
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -46,7 +46,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
           </div>
 
           {/* AI Insight with Gradient on Icon and Text */}
-          <div className="flex flex-col gap-3 mt-auto">
+          <div className="flex flex-col gap-3 md:mt-auto">
             <div className="flex items-center gap-2">
               {/* Icon with gradient */}
               <div className="flex-shrink-0">
@@ -71,7 +71,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
         </div>
 
         {/* Right Side: Comparison List */}
-        <div className="pl-12">
+        <div className="pl-0 md:pl-12">
           {/* Comparison Header */}
           <div className="flex items-center gap-2 mb-6">
             {/* Bar Chart Icon */}
@@ -99,15 +99,15 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
                 key={index}
                 className="flex items-center justify-between"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <Image
                     src={comparison.icon}
                     alt={comparison.llm}
-                    width={18}
-                    height={18}
+                    width={16}
+                    height={16}
                     className="object-contain opacity-70"
                   />
-                  <span className="text-gray-500 text-sm uppercase tracking-wide">
+                  <span className="text-gray-500 text-xs sm:text-sm uppercase tracking-wide truncate">
                     {comparison.llm}
                   </span>
                 </div>
@@ -119,7 +119,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
                     Pro
                   </button>
                 ) : (
-                  <span className="text-white text-sm font-normal">
+                  <span className="text-white text-xs sm:text-sm font-normal">
                     {comparison.value}{title.includes('Rate') ? '%' : ''}
                   </span>
                 )}

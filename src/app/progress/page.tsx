@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Reveal } from '@/components/ui';
 
 const steps = [
   {
@@ -74,7 +75,7 @@ function ProgressContent() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center px-6">
-      <div className="max-w-2xl w-full">
+      <Reveal variant="fadeIn" initiallyVisible className="max-w-2xl w-full">
         {/* Main Heading */}
         <h1 className="text-gray-200 text-4xl font-light mb-6">
           Analyzing {brand}...
@@ -97,7 +98,7 @@ function ProgressContent() {
         <p className="text-gray-400 text-base leading-relaxed">
           {currentStepData.insight}
         </p>
-      </div>
+      </Reveal>
     </div>
   );
 }

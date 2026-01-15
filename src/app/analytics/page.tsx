@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { MetricCard } from '@/components/ui/MetricCard';
-import { ProModal } from '@/components/ui';
+import { ProModal, Reveal } from '@/components/ui';
 import { ComparisonCard } from '@/components/analytics/ComparisonCard';
 import { CitationCard } from '@/components/analytics/CitationCard';
 import { mockAnalyticsData } from '@/constants/mockAnalyticsData';
@@ -25,20 +25,25 @@ function AnalyticsContent() {
       <Header />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12 relative">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-10 md:py-12 relative">
         {/* Page Header */}
-        <div className="mb-12">
-          <h1 className="text-white text-4xl md:text-5xl font-light mb-4">
-            AEO Analytics -{' '}
-            <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent italic">{brandName}</span>
-          </h1>
-          <p className="text-gray-400 text-lg">
-            Here&apos;s what we learnt about your brand.
-          </p>
-        </div>
+        <Reveal variant="fadeIn" initiallyVisible duration={1.0}>
+          <div className="mb-8 sm:mb-12">
+            <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-2 sm:mb-4">
+              AEO Analytics -{' '}
+              <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent italic">
+                {brandName}
+              </span>
+            </h1>
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
+              Here&apos;s what we learnt about your brand.
+            </p>
+          </div>
+        </Reveal>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+        <Reveal delay={0.12} duration={1.0}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-10 sm:mb-16">
           {[
             { label: "Total Mentions", value: mockAnalyticsData.metrics.totalMentions, info: "Total number of mentions across all LLMs" },
             { label: "Total Citations", value: mockAnalyticsData.metrics.totalCitations, info: "Total number of citations from sources" },
@@ -52,10 +57,12 @@ function AnalyticsContent() {
               info={metric.info}
             />
           ))}
-        </div>
+          </div>
+        </Reveal>
 
         {/* Comparison Sections - Stacked Vertically */}
-        <div className="space-y-8 mb-16">
+        <Reveal delay={0.12} duration={1.0}>
+          <div className="space-y-6 sm:space-y-8 mb-10 sm:mb-16">
           {[
             { title: "Mentions Rate", comparisons: mockAnalyticsData.mentionsRate.comparisons, insight: mockAnalyticsData.mentionsRate.insight },
             { title: "Sentiment Score", comparisons: mockAnalyticsData.sentimentScore.comparisons, insight: mockAnalyticsData.sentimentScore.insight }
@@ -67,24 +74,28 @@ function AnalyticsContent() {
               insight={card.insight}
             />
           ))}
-        </div>
+          </div>
+        </Reveal>
 
         {/* Ranking Overview */}
-        <div className="mb-16">
-          <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <Reveal delay={0.12} duration={1.0}>
+          <div className="mb-10 sm:mb-16">
+          <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-4 sm:p-6 md:p-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
               {/* Left Side: Title + AI Insight */}
-              <div className="flex flex-col justify-between pr-6 bg-[#2F2F2F33] -m-12 p-12 mr-0">
+              <div className="flex flex-col bg-[#2F2F2F33] -m-4 p-4 sm:-m-6 sm:p-6 md:-m-12 md:p-12 mr-0 md:pr-6 md:justify-between">
                 {/* Title with Info Icon */}
-                <div className="flex items-center gap-2 mb-8">
-                  <h3 className="text-white text-2xl font-normal">Ranking Overview</h3>
+                <div className="flex items-center gap-2 mb-4 sm:mb-6 md:mb-8">
+                  <h3 className="text-white text-lg sm:text-xl md:text-2xl font-normal">
+                    Ranking Overview
+                  </h3>
                   <button
                     className="text-gray-600 hover:text-gray-500 transition-all duration-150 active:scale-95"
                     title="Information about Ranking Overview"
                   >
                     <svg
-                      width="20"
-                      height="20"
+                      width="18"
+                      height="18"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -97,7 +108,7 @@ function AnalyticsContent() {
                 </div>
 
                 {/* AI Insight with Gradient on Icon and Text */}
-                <div className="flex flex-col gap-3 mt-auto">
+                <div className="flex flex-col gap-3 md:mt-auto">
                   <div className="flex items-center gap-2">
                     {/* Icon with gradient */}
                     <div className="flex-shrink-0">
@@ -117,12 +128,14 @@ function AnalyticsContent() {
                       AI INSIGHT
                     </h4>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">{mockAnalyticsData.rankings.insight}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    {mockAnalyticsData.rankings.insight}
+                  </p>
                 </div>
               </div>
 
               {/* Right Side: Rank by LLMs */}
-              <div className="pl-12">
+              <div className="pl-0 md:pl-12">
                 {/* Rank Header */}
                 <div className="flex items-center gap-2 mb-6">
                   {/* Bar Chart Icon */}
@@ -153,15 +166,15 @@ function AnalyticsContent() {
                       key={index}
                       className="flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
                         <Image
                           src={llm.icon}
                           alt={llm.name}
-                          width={18}
-                          height={18}
+                          width={16}
+                          height={16}
                           className="object-contain opacity-70"
                         />
-                        <span className="text-gray-500 text-sm uppercase tracking-wide">
+                        <span className="text-gray-500 text-xs sm:text-sm uppercase tracking-wide truncate">
                           {llm.name}
                         </span>
                       </div>
@@ -173,7 +186,7 @@ function AnalyticsContent() {
                           Pro
                         </button>
                       ) : (
-                        <span className="text-white text-sm font-normal">
+                        <span className="text-white text-xs sm:text-sm font-normal">
                           #{llm.rank}
                         </span>
                       )}
@@ -183,19 +196,21 @@ function AnalyticsContent() {
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </Reveal>
 
         {/* Citation Overview */}
-        <div className="mb-16">
-          <div className="mb-8">
-            <h2 className="text-white text-3xl font-light mb-2">
+        <Reveal delay={0.12} duration={1.0}>
+          <div className="mb-10 sm:mb-16">
+          <div className="mb-4 sm:mb-8">
+            <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-light mb-2">
               Citation Overview
             </h2>
           </div>
 
           {/* AI Insight */}
-          <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-12 mb-8">
-            <div className="flex items-start gap-3">
+          <div className="bg-[#0a0a0a] border border-[#2a2a2a] p-4 sm:p-6 md:p-12 mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row items-start gap-3">
               <div className="flex-shrink-0">
                 <svg width="20" height="20" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -220,15 +235,18 @@ function AnalyticsContent() {
           </div>
 
           {/* Citation Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {mockAnalyticsData.citations.llms.map((llm, index) => (
               <CitationCard key={index} llm={llm} />
             ))}
           </div>
-        </div>
+          </div>
+        </Reveal>
       </main>
 
-      <Footer />
+      <Reveal delay={0.12} duration={1.0}>
+        <Footer />
+      </Reveal>
       
       <ProModal
         isOpen={isRankingProModalOpen}
