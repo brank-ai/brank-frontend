@@ -90,6 +90,31 @@ src/
 - Use `cn()` utility from `lib/utils.ts` for conditional classes
 - Maintain consistent spacing scale (using Tailwind's scale)
 
+### Responsive Design Requirements
+**CRITICAL**: When making ANY UI changes, ensure proper responsive behavior across all target devices:
+
+**Mobile (iPhone) Viewports:**
+- **iPhone SE**: 375px width (smallest viewport - primary mobile baseline)
+- **iPhone 12**: 390px width
+- **iPhone 14 Pro**: 393px width
+- **iPhone 14 Pro Max**: 430px width (largest iPhone viewport)
+
+**Desktop Viewports:**
+- **Small Laptop**: 1280px width
+- **Standard Desktop**: 1440px width
+- **Full HD**: 1920px width
+- **2K/QHD**: 2560px width
+
+**Requirements:**
+- Test and verify all layouts work properly on these screen sizes
+- Use appropriate Tailwind breakpoints: `sm:` (640px), `md:` (768px), `lg:` (1024px), `xl:` (1280px), `2xl:` (1536px)
+- Start with the smallest screen (iPhone SE 375px) and scale up
+- Ensure text sizes are readable without horizontal scrolling
+- Check button sizes and touch targets are appropriate on mobile (minimum 44x44px)
+- Verify images and content don't overflow at any viewport size
+- Test spacing and padding on both mobile and desktop viewports
+- Ensure desktop layouts utilize screen real estate effectively without excessive whitespace
+
 ### Accessibility (Reference SKILL.md lines 326-374)
 - Use semantic HTML elements (`<article>`, `<nav>`, `<main>`, etc.)
 - Include proper ARIA attributes where needed
@@ -149,7 +174,7 @@ Before considering code complete, verify:
 - [ ] Accessibility guidelines followed
 - [ ] Error handling implemented
 - [ ] Code is readable and maintainable
-- [ ] Responsive design works across breakpoints
+- [ ] Responsive design works across all viewports (iPhone SE to 2K desktop)
 - [ ] Images are optimized
 
 ## Key Principles
@@ -166,8 +191,8 @@ Before considering code complete, verify:
 2. Follow the established component patterns in `src/components/`
 3. Maintain consistency with existing styling approaches
 4. Reference SKILL.md for detailed implementation patterns
-5. Consider mobile responsiveness for all UI changes
-6. Test changes across different viewport sizes
+5. **CRITICAL**: Test responsiveness on all target devices - Mobile: iPhone SE (375px), iPhone 12 (390px), iPhone 14 Pro (393px), iPhone 14 Pro Max (430px); Desktop: 1280px, 1440px, 1920px, 2560px
+6. Test changes across different viewport sizes and all breakpoints
 7. Ensure TypeScript compilation succeeds with no errors
 
 ## Additional Notes

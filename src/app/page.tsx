@@ -7,7 +7,7 @@ import AIExposureSection from '@/components/sections/AIExposureSection';
 export default function Home() {
   return (
     <div className="min-h-screen bg-black">
-      <Header showAnalyticsButton={true} />
+      <Header />
       <main>
         <HeroSection />
         <VisibilitySection />
