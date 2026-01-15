@@ -62,7 +62,7 @@ export default function HeroSection() {
             placeholder="Check your brand's AI score?"
             value={brandName}
             onChange={(e) => setBrandName(e.target.value)}
-            className="flex-1 bg-transparent text-white placeholder-gray-400 px-3 py-2 sm:px-5 sm:py-3 text-xs sm:text-sm focus:outline-none"
+            className="flex-1 bg-transparent text-white placeholder-gray-400 px-3 py-2 sm:px-5 sm:py-3 text-[16px] sm:text-sm focus:outline-none"
           />
           <button 
             type="submit"
