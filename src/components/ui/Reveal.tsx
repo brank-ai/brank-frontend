@@ -88,7 +88,7 @@ export function Reveal({
   once = true,
   initiallyVisible = false,
 }: RevealProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion() ?? false;
   const preset = getPreset({ variant, y, reduceMotion });
 
   return (

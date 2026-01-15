@@ -23,7 +23,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
     <div className={cn('bg-[#0a0a0a] border border-[#2a2a2a] p-4 sm:p-6 md:p-12', className)}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
         {/* Left Side: Title + AI Insight */}
-        <div className="flex flex-col bg-[#2F2F2F33] -m-4 p-4 sm:-m-6 sm:p-6 md:-m-12 md:p-12 mr-0 md:pr-6 md:justify-between">
+        <div className="flex flex-col bg-[#2F2F2F33] -m-4 p-4 sm:-m-6 sm:p-6 md:-m-12 md:p-12 md:pr-6 md:justify-between">
           {/* Title with Info Icon */}
           <div className="flex items-center gap-2 mb-4 sm:mb-6 md:mb-8">
             <h3 className="text-white text-lg sm:text-xl md:text-2xl font-normal">{title}</h3>
