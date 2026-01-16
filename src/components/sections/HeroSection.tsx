@@ -23,7 +23,14 @@ export default function HeroSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (brandName.trim()) {
-      router.push(`/progress?brand=${encodeURIComponent(brandName.trim())}`);
+      const brand = brandName.trim();
+      
+      // Fire-and-forget prefetch to warm backend cache
+      fetch(`/api/prefetch-metric?website=${encodeURIComponent(brand)}`).catch(() => {
+        // Silently ignore prefetch errors
+      });
+      
+      router.push(`/progress?brand=${encodeURIComponent(brand)}`);
     }
   };
 

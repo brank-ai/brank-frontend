@@ -59,7 +59,7 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
                   </svg>
                   <span className="text-gray-300 text-xs sm:text-sm truncate">{source.url}</span>
                 </div>
-                <span className="text-gray-400 text-xs sm:text-sm flex-shrink-0 pl-2">{source.count}</span>
+                <span className="text-gray-400 text-xs sm:text-sm flex-shrink-0 pl-2">{source.count}%</span>
               </div>
             ))}
           </div>
