@@ -30,10 +30,10 @@ export default function RotatingText({
   }, [texts.length, rotationInterval]);
 
   return (
-    <span className={`inline-flex items-center justify-center ${className}`}>
-      <span className="relative inline-flex items-center justify-center overflow-hidden px-3 sm:px-4 md:px-6 py-1 sm:py-1.5 md:py-2 bg-black rounded-lg w-[140px] sm:w-[180px] md:w-[280px] lg:w-[320px]">
+    <span className={`inline-flex items-center justify-start ${className}`}>
+      <span className="relative inline-flex items-center justify-start overflow-hidden w-[120px] sm:w-[150px] md:w-[230px] lg:w-[280px] px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 bg-white rounded-lg">
         <span 
-          className={`block text-white font-normal transition-all duration-300 ease-in-out ${
+          className={`block text-black font-normal transition-all duration-300 ease-in-out ${
             isAnimating ? 'animate-slideUpOut' : 'animate-slideUpIn'
           }`}
           key={currentIndex}

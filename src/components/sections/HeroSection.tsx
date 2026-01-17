@@ -62,66 +62,49 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-[70vh] w-full overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/images/hero-section-min.jpg')`
-        }}
-      />
-
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80" />
-
-      {/* Bottom gradient for smooth transition */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent to-black z-10" />
-
+    <section className="relative min-h-[70vh] w-full overflow-hidden bg-black">
       {/* Content - Centered */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[70vh] px-4 sm:px-8 md:px-16 lg:px-24 pb-32">
-        {/* Main Headline - Centered with serif font */}
-        <Reveal trigger="mount" variant="fadeIn" duration={2.0} initiallyVisible={false}>
-          <div className="mb-6 w-full max-w-md md:max-w-2xl lg:max-w-6xl text-center mx-auto">
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-[2.75rem] lg:text-[3.375rem] font-normal leading-relaxed text-white flex flex-wrap items-center justify-center gap-2 md:gap-3">
-              <span>Track your brand across</span>
-              <RotatingText 
-                texts={['ChatGPT', 'Gemini', 'Grok', 'Perplexity']}
-                rotationInterval={2500}
-                className="font-serif text-2xl sm:text-3xl md:text-[2.75rem] lg:text-[3.375rem]"
-              />
-            </h1>
-          </div>
-        </Reveal>
-
-        {/* Search Bar - Dark style with cyan arrow */}
-        <Reveal trigger="mount" variant="fadeUp" delay={0.25} duration={2.0} y={16} initiallyVisible={false}>
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden w-full max-w-md md:max-w-2xl lg:max-w-6xl border border-white/10 mx-auto"
-          >
-            <input
-              type="text"
-              placeholder="Search your brand"
-              value={brandName}
-              onChange={(e) => setBrandName(e.target.value)}
-              className="flex-1 min-w-0 bg-transparent text-white placeholder-gray-400 px-2.5 py-2 sm:px-5 sm:py-3 text-[16px] leading-6 focus:outline-none"
-            />
-            <button 
-              type="submit"
-              className="shrink-0 bg-transparent text-gray-400 px-2.5 py-2 sm:px-4 sm:py-3 hover:[&>svg]:stroke-[url(#arrowGradient)] transition-all duration-150 group active:scale-95"
+        <div className="w-full flex flex-col items-center">
+          {/* Search Bar - White border with search icon */}
+          <Reveal trigger="mount" variant="fadeIn" duration={2.0} initiallyVisible={false}>
+            <form
+              onSubmit={handleSubmit}
+              className="flex items-center border-2 border-white rounded-full mb-8 sm:mb-10 md:mb-12 w-[95%] sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px]"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="sm:w-5 sm:h-5 stroke-current group-hover:stroke-[#00FFBB]" strokeWidth="2">
-                <defs>
-                  <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style={{ stopColor: '#00FFBB', stopOpacity: 1 }} />
-                    <stop offset="100%" style={{ stopColor: '#00B7FF', stopOpacity: 1 }} />
-                  </linearGradient>
-                </defs>
-                <path d="M5 12h14M12 5l7 7-7 7" className="group-hover:stroke-[url(#arrowGradient)]" />
-              </svg>
-            </button>
-          </form>
-        </Reveal>
+              <input
+                type="text"
+                placeholder="Get Brank's analysis of your brand."
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                className="flex-1 min-w-0 bg-transparent text-white placeholder-white/70 pl-4 sm:pl-6 md:pl-8 pr-2 py-2 sm:py-3 md:py-4 text-base sm:text-lg md:text-xl lg:text-2xl focus:outline-none"
+              />
+              <button 
+                type="submit"
+                className="pr-3 sm:pr-5 md:pr-6 flex items-center shrink-0 hover:opacity-80 transition-opacity"
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+            </form>
+          </Reveal>
+
+          {/* Main Headline - Centered with serif font */}
+          <Reveal trigger="mount" variant="fadeUp" delay={0.25} duration={2.0} y={16} initiallyVisible={false}>
+            <div className="text-center">
+              <h1 className="font-serif text-2xl sm:text-3xl md:text-[2.75rem] lg:text-[3.375rem] font-normal leading-relaxed text-white flex flex-wrap items-center justify-center gap-2 md:gap-3">
+                <span>Track your brand across</span>
+                <RotatingText 
+                  texts={['ChatGPT', 'Gemini', 'Grok', 'Perplexity']}
+                  rotationInterval={2500}
+                  className="font-serif text-2xl sm:text-3xl md:text-[2.75rem] lg:text-[3.375rem]"
+                />
+              </h1>
+            </div>
+          </Reveal>
+        </div>
       </div>
 
 
