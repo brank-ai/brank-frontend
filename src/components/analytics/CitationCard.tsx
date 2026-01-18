@@ -14,7 +14,11 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
     <>
       <div
         className={cn(
-          'bg-[#2F2F2F33] border border-gray-800 p-4 sm:p-6 relative',
+          // Soft Tile Style v2.0
+          'rounded-xl',
+          'shadow-soft-tile-sm',
+          'p-4 sm:p-6',
+          'relative',
           className
         )}
       >
@@ -27,16 +31,25 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
             height={20}
             className="object-contain"
           />
-          <h4 className="text-white text-base sm:text-lg font-medium">{llm.name}</h4>
+          <h4 className="text-text-primary text-base sm:text-lg font-medium tracking-tight">
+            {llm.name}
+          </h4>
         </div>
 
         {/* Content Container with Blur */}
         <div className="relative">
           {/* Subtitle */}
-          <p className={cn("text-gray-500 text-xs mb-4", shouldBlur && "blur-sm select-none")}>{llm.subtitle}</p>
+          <p
+            className={cn(
+              'text-text-subtle text-xs mb-4',
+              shouldBlur && 'blur-sm select-none'
+            )}
+          >
+            {llm.subtitle}
+          </p>
 
           {/* Sources */}
-          <div className={cn("space-y-2", shouldBlur && "blur-sm select-none")}>
+          <div className={cn('space-y-2', shouldBlur && 'blur-sm select-none')}>
             {llm.sources.map((source, index) => (
               <div
                 key={index}
@@ -52,24 +65,41 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-gray-500"
+                    className="text-text-subtle"
                   >
                     <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                     <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                   </svg>
-                  <span className="text-gray-300 text-xs sm:text-sm truncate">{source.url}</span>
+                  <span className="text-text-secondary text-xs sm:text-sm truncate">
+                    {source.url}
+                  </span>
                 </div>
-                <span className="text-gray-400 text-xs sm:text-sm flex-shrink-0 pl-2">{source.count}%</span>
+                <span className="text-text-muted text-xs sm:text-sm flex-shrink-0 pl-2">
+                  {source.count}%
+                </span>
               </div>
             ))}
           </div>
 
           {/* Pro Button Overlay */}
           {shouldBlur && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-bg-base/60 via-transparent to-transparent pointer-events-none rounded-lg">
               <button
                 onClick={() => setIsProModalOpen(true)}
-                className="px-5 py-2 sm:px-6 sm:py-2.5 bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-150 rounded-md pointer-events-auto active:scale-95"
+                className="
+                  px-4 py-1.5
+                  bg-bg-elevated
+                  text-text-primary
+                  text-xs font-medium
+                  border border-subtle
+                  rounded-lg
+                  shadow-soft-tile-xs
+                  hover:bg-bg-surface
+                  hover:border-text-muted/20
+                  active:scale-[0.98]
+                  transition-all duration-300
+                  pointer-events-auto
+                "
               >
                 Pro
               </button>
@@ -87,4 +117,3 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
 };
 
 export { CitationCard };
-

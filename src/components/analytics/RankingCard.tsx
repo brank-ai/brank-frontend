@@ -13,7 +13,10 @@ const RankingCard: React.FC<RankingCardProps> = ({
   return (
     <div
       className={cn(
-        'bg-gray-900 border border-gray-800 rounded-lg p-6',
+        // Soft Tile Style v2.0
+        'rounded-xl',
+        'shadow-soft-tile-sm',
+        'p-6',
         className
       )}
     >
@@ -25,7 +28,7 @@ const RankingCard: React.FC<RankingCardProps> = ({
             height="16"
             viewBox="0 0 24 24"
             fill="none"
-            className="text-gray-400"
+            className="text-text-muted"
           >
             <path
               d="M3 13h8v8H3v-8zm10-10h8v18h-8V3z"
@@ -35,10 +38,10 @@ const RankingCard: React.FC<RankingCardProps> = ({
               strokeLinejoin="round"
             />
           </svg>
-          <h4 className="text-white text-lg font-medium">{title}</h4>
+          <h4 className="text-text-primary text-lg font-medium tracking-tight">{title}</h4>
         </div>
         {subtitle && (
-          <p className="text-gray-500 text-xs ml-6">{subtitle}</p>
+          <p className="text-text-subtle text-xs ml-6">{subtitle}</p>
         )}
       </div>
 
@@ -49,14 +52,14 @@ const RankingCard: React.FC<RankingCardProps> = ({
             <div
               key={index}
               className={cn(
-                'flex items-center justify-between py-2',
-                item.isUser && 'bg-gray-800 -mx-2 px-2 rounded'
+                'flex items-center justify-between py-2 transition-all duration-300',
+                item.isUser && 'bg-bg-elevated -mx-2 px-2 rounded-lg shadow-deep-field-sm'
               )}
             >
               <span
                 className={cn(
                   'text-sm',
-                  item.isUser ? 'text-white font-medium' : 'text-gray-300'
+                  item.isUser ? 'text-text-primary font-medium' : 'text-text-secondary'
                 )}
               >
                 {item.name}
@@ -64,7 +67,7 @@ const RankingCard: React.FC<RankingCardProps> = ({
               <span
                 className={cn(
                   'text-sm',
-                  item.isUser ? 'text-white font-bold' : 'text-gray-400'
+                  item.isUser ? 'text-text-primary font-medium' : 'text-text-muted'
                 )}
               >
                 #{item.rank}
@@ -86,9 +89,9 @@ const RankingCard: React.FC<RankingCardProps> = ({
                   height={20}
                   className="object-contain"
                 />
-                <span className="text-gray-300 text-sm">{item.name}</span>
+                <span className="text-text-secondary text-sm">{item.name}</span>
               </div>
-              <span className="text-white text-sm font-medium">
+              <span className="text-text-primary text-sm font-medium">
                 #{item.rank}
               </span>
             </div>
@@ -99,4 +102,3 @@ const RankingCard: React.FC<RankingCardProps> = ({
 };
 
 export { RankingCard };
-

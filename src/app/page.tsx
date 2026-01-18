@@ -1,6 +1,7 @@
+import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import HeroSection from '@/components/sections/HeroSection';
-import MetricsSection from '@/components/sections/MetricsSection';
+import MainContentSection from '@/components/sections/MainContentSection';
 import { getLandingPageData } from '@/lib/backend';
 
 export default async function Home() {
@@ -14,12 +15,13 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-base">
       <Header />
       <main>
         <HeroSection brandData={brandData} />
-        <MetricsSection />
+        <MainContentSection />
       </main>
+      <Footer />
     </div>
   );
 }

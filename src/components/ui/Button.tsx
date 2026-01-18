@@ -13,20 +13,67 @@ const Button: React.FC<ButtonProps> = ({
   className,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center rounded-md font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95';
-  
+  const baseStyles = `
+    inline-flex items-center justify-center
+    rounded-lg font-medium
+    transition-all duration-300
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base
+    disabled:pointer-events-none disabled:opacity-50
+  `;
+
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
-    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300',
-    outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100',
-    ghost: 'text-gray-700 hover:bg-gray-100 active:bg-gray-200',
-    white: 'bg-white text-black hover:bg-gray-50 active:bg-gray-100'
+    // Primary - Volumetric Soft Tile v2.0 (Raised with gradient)
+    primary: `
+      text-text-primary
+      shadow-soft-tile-sm
+      hover:brightness-110
+      active:shadow-deep-field-sm
+      active:scale-[0.98]
+    `,
+    // Secondary - Subtle Ridge Style v2.0
+    secondary: `
+      text-text-secondary
+      shadow-ridge
+      hover:brightness-110
+      hover:text-text-primary
+      active:shadow-deep-field-sm
+      active:scale-[0.98]
+    `,
+    // Outline - Minimal with subtle border
+    outline: `
+      bg-transparent
+      text-text-muted
+      border border-subtle
+      hover:shadow-soft-tile-xs
+      hover:text-text-primary
+      hover:border-white/[0.08]
+      active:shadow-deep-field-sm
+      active:scale-[0.98]
+    `,
+    // Ghost - No background, text only
+    ghost: `
+      bg-transparent
+      text-text-muted
+      hover:shadow-soft-tile-xs
+      hover:text-text-primary
+      active:bg-bg-depressed
+      active:scale-[0.98]
+    `,
+    // White - High contrast (for dark backgrounds)
+    white: `
+      bg-text-primary
+      text-bg-base
+      shadow-soft-tile-xs
+      hover:bg-text-secondary
+      active:shadow-deep-field-sm
+      active:scale-[0.98]
+    `
   };
 
   const sizes = {
     sm: 'h-8 px-3 text-sm',
     md: 'h-10 px-4 py-2',
-    lg: 'h-11 px-8 text-lg'
+    lg: 'h-12 px-8 text-lg'
   };
 
   return (

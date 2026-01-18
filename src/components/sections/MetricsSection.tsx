@@ -5,35 +5,53 @@ import { Reveal } from '@/components/ui';
 interface MetricCardProps {
   title: string;
   description: string;
-  index: number;
 }
 
-function MetricCard({ title, description, index }: MetricCardProps) {
+function MetricCard({ title, description }: MetricCardProps) {
   return (
-    <div className="relative rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-white/20 transition-all overflow-hidden group bg-black/40">
-      {/* Left accent border */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/70 group-hover:bg-white transition-colors" />
-      
-      {/* Background texture/pattern with grid */}
-      <div 
-        className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity"
+    <div
+      className="
+        relative
+        rounded-xl
+        p-6 sm:p-8
+        shadow-soft-tile-sm
+        overflow-hidden
+        group
+        transition-all duration-300
+        hover:shadow-soft-tile
+      "
+    >
+      {/* Left accent LED indicator */}
+      <div
+        className="
+          absolute left-0 top-0 bottom-0 w-1
+          bg-text-muted/30
+          group-hover:bg-green-500
+          group-hover:shadow-glow-green
+          transition-all duration-300
+        "
+      />
+
+      {/* Subtle grid pattern texture */}
+      <div
+        className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+            linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
           `,
-          backgroundSize: '30px 30px',
+          backgroundSize: '24px 24px',
           backgroundPosition: 'center',
         }}
       />
-      
+
       {/* Content */}
-      <div className="relative z-10">
-        <h3 className="text-white text-xl sm:text-2xl font-semibold mb-3">
+      <div className="relative z-10 pl-4">
+        <h3 className="text-text-primary text-xl sm:text-2xl font-medium tracking-tight mb-3">
           {title}
         </h3>
         {description && (
-          <p className="text-white/60 text-sm sm:text-base leading-relaxed">
+          <p className="text-text-muted text-sm sm:text-base leading-relaxed">
             {description}
           </p>
         )}
@@ -57,19 +75,25 @@ export default function MetricsSection() {
       description: 'Monitor which sources AI models cite when mentioning your brand and optimize your content strategy accordingly.',
     },
     {
-      title: 'Sentiment score',
+      title: 'Sentiment Score',
       description: 'Analyze the sentiment and context of AI responses about your brand to maintain a positive reputation.',
     },
   ];
 
   return (
-    <section className="w-full bg-black py-16 sm:py-20 md:py-24 px-4 sm:px-8">
+    <section className="w-full bg-bg-base py-16 sm:py-20 md:py-24 px-4 sm:px-8">
       <Reveal variant="fadeUp" duration={1.5} y={30}>
         <div className="max-w-7xl mx-auto">
-          {/* Main container card with rounded corners */}
-          <div className="bg-black rounded-3xl sm:rounded-[2.5rem] p-8 sm:p-10 md:p-12 lg:p-16 border border-white/10">
+          {/* Main container - Soft Tile Style v2.0 */}
+          <div
+            className="
+              rounded-2xl sm:rounded-3xl
+              p-8 sm:p-10 md:p-12 lg:p-16
+              shadow-soft-tile
+            "
+          >
             {/* Grid layout - stack on mobile, 2 columns on desktop */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               {/* Left column - stacked cards */}
               <div className="flex flex-col gap-4 sm:gap-5">
                 {metrics.slice(0, 2).map((metric, index) => (
@@ -83,12 +107,11 @@ export default function MetricsSection() {
                     <MetricCard
                       title={metric.title}
                       description={metric.description}
-                      index={index}
                     />
                   </Reveal>
                 ))}
               </div>
-              
+
               {/* Right column - stacked cards */}
               <div className="flex flex-col gap-4 sm:gap-5">
                 {metrics.slice(2, 4).map((metric, index) => (
@@ -102,7 +125,6 @@ export default function MetricsSection() {
                     <MetricCard
                       title={metric.title}
                       description={metric.description}
-                      index={index + 2}
                     />
                   </Reveal>
                 ))}
@@ -114,4 +136,3 @@ export default function MetricsSection() {
     </section>
   );
 }
-

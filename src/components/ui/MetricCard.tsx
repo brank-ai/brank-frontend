@@ -11,17 +11,25 @@ const MetricCard: React.FC<MetricCardProps> = ({
   return (
     <div
       className={cn(
-        'bg-[#2F2F2F33] border border-gray-800 p-3 sm:p-6 flex flex-col items-center justify-center',
+        // Volumetric Soft Tile Style
+        'bg-bg-surface',
+        'rounded-xl',
+        'p-4 sm:p-6',
+        'shadow-soft-tile-sm',
+        'border border-subtle',
+        'flex flex-col items-center justify-center',
+        'transition-all duration-300',
+        'hover:shadow-soft-tile',
         className
       )}
     >
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-wider text-center">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-text-muted text-[10px] sm:text-xs uppercase tracking-wider text-center font-medium">
           {label}
         </span>
         {info && (
           <button
-            className="text-gray-500 hover:text-gray-300 transition-colors"
+            className="text-text-subtle hover:text-text-muted transition-colors duration-300"
             title={info}
           >
             <svg
@@ -38,10 +46,11 @@ const MetricCard: React.FC<MetricCardProps> = ({
           </button>
         )}
       </div>
-      <div className="text-white text-2xl sm:text-4xl font-bold leading-none">{value}</div>
+      <div className="text-text-primary text-2xl sm:text-4xl font-medium leading-none tracking-tight text-glow">
+        {value}
+      </div>
     </div>
   );
 };
 
 export { MetricCard };
-

@@ -18,18 +18,18 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
     e.preventDefault();
     if (brandName.trim()) {
       const brand = brandName.trim();
-      
+
       // Fire-and-forget prefetch to warm backend cache
       fetch(`/api/prefetch-metric?website=${encodeURIComponent(brand)}`).catch(() => {
         // Silently ignore prefetch errors
       });
-      
+
       router.push(`/progress?brand=${encodeURIComponent(brand)}`);
     }
   };
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-black">
+    <section className="relative min-h-screen w-full overflow-hidden bg-bg-base">
       {/* Content - Centered */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-8 md:px-16 lg:px-24">
         <div className="w-full flex flex-col items-center relative translate-y-16">
@@ -37,8 +37,8 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
           <div className="absolute bottom-full w-full flex justify-center mb-10 sm:mb-14 md:mb-18">
             <Reveal trigger="mount" variant="fadeUp" delay={0.25} duration={2.0} y={16} initiallyVisible={false}>
               <div className="w-full sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px] overflow-visible">
-                <h1 className="font-serif text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal text-white flex flex-col sm:flex-row sm:items-center items-center gap-2 md:gap-3 sm:pl-24 md:pl-32 lg:pl-40 overflow-visible">
-                  <span className="shrink-0">Track your brand across</span>
+                <h1 className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-text-primary flex flex-col sm:flex-row sm:items-center items-center gap-2 md:gap-3 sm:pl-24 md:pl-32 lg:pl-40 overflow-visible">
+                  <span className="shrink-0 text-glow">Track your brand across</span>
                   <RotatingText
                     items={[
                       { name: 'ChatGPT', logo: '/images/LLMs/chatgpt.svg' },
@@ -47,34 +47,55 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
                       { name: 'Perplexity', logo: '/images/LLMs/perplexity.svg' },
                     ]}
                     rotationInterval={2500}
-                    className="font-serif text-lg sm:text-xl md:text-2xl lg:text-3xl"
+                    className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl"
                   />
                 </h1>
               </div>
             </Reveal>
           </div>
 
-          {/* Search Bar - White border with search icon */}
+          {/* Search Bar - Deep Field (Depressed) Style */}
           <Reveal trigger="mount" variant="fadeIn" duration={2.0} initiallyVisible={false}>
             <form
               onSubmit={handleSubmit}
-              className="flex items-center rounded-full w-[85vw] sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px] bg-[#1e1e1e]"
-              style={{
-                boxShadow: 'inset 4px 4px 8px rgba(0, 0, 0, 0.6), inset -4px -4px 8px rgba(255, 255, 255, 0.05), 0 4px 15px rgba(0, 0, 0, 0.5)'
-              }}
+              className="
+                flex items-center
+                rounded-full
+                w-[85vw] sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px]
+                bg-bg-surface
+                shadow-soft-tile-sm
+                border border-subtle
+              "
             >
               <input
                 type="text"
                 placeholder="Get Brank's analysis of your brand."
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
-                className="flex-1 min-w-0 bg-transparent text-white/80 placeholder-white/40 pl-[5%] pr-2 py-2 text-sm sm:py-3 md:py-4 sm:text-base md:text-lg lg:text-xl font-serif focus:outline-none"
+                className="
+                  flex-1 min-w-0
+                  bg-transparent
+                  text-text-primary/80
+                  placeholder-text-subtle
+                  pl-[5%] pr-2
+                  py-2 text-sm
+                  sm:py-3 md:py-4
+                  sm:text-base md:text-lg lg:text-xl
+                  font-sans
+                  focus:outline-none
+                "
               />
-              <button 
+              <button
                 type="submit"
-                className="pr-3 sm:pr-5 md:pr-6 flex items-center shrink-0 hover:opacity-80 transition-opacity"
+                className="
+                  pr-3 sm:pr-5 md:pr-6
+                  flex items-center shrink-0
+                  text-text-muted
+                  hover:text-text-primary
+                  transition-colors duration-300
+                "
               >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <circle cx="11" cy="11" r="8" />
                   <path d="m21 21-4.35-4.35" />
                 </svg>
@@ -82,7 +103,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
             </form>
           </Reveal>
 
-          {/* Logo Ticker - Infinite scroll of trusted bands */}
+          {/* Logo Ticker - Infinite scroll of trusted brands */}
           <Reveal trigger="mount" variant="fadeIn" delay={0.5} duration={2.0} initiallyVisible={false}>
             <div className="w-full mt-12 sm:mt-16 md:mt-20">
               <LogoTicker />

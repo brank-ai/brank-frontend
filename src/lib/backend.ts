@@ -31,7 +31,7 @@ export async function getMetrics(website: string): Promise<BackendMetricResponse
 
   try {
     const response = await fetch(url.toString(), {
-      cache: 'no-store', // Always fetch fresh data
+      next: { revalidate: 300 }, // Cache for 5 minutes to support prefetching
       headers: {
         'Content-Type': 'application/json',
       },

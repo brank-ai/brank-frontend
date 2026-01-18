@@ -1,22 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   BRANK DESIGN SYSTEM v2.0 - CSS Variables
+   High-Fidelity Volumetric
+   ============================================ */
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  /* Legacy Variables */
+  --background: #050505;
+  --foreground: #F0F0F0;
   --accent-teal: #06b6d4;
   --accent-cyan: #06b6d4;
-  --card-bg: #1a1a1a;
-  --header-bg: #000000;
+  --card-bg: #111111;
+  --header-bg: #050505;
+
+  /* Design System v2.0: Base Colors */
+  --bg-base: #050505;
+  --bg-surface: #111111;
+  --bg-surface-light: #161616;
+  --bg-elevated: #1a1a1a;
+  --bg-depressed: #000000; /* Pure black for v2.0 */
+
+  /* Design System v2.0: Text Colors (Brighter) */
+  --text-primary: #F0F0F0;
+  --text-secondary: #D0D0D0;
+  --text-muted: #888888;
+  --text-subtle: #666666;
+
+  /* Design System v2.0: Shadow Colors */
+  --shadow-light: rgba(255, 255, 255, 0.06);
+  --shadow-dark: rgba(0, 0, 0, 0.9);
+  --rim-highlight: rgba(255, 255, 255, 0.08);
+
+  /* Design System: Accent Colors */
+  --accent-success: #22C55E;
+  --accent-warning: #F59E0B;
+  --accent-error: #EF4444;
+  --accent-info: #3B82F6;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Roboto Flex', sans-serif;
+  font-family: 'Geist Sans', 'Inter', 'Roboto Flex', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Prevent iOS Safari from auto-zooming the page when focusing form fields (<16px font). */
@@ -33,6 +63,258 @@ body {
     text-wrap: balance;
   }
 }
+
+/* ============================================
+   BRANK DESIGN SYSTEM - Utility Classes
+   ============================================ */
+
+/* Background Colors */
+.bg-base { background-color: var(--bg-base); }
+.bg-surface { background-color: var(--bg-surface); }
+.bg-surface-light { background-color: var(--bg-surface-light); }
+.bg-elevated { background-color: var(--bg-elevated); }
+.bg-depressed { background-color: var(--bg-depressed); }
+
+/* Text Colors */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-subtle { color: var(--text-subtle); }
+
+/* ============================================
+   VOLUMETRIC SHADOWS v2.0
+   High-Fidelity with Rim Lighting
+   ============================================ */
+
+/* Soft Tile (Raised) - Cards, Buttons, Containers */
+.shadow-soft-tile {
+  background: linear-gradient(145deg, #161616, #121212);
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.08),
+    -12px -12px 30px rgba(255, 255, 255, 0.06),
+    12px 12px 30px rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.shadow-soft-tile-sm {
+  background: linear-gradient(145deg, #161616, #121212);
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.08),
+    -6px -6px 16px rgba(255, 255, 255, 0.05),
+    6px 6px 16px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.shadow-soft-tile-xs {
+  background: linear-gradient(145deg, #161616, #121212);
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.06),
+    -3px -3px 8px rgba(255, 255, 255, 0.04),
+    3px 3px 8px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Deep Field (Depressed) - Inputs, Search Bars, Code Snippets */
+.shadow-deep-field {
+  background: #000000;
+  box-shadow:
+    inset 0 1px 0px rgba(0, 0, 0, 0.5),
+    inset 4px 4px 12px rgba(0, 0, 0, 0.95),
+    inset -2px -2px 8px rgba(255, 255, 255, 0.02);
+}
+
+.shadow-deep-field-lg {
+  background: #000000;
+  box-shadow:
+    inset 0 1px 0px rgba(0, 0, 0, 0.5),
+    inset 6px 6px 18px rgba(0, 0, 0, 0.95),
+    inset -3px -3px 12px rgba(255, 255, 255, 0.02);
+}
+
+.shadow-deep-field-sm {
+  background: #000000;
+  box-shadow:
+    inset 0 1px 0px rgba(0, 0, 0, 0.4),
+    inset 2px 2px 6px rgba(0, 0, 0, 0.9),
+    inset -1px -1px 4px rgba(255, 255, 255, 0.02);
+}
+
+/* Ridge (Subtle) - Dividers, Subtle Buttons */
+.shadow-ridge {
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.05),
+    4px 4px 8px rgba(0, 0, 0, 0.6),
+    -4px -4px 8px rgba(255, 255, 255, 0.03);
+}
+
+/* ============================================
+   GLOW EFFECTS
+   ============================================ */
+
+.shadow-glow-green {
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+}
+
+.shadow-glow-blue {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+}
+
+.shadow-glow-white {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.text-glow-strong {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   LED INDICATORS
+   ============================================ */
+
+.led-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: var(--accent-success);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+}
+
+.led-indicator-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   BORDERS
+   ============================================ */
+
+.border-subtle {
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.border-subtle-visible {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.border-subtle-hover {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.heading-display {
+  font-size: 4.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.heading-1 {
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.heading-2 {
+  font-size: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.heading-3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.heading-4 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.body-large {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(234, 234, 234, 0.8);
+}
+
+.body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(234, 234, 234, 0.8);
+}
+
+.body-small {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(234, 234, 234, 0.8);
+}
+
+.caption {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.overline {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   HOVER & INTERACTION EFFECTS
+   ============================================ */
+
+.hover-lift {
+  transition: all 300ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+    -16px -16px 40px rgba(255, 255, 255, 0.08),
+    16px 16px 40px rgba(0, 0, 0, 0.95);
+}
+
+.press-effect {
+  transition: all 150ms ease;
+}
+
+.press-effect:active {
+  transform: scale(0.98);
+  box-shadow:
+    inset 0 1px 0px rgba(0, 0, 0, 0.5),
+    inset 4px 4px 12px rgba(0, 0, 0, 0.95),
+    inset -2px -2px 8px rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   EXISTING ANIMATIONS (Preserved)
+   ============================================ */
 
 /* Marquee animation */
 @keyframes marquee {
@@ -104,6 +386,28 @@ body {
   }
 }
 
+/* Design System Animation - Glow Pulse */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+  }
+}
+
+/* Design System Animation - Fade In Up */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-marquee {
   animation: marquee 80s linear infinite;
 }
@@ -142,4 +446,12 @@ body {
 
 .animate-slideUpIn {
   animation: slideUpIn 0.3s ease-in-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 500ms ease-out forwards;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
 }

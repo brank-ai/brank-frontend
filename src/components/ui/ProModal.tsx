@@ -44,17 +44,32 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-80"
+      <div
+        className="absolute inset-0 bg-bg-base/90 backdrop-blur-sm"
         onClick={handleClose}
       />
-      
-      {/* Modal Container */}
-      <div className="relative bg-black border border-gray-800 p-8 max-w-md w-full mx-4 z-10">
+
+      {/* Modal Container - Soft Tile Style v2.0 */}
+      <div
+        className="
+          relative
+          rounded-xl
+          shadow-soft-tile
+          p-8
+          max-w-md w-full mx-4
+          z-10
+        "
+      >
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-all duration-150 active:scale-95"
+          className="
+            absolute top-4 right-4
+            text-text-muted
+            hover:text-text-primary
+            transition-all duration-300
+            active:scale-95
+          "
           aria-label="Close modal"
         >
           <svg
@@ -74,8 +89,8 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
 
         {/* Content */}
         <div className="pr-8">
-          <h2 className="text-white text-xl font-normal mb-6">
-            To acess PRO features reach out to us
+          <h2 className="text-text-primary text-xl font-medium tracking-tight mb-6">
+            To access PRO features reach out to us
           </h2>
 
           {!isSubmitted ? (
@@ -87,25 +102,52 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className={`w-full px-4 py-3 bg-[#2F2F2F33] text-white placeholder:text-gray-500 border ${
-                      error ? 'border-red-500' : 'border-gray-800'
-                    } focus:outline-none focus:border-gray-600`}
+                    className={`
+                      w-full px-4 py-3
+                      bg-bg-depressed
+                      text-text-primary
+                      placeholder:text-text-subtle
+                      rounded-lg
+                      shadow-deep-field-sm
+                      border ${error ? 'border-accent-error/50' : 'border-transparent'}
+                      focus:outline-none
+                      transition-all duration-300
+                    `}
                     required
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-white text-black text-sm font-medium hover:opacity-90 transition-all duration-150 rounded-md active:scale-95"
+                  className="
+                    px-6 py-3
+                    bg-text-primary
+                    text-bg-base
+                    text-sm font-medium
+                    rounded-lg
+                    shadow-soft-tile-xs
+                    hover:bg-text-secondary
+                    active:shadow-deep-field-sm
+                    active:scale-[0.98]
+                    transition-all duration-300
+                  "
                 >
                   Submit
                 </button>
               </div>
               {error && (
-                <p className="text-red-500 text-sm">{error}</p>
+                <p className="text-accent-error text-sm">{error}</p>
               )}
             </form>
           ) : (
-            <div className="flex items-start gap-3 p-4 bg-green-900 bg-opacity-20 border border-green-500">
+            <div
+              className="
+                flex items-start gap-3
+                p-4
+                bg-accent-success/10
+                rounded-lg
+                border border-accent-success/20
+              "
+            >
               <svg
                 width="24"
                 height="24"
@@ -115,13 +157,13 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="text-green-500 flex-shrink-0"
+                className="text-accent-success flex-shrink-0"
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
               <div>
-                <p className="text-green-500 font-medium mb-1">Success!</p>
-                <p className="text-gray-300 text-sm">
+                <p className="text-accent-success font-medium mb-1">Success!</p>
+                <p className="text-text-muted text-sm">
                   Thank you for your interest. We will reach out to you shortly at {email}.
                 </p>
               </div>
@@ -134,4 +176,3 @@ const ProModal: React.FC<ProModalProps> = ({ isOpen, onClose }) => {
 };
 
 export { ProModal };
-

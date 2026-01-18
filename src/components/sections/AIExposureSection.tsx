@@ -11,16 +11,16 @@ const llmPlatforms = [
 
 export default function AIExposureSection() {
   return (
-    <section className="w-full bg-black py-12 sm:py-16 md:py-20">
+    <section className="w-full bg-bg-base py-12 sm:py-16 md:py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Main headline */}
-        <h2 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight mb-3 sm:mb-4 text-center">
+        <h2 className="text-text-primary text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight mb-3 sm:mb-4 text-center">
           Brank helps you understand your{' '}
-          <span className="text-white italic">AI exposure.</span>
+          <span className="text-text-primary italic">AI exposure.</span>
         </h2>
         
         {/* Subtitle */}
-        <p className="text-gray-400 text-sm sm:text-base md:text-lg mb-10 sm:mb-12 md:mb-16 text-center">
+        <p className="text-text-muted text-sm sm:text-base md:text-lg mb-10 sm:mb-12 md:mb-16 text-center">
           Across ChatGPT, Claude, Deepseek, Gemini, Grok, and Perplexity.
         </p>
         
@@ -29,7 +29,7 @@ export default function AIExposureSection() {
           {llmPlatforms.map((platform) => (
             <div 
               key={platform.name}
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 border border-gray-700 flex items-center justify-center"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 border border-subtle flex items-center justify-center"
             >
               <Image
                 src={platform.logo}

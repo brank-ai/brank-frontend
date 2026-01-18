@@ -1,6 +1,6 @@
-# Brank Design System: "Quiet Luxury"
+# Brank Design System: "High-Fidelity Volumetric"
 
-> A comprehensive design system for the Brank frontend, implementing a "Volumetric Dark" aesthetic that mimics high-end physical hardware.
+> **Version 2.0 (High Contrast Update)** - A comprehensive design system for the Brank frontend. This version increases visual definition using "Rim Lighting" and sharper shadow falls.
 
 ---
 
@@ -21,47 +21,46 @@
 
 ## 1. High-Level Philosophy
 
-This design system, codenamed **"Volumetric Dark,"** mimics high-end physical hardware with a premium, understated aesthetic.
+This design system, codenamed **"High-Fidelity Volumetric,"** emphasizes tactile interactions. We have moved from "soft" shadows to "defined" physics.
 
 ### Core Principles
 
 | Principle | Description |
 |-----------|-------------|
-| **Physics** | Elements are not "flat." They are either **raised (convex)** or **depressed (concave)** into the dark surface. |
-| **Lighting** | Global light source is **Top-Left**. Shadows fall **Bottom-Right**. |
-| **Material** | Soft-touch matte plastic. **No glossy surfaces. No harsh borders.** |
-| **Restraint** | Minimal color usage. Let shadow and depth do the work. |
+| **Rim Lighting** | Every raised element has a 1px sharp highlight on the top-left edge. This defines the shape. |
+| **Deep Contrast** | Shadows are pitch black. Highlights are white (low opacity). This creates maximum depth. |
+| **Tactility** | Buttons and cards should look like distinct physical keys on a control board. |
 
 ### Design Mantras
 
-- "Black on Black" - Depth through shadow, not color
-- "Whisper, don't shout" - Subtle interactions over dramatic animations
-- "Touch it" - Every element should feel tangible and physical
+- "Define the edges" - Sharp rim lights over soft glows
+- "Control board aesthetic" - Elements look like physical switches and keys
+- "Maximum depth" - Pure black shadows, white alpha highlights
 
 ---
 
 ## 2. Color Palette
 
-The interface is **"Black on Black"** - using subtle variations of dark tones to create depth.
+We have slightly lightened the surface color to create more separation from the background.
 
 ### Primary Colors
 
 | Token | Hex | RGB | Usage |
 |-------|-----|-----|-------|
 | `bg-base` | `#050505` | `rgb(5, 5, 5)` | The desk surface / page background |
-| `bg-surface` | `#111111` | `rgb(17, 17, 17)` | Raised elements (cards, containers) |
-| `bg-surface-light` | `#161616` | `rgb(22, 22, 22)` | Lighter surface variant |
-| `bg-elevated` | `#1a1a1a` | `rgb(26, 26, 26)` | Hover states, elevated surfaces |
-| `bg-depressed` | `#0a0a0a` | `rgb(10, 10, 10)` | Inset/depressed areas |
+| `bg-surface` | `#141414` | `rgb(20, 20, 20)` | **(Updated)** Slightly lighter to pop against black |
+| `bg-surface-light` | `#1A1A1A` | `rgb(26, 26, 26)` | Lighter surface variant |
+| `bg-elevated` | `#1E1E1E` | `rgb(30, 30, 30)` | Hover states, elevated surfaces |
+| `bg-depressed` | `#000000` | `rgb(0, 0, 0)` | **(Updated)** Pure black for deepest inputs |
 
 ### Text Colors
 
 | Token | Hex | Opacity | Usage |
 |-------|-----|---------|-------|
-| `text-primary` | `#EAEAEA` | 100% | Primary headings, important text |
-| `text-secondary` | `#CCCCCC` | 100% | Secondary text, descriptions |
-| `text-muted` | `#888888` | 100% | Labels, captions, hints |
-| `text-subtle` | `#666666` | 100% | Disabled states, very subtle text |
+| `text-primary` | `#F0F0F0` | 100% | **(Updated)** Brighter white for contrast |
+| `text-secondary` | `#A3A3A3` | 100% | Secondary text, descriptions |
+| `text-muted` | `#666666` | 100% | Labels, captions, hints |
+| `text-subtle` | `#4A4A4A` | 100% | Disabled states, very subtle text |
 
 ### Accent Colors
 
@@ -72,152 +71,148 @@ The interface is **"Black on Black"** - using subtle variations of dark tones to
 | `accent-error` | `#EF4444` | Error states |
 | `accent-info` | `#3B82F6` | Information indicators |
 
-### Shadow Colors
-
-| Token | Hex/RGBA | Usage |
-|-------|----------|-------|
-| `shadow-light` | `#1f1f1f` | Top-left highlight |
-| `shadow-dark` | `#050505` | Bottom-right shadow |
-| `shadow-border` | `rgba(255,255,255,0.02)` | Subtle border reinforcement |
-| `shadow-glow` | `rgba(255,255,255,0.2)` | Text glow effect |
-
 ### Color Rules
 
 ```
 ✅ DO:
 - Use bg-base (#050505) as the primary page background
-- Use off-white (#EAEAEA) for large text, never pure white (#FFFFFF)
-- Use green (#22C55E) sparingly, only for small LED indicators
-- Create depth through shadow variations, not color differences
+- Use bg-surface (#141414) for raised elements - it's lighter now
+- Use pure black (#000000) for depressed/input fields
+- Use brighter text (#F0F0F0) for high contrast
 
 ❌ DON'T:
-- Use pure white (#FFFFFF) for large text areas
-- Use bright accent colors for large surfaces
-- Mix warm and cool grays
-- Use gradients (except very subtle ones for depth)
+- Use flat colors without gradients on cards
+- Skip the rim light (inset highlight)
+- Use old grey highlights - use white alpha instead
 ```
 
 ---
 
 ## 3. Volumetric Shadow Tokens
 
-Use these exact shadow values. **Do not invent new shadows.**
+**MAJOR UPDATE:** All shadows now include an inset value (Rim Light) to define the edges.
 
-### A. The "Soft Tile" (Raised Card)
+### Shadow Comparison
 
-**Used for:** Feature cards, containers, buttons, modal overlays
+| Property | Old System | New System |
+|----------|------------|------------|
+| Highlights | Dark Grey (`#1f1f1f`) | White Alpha (`rgba(255,255,255,0.08)`) |
+| Blur | Wide (60px) | Tight (30px) |
+| Edges | None | 1px Inset Bevel (Rim Light) |
+| Surface | Flat Color | Subtle Gradient |
+
+### A. The "Tactile Tile" (Raised Card)
+
+**Used for:** Feature cards, containers, large buttons.
+
+**Change:** Added 1px inner light, tighter blur, brighter outer highlight.
 
 ```css
 /* CSS */
 .shadow-soft-tile {
+  background: linear-gradient(145deg, #161616, #121212); /* Subtle surface curve */
   box-shadow:
-    -20px -20px 60px #1f1f1f,
-    20px 20px 60px #050505;
+    /* The Rim Light (Sharp Edge) */
+    inset 1px 1px 0px rgba(255, 255, 255, 0.08),
+    /* Top Left Highlight (Soft) */
+    -12px -12px 30px rgba(255, 255, 255, 0.06),
+    /* Bottom Right Shadow (Deep) */
+    12px 12px 30px rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 /* Tailwind Arbitrary Value */
-shadow-[-20px_-20px_60px_#1f1f1f,20px_20px_60px_#050505]
-border border-white/[0.02]
+bg-gradient-to-br from-[#161616] to-[#121212]
+shadow-[inset_1px_1px_0px_rgba(255,255,255,0.08),-12px_-12px_30px_rgba(255,255,255,0.06),12px_12px_30px_rgba(0,0,0,0.9)]
 ```
 
-**Smaller variant (for buttons):**
+### B. The "Control Button" (Small Raised)
+
+**Used for:** Primary CTAs, toggles.
+
+**Change:** Very sharp definition. Looks like a plastic key.
+
 ```css
+/* CSS */
 .shadow-soft-tile-sm {
+  background: linear-gradient(145deg, #1A1A1A, #141414);
   box-shadow:
-    -8px -8px 24px #1f1f1f,
-    8px 8px 24px #050505;
-  border: 1px solid rgba(255, 255, 255, 0.02);
+    inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+    -6px -6px 14px rgba(255, 255, 255, 0.06),
+    6px 6px 14px rgba(0, 0, 0, 0.8);
 }
+
+/* Tailwind Arbitrary Value */
+bg-gradient-to-br from-[#1A1A1A] to-[#141414]
+shadow-[inset_1px_1px_0px_rgba(255,255,255,0.1),-6px_-6px_14px_rgba(255,255,255,0.06),6px_6px_14px_rgba(0,0,0,0.8)]
 ```
 
-### B. The "Deep Field" (Depressed Input)
+### C. The "Trench" (Depressed Field)
 
-**Used for:** Search bars, text inputs, code snippets, depressed containers
+**Used for:** Search bars, inputs.
+
+**Change:** Increased opacity of inner shadows for a "deeper" hole effect.
 
 ```css
 /* CSS */
 .shadow-deep-field {
+  background: #050505;
   box-shadow:
-    inset 5px 5px 15px #050505,
-    inset -5px -5px 15px #1a1a1a;
+    /* Deep Inner Shadow */
+    inset 6px 6px 14px rgba(0, 0, 0, 0.9),
+    /* Reflected Light on bottom lip */
+    inset -6px -6px 14px rgba(255, 255, 255, 0.04),
+    /* External "Lip" highlight */
+    0px 1px 0px rgba(255,255,255,0.05);
 }
 
 /* Tailwind Arbitrary Value */
-shadow-[inset_5px_5px_15px_#050505,inset_-5px_-5px_15px_#1a1a1a]
+shadow-[inset_6px_6px_14px_rgba(0,0,0,0.9),inset_-6px_-6px_14px_rgba(255,255,255,0.04),0px_1px_0px_rgba(255,255,255,0.05)]
 ```
 
-**Larger variant (for bigger containers):**
-```css
-.shadow-deep-field-lg {
-  box-shadow:
-    inset 8px 8px 24px #050505,
-    inset -8px -8px 24px #1a1a1a;
-}
-```
+### D. The "Ridge" (Subtle Border)
 
-### C. The "Ridge" (Subtle Border)
-
-**Used for:** Dividers, extremely subtle buttons, subtle separations
+**Used for:** Dividers, inactive states, subtle separations.
 
 ```css
 /* CSS */
 .shadow-ridge {
   box-shadow:
-    6px 6px 10px -1px rgba(0, 0, 0, 0.5),
-    -6px -6px 10px -1px rgba(255, 255, 255, 0.02);
+    inset 1px 1px 0px rgba(255, 255, 255, 0.05),
+    4px 4px 10px rgba(0, 0, 0, 0.6),
+    -4px -4px 10px rgba(255, 255, 255, 0.03);
 }
-
-/* Tailwind Arbitrary Value */
-shadow-[6px_6px_10px_-1px_rgba(0,0,0,0.5),-6px_-6px_10px_-1px_rgba(255,255,255,0.02)]
 ```
 
-### D. The "Glow" (LED Indicator)
+### E. The "Glow" (LED Indicator)
 
-**Used for:** Status indicators, active states, success markers
+**Used for:** Status indicators, active states, success markers.
 
 ```css
 /* CSS */
 .shadow-glow-green {
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
-}
-
-.shadow-glow-blue {
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.7);
 }
 
 /* Tailwind Arbitrary Value */
-shadow-[0_0_10px_rgba(34,197,94,0.6)]
-```
-
-### E. The "Text Glow"
-
-**Used for:** Key headings, emphasized words
-
-```css
-/* CSS */
-.text-glow {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-}
-
-.text-glow-strong {
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
-}
+shadow-[0_0_15px_rgba(34,197,94,0.7)]
 ```
 
 ### Shadow Quick Reference
 
-| Shadow Type | Use Case | Feel |
-|-------------|----------|------|
-| Soft Tile | Cards, buttons | Raised, tactile |
-| Deep Field | Inputs, search | Depressed, recessed |
-| Ridge | Dividers, subtle elements | Barely there |
-| Glow | Indicators, active states | Alive, electronic |
-| Text Glow | Headlines, emphasis | Premium, ethereal |
+| Shadow Type | Key Feature | Feel |
+|-------------|-------------|------|
+| Tactile Tile | Rim light + gradient | Physical key |
+| Control Button | Sharp edges | Clickable switch |
+| Trench | Deep inset + lip | Carved hole |
+| Ridge | Subtle bevel | Barely raised |
+| Glow | Bright halo | Active LED |
 
 ---
 
 ## 4. Typography
+
+(No major changes, just ensure high contrast with brighter text)
 
 ### Font Stack
 
@@ -244,56 +239,6 @@ font-family: 'Geist Mono', 'Fira Code', 'Consolas', monospace;
 | Caption | 12px / 0.75rem | 400 (normal) | 0.02em | 1.4 | Labels, hints |
 | Overline | 11px / 0.6875rem | 500 (medium) | 0.1em | 1.4 | Category labels |
 
-### Typography Rules
-
-```css
-/* Headers */
-.heading {
-  font-weight: 500; /* medium */
-  letter-spacing: -0.02em; /* tracking-tight */
-  color: #EAEAEA;
-}
-
-/* Body Text */
-.body {
-  font-weight: 400; /* normal */
-  color: rgba(234, 234, 234, 0.8); /* 80% opacity */
-  line-height: 1.6;
-}
-
-/* Muted Text */
-.muted {
-  color: #888888;
-}
-
-/* Glowing Text (for emphasis) */
-.text-emphasis {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-}
-```
-
-### Tailwind Typography Classes
-
-```html
-<!-- Display Heading -->
-<h1 class="text-7xl font-medium tracking-tight text-[#EAEAEA]">
-
-<!-- H1 -->
-<h1 class="text-5xl font-medium tracking-tight text-[#EAEAEA]">
-
-<!-- H2 -->
-<h2 class="text-4xl font-medium tracking-tight text-[#EAEAEA]">
-
-<!-- Body with opacity -->
-<p class="text-base font-normal text-[#EAEAEA]/80">
-
-<!-- Muted caption -->
-<span class="text-xs font-normal tracking-wide text-[#888888]">
-
-<!-- Glowing keyword -->
-<span class="[text-shadow:0_0_20px_rgba(255,255,255,0.2)]">
-```
-
 ---
 
 ## 5. Spacing & Layout
@@ -315,17 +260,6 @@ Based on a 4px base unit:
 | `space-24` | 96px | Page section spacing |
 | `space-32` | 128px | Major section breaks |
 
-### Container Widths
-
-```css
-/* Max widths for content */
---container-sm: 640px;   /* Narrow content, forms */
---container-md: 768px;   /* Medium content */
---container-lg: 1024px;  /* Wide content */
---container-xl: 1280px;  /* Full-width sections */
---container-2xl: 1536px; /* Maximum content width */
-```
-
 ### Border Radius
 
 | Token | Value | Usage |
@@ -342,204 +276,110 @@ Based on a 4px base unit:
 
 ## 6. Component Patterns
 
-### A. Status Tile (Bento Grid Item)
+### A. Feature Card (With Gradient Surface)
 
-A square/rectangular container using Shadow A (Soft Tile).
+**Note:** We now add `bg-gradient-surface` to give the card a curved feel.
 
 ```tsx
-interface StatusTileProps {
-  icon: React.ReactNode;
-  label: string;
-  status?: 'active' | 'inactive';
-}
-
-// Structure
-<div className="
-  bg-[#111111]
-  rounded-xl
-  p-6
-  shadow-[-20px_-20px_60px_#1f1f1f,20px_20px_60px_#050505]
-  border border-white/[0.02]
-  flex flex-col items-center justify-center
-  aspect-square
-">
-  {/* Icon */}
-  <div className="text-[#EAEAEA] mb-4">
-    {icon}
-  </div>
-
-  {/* Label */}
-  <span className="text-sm text-[#888888]">
-    {label}
-  </span>
-
-  {/* Status LED (if active) */}
-  {status === 'active' && (
+export function FeatureCard() {
+  return (
     <div className="
-      w-2 h-2
-      rounded-full
-      bg-green-500
-      shadow-[0_0_10px_rgba(34,197,94,0.6)]
-      mt-3
-    " />
-  )}
-</div>
-```
-
-### B. Toggle Switch
-
-A pill-shaped container using Shadow B (Depressed track) with Shadow A (Raised knob).
-
-```tsx
-interface ToggleProps {
-  enabled: boolean;
-  onChange: (enabled: boolean) => void;
+      bg-gradient-surface        /* NEW: Adds subtle curve */
+      rounded-2xl
+      p-8
+      shadow-soft-tile           /* NEW: Sharper shadow */
+      border border-white/[0.02]
+      hover:-translate-y-1
+      transition-all duration-300
+    ">
+      <h3 className="text-text-primary text-xl font-medium mb-2">Analytics</h3>
+      <p className="text-text-secondary">Real-time data processing.</p>
+    </div>
+  );
 }
-
-// Structure
-<button className="
-  relative
-  w-14 h-8
-  rounded-full
-  bg-[#0a0a0a]
-  shadow-[inset_5px_5px_15px_#050505,inset_-5px_-5px_15px_#1a1a1a]
-  transition-all duration-300
-">
-  {/* Knob */}
-  <div className={`
-    absolute top-1
-    w-6 h-6
-    rounded-full
-    bg-[#161616]
-    shadow-[-8px_-8px_24px_#1f1f1f,8px_8px_24px_#050505]
-    border border-white/[0.02]
-    transition-all duration-300
-    ${enabled ? 'left-7' : 'left-1'}
-  `}>
-    {/* Active LED */}
-    {enabled && (
-      <div className="
-        absolute inset-0 m-auto
-        w-2 h-2
-        rounded-full
-        bg-green-500
-        shadow-[0_0_10px_rgba(34,197,94,0.6)]
-      " />
-    )}
-  </div>
-</button>
 ```
 
-### C. Input Field (Deep Field)
+### B. The "Physical" Search Bar
 
 ```tsx
-// Structure
-<div className="relative">
-  {/* Label */}
-  <label className="
-    block text-xs font-medium tracking-wide
-    text-[#888888] uppercase mb-2
-  ">
-    Search
-  </label>
-
-  {/* Input Container */}
-  <div className="
-    bg-[#0a0a0a]
-    rounded-lg
-    shadow-[inset_5px_5px_15px_#050505,inset_-5px_-5px_15px_#1a1a1a]
-    px-4 py-3
-  ">
-    <input
-      type="text"
-      className="
-        bg-transparent
-        w-full
-        text-[#EAEAEA]
-        placeholder:text-[#666666]
-        outline-none
-        text-base
-      "
-      placeholder="Type to search..."
-    />
-  </div>
-</div>
+export function SearchInput() {
+  return (
+    <div className="
+      bg-bg-depressed
+      rounded-full               /* Pill shape works best for this */
+      shadow-deep-field          /* Deep trench effect */
+      px-6 py-4
+      flex items-center gap-3
+      border-b border-white/[0.05] /* Subtle lip at bottom */
+    ">
+      <SearchIcon className="w-5 h-5 text-text-muted" />
+      <input
+        type="text"
+        placeholder="Search..."
+        className="bg-transparent text-text-primary w-full outline-none placeholder:text-text-muted"
+      />
+    </div>
+  );
+}
 ```
 
-### D. Primary Button (Soft Tile)
+### C. Control Button (CTA)
 
 ```tsx
-// Structure
-<button className="
-  bg-[#111111]
-  text-[#EAEAEA]
-  px-6 py-3
-  rounded-lg
-  font-medium
-  shadow-[-8px_-8px_24px_#1f1f1f,8px_8px_24px_#050505]
-  border border-white/[0.02]
-  transition-all duration-300
-  hover:bg-[#161616]
-  active:shadow-[inset_5px_5px_15px_#050505,inset_-5px_-5px_15px_#1a1a1a]
-">
-  Get Started
-</button>
+export function ControlButton() {
+  return (
+    <button className="
+      bg-gradient-button
+      text-text-primary
+      px-6 py-3
+      rounded-lg
+      font-medium
+      shadow-soft-tile-sm
+      border border-white/[0.02]
+      transition-all duration-300
+      hover:brightness-110
+      active:shadow-deep-field
+      active:scale-[0.98]
+    ">
+      Get Started
+    </button>
+  );
+}
 ```
 
-### E. Card (Feature Card)
+### D. Metric Card with LED
 
 ```tsx
-// Structure
-<div className="
-  bg-[#111111]
-  rounded-xl
-  p-8
-  shadow-[-20px_-20px_60px_#1f1f1f,20px_20px_60px_#050505]
-  border border-white/[0.02]
-">
-  {/* Icon/Image Area */}
-  <div className="
-    w-12 h-12
-    rounded-lg
-    bg-[#0a0a0a]
-    shadow-[inset_5px_5px_15px_#050505,inset_-5px_-5px_15px_#1a1a1a]
-    flex items-center justify-center
-    mb-6
-  ">
-    <Icon className="w-6 h-6 text-[#888888]" />
-  </div>
+export function MetricCard({ title, value, isActive }) {
+  return (
+    <div className="
+      bg-gradient-surface
+      rounded-xl
+      p-6
+      shadow-soft-tile
+      border border-white/[0.02]
+      relative
+    ">
+      {/* LED Indicator */}
+      {isActive && (
+        <div className="
+          absolute top-4 right-4
+          w-2 h-2
+          rounded-full
+          bg-green-500
+          shadow-glow-green
+        " />
+      )}
 
-  {/* Title */}
-  <h3 className="
-    text-xl font-medium tracking-tight
-    text-[#EAEAEA] mb-3
-  ">
-    Feature Title
-  </h3>
-
-  {/* Description */}
-  <p className="text-[#888888] text-base leading-relaxed">
-    Feature description goes here with muted text.
-  </p>
-</div>
-```
-
-### F. Navigation Item
-
-```tsx
-// Structure
-<a className="
-  px-4 py-2
-  rounded-lg
-  text-[#888888]
-  text-sm font-medium
-  transition-all duration-300
-  hover:text-[#EAEAEA]
-  hover:bg-[#111111]
-  hover:shadow-[-8px_-8px_24px_#1f1f1f,8px_8px_24px_#050505]
-">
-  Products
-</a>
+      <span className="text-text-muted text-xs uppercase tracking-wider">
+        {title}
+      </span>
+      <div className="text-text-primary text-3xl font-medium mt-2">
+        {value}
+      </div>
+    </div>
+  );
+}
 ```
 
 ---
@@ -547,8 +387,6 @@ interface ToggleProps {
 ## 7. Animation & Transitions
 
 ### Default Transition
-
-All interactive elements use the same base transition:
 
 ```css
 .transition-base {
@@ -561,50 +399,25 @@ transition-all duration-300
 
 ### Hover Lift Effect
 
-For cards that "lift" on hover:
-
 ```css
 .hover-lift {
   transition: all 300ms ease;
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    -24px -24px 70px #1f1f1f,
-    24px 24px 70px #050505;
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 ```
 
-### Press Effect
-
-For buttons that "press" when clicked:
+### Press Effect (NEW - Deeper)
 
 ```css
 .press-effect:active {
   transform: scale(0.98);
   box-shadow:
-    inset 5px 5px 15px #050505,
-    inset -5px -5px 15px #1a1a1a;
-}
-```
-
-### Fade In Animation
-
-```css
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 500ms ease-out forwards;
+    inset 6px 6px 14px rgba(0, 0, 0, 0.9),
+    inset -6px -6px 14px rgba(255, 255, 255, 0.04);
 }
 ```
 
@@ -613,10 +426,10 @@ For buttons that "press" when clicked:
 ```css
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.7);
   }
   50% {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.9);
   }
 }
 
@@ -629,7 +442,7 @@ For buttons that "press" when clicked:
 
 ## 8. Tailwind Configuration
 
-Add these to your `tailwind.config.ts`:
+Replace your existing `tailwind.config.ts` with these new values:
 
 ```typescript
 import type { Config } from 'tailwindcss';
@@ -641,45 +454,59 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Base colors
+        // Base colors (Updated for v2.0)
         'bg-base': '#050505',
-        'bg-surface': '#111111',
-        'bg-surface-light': '#161616',
-        'bg-elevated': '#1a1a1a',
-        'bg-depressed': '#0a0a0a',
+        'bg-surface': '#141414',        // Lighter
+        'bg-surface-light': '#1A1A1A',
+        'bg-elevated': '#1E1E1E',
+        'bg-depressed': '#000000',      // Pure black
 
-        // Text colors
-        'text-primary': '#EAEAEA',
-        'text-secondary': '#CCCCCC',
-        'text-muted': '#888888',
-        'text-subtle': '#666666',
+        // Text colors (Updated for v2.0)
+        'text-primary': '#F0F0F0',      // Brighter
+        'text-secondary': '#A3A3A3',
+        'text-muted': '#666666',
+        'text-subtle': '#4A4A4A',
+      },
 
-        // Shadow colors
-        'shadow-light': '#1f1f1f',
-        'shadow-dark': '#050505',
+      backgroundImage: {
+        // Surface gradients for volumetric effect
+        'gradient-surface': 'linear-gradient(145deg, #161616, #121212)',
+        'gradient-button': 'linear-gradient(145deg, #1A1A1A, #141414)',
       },
 
       boxShadow: {
-        // Soft Tile (Raised)
-        'soft-tile': '-20px -20px 60px #1f1f1f, 20px 20px 60px #050505',
-        'soft-tile-sm': '-8px -8px 24px #1f1f1f, 8px 8px 24px #050505',
+        // 1. The "Tactile Tile" (Cards) - High Vis
+        'soft-tile':
+          'inset 1px 1px 0px rgba(255, 255, 255, 0.08), -12px -12px 30px rgba(255, 255, 255, 0.06), 12px 12px 30px rgba(0, 0, 0, 0.9)',
 
-        // Deep Field (Depressed)
-        'deep-field': 'inset 5px 5px 15px #050505, inset -5px -5px 15px #1a1a1a',
-        'deep-field-lg': 'inset 8px 8px 24px #050505, inset -8px -8px 24px #1a1a1a',
+        // 2. The "Control Button" (Clickable) - Sharp
+        'soft-tile-sm':
+          'inset 1px 1px 0px rgba(255, 255, 255, 0.1), -6px -6px 14px rgba(255, 255, 255, 0.06), 6px 6px 14px rgba(0, 0, 0, 0.8)',
 
-        // Ridge (Subtle)
-        'ridge': '6px 6px 10px -1px rgba(0,0,0,0.5), -6px -6px 10px -1px rgba(255,255,255,0.02)',
+        // 3. Extra small variant
+        'soft-tile-xs':
+          'inset 1px 1px 0px rgba(255, 255, 255, 0.08), -3px -3px 8px rgba(255, 255, 255, 0.04), 3px 3px 8px rgba(0, 0, 0, 0.7)',
 
-        // Glow effects
-        'glow-green': '0 0 10px rgba(34, 197, 94, 0.6)',
-        'glow-blue': '0 0 10px rgba(59, 130, 246, 0.6)',
-        'glow-white': '0 0 20px rgba(255, 255, 255, 0.2)',
+        // 4. The "Trench" (Inputs) - Deep
+        'deep-field':
+          'inset 6px 6px 14px rgba(0, 0, 0, 0.9), inset -6px -6px 14px rgba(255, 255, 255, 0.04), 0px 1px 0px rgba(255,255,255,0.05)',
+
+        'deep-field-sm':
+          'inset 4px 4px 10px rgba(0, 0, 0, 0.9), inset -4px -4px 10px rgba(255, 255, 255, 0.03)',
+
+        // 5. The "Ridge" (Subtle)
+        'ridge':
+          'inset 1px 1px 0px rgba(255, 255, 255, 0.05), 4px 4px 10px rgba(0, 0, 0, 0.6), -4px -4px 10px rgba(255, 255, 255, 0.03)',
+
+        // 6. Glows (Updated - Brighter)
+        'glow-green': '0 0 15px rgba(34, 197, 94, 0.7)',
+        'glow-blue': '0 0 15px rgba(59, 130, 246, 0.7)',
+        'glow-white': '0 0 20px rgba(255, 255, 255, 0.25)',
       },
 
       fontFamily: {
-        sans: ['Geist Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        mono: ['Geist Mono', 'Fira Code', 'Consolas', 'monospace'],
+        sans: ['var(--font-geist-sans)', 'Geist Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'Geist Mono', 'Fira Code', 'Consolas', 'monospace'],
       },
 
       letterSpacing: {
@@ -699,8 +526,8 @@ const config: Config = {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 10px rgba(34, 197, 94, 0.6)' },
-          '50%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.8)' },
+          '0%, 100%': { boxShadow: '0 0 15px rgba(34, 197, 94, 0.7)' },
+          '50%': { boxShadow: '0 0 25px rgba(34, 197, 94, 0.9)' },
         },
       },
     },
@@ -719,76 +546,107 @@ Add these to your `globals.css`:
 
 ```css
 /* ============================================
-   BRANK DESIGN SYSTEM - Utility Classes
+   BRANK DESIGN SYSTEM v2.0 - High-Fidelity Volumetric
    ============================================ */
 
 /* Background Colors */
 .bg-base { background-color: #050505; }
-.bg-surface { background-color: #111111; }
-.bg-surface-light { background-color: #161616; }
-.bg-elevated { background-color: #1a1a1a; }
-.bg-depressed { background-color: #0a0a0a; }
+.bg-surface { background-color: #141414; }
+.bg-surface-light { background-color: #1A1A1A; }
+.bg-elevated { background-color: #1E1E1E; }
+.bg-depressed { background-color: #000000; }
+
+/* Gradient Surfaces */
+.bg-gradient-surface {
+  background: linear-gradient(145deg, #161616, #121212);
+}
+
+.bg-gradient-button {
+  background: linear-gradient(145deg, #1A1A1A, #141414);
+}
 
 /* Text Colors */
-.text-primary { color: #EAEAEA; }
-.text-secondary { color: #CCCCCC; }
-.text-muted { color: #888888; }
-.text-subtle { color: #666666; }
+.text-primary { color: #F0F0F0; }
+.text-secondary { color: #A3A3A3; }
+.text-muted { color: #666666; }
+.text-subtle { color: #4A4A4A; }
 
-/* Volumetric Shadows */
+/* Volumetric Shadows - v2.0 */
 .shadow-soft-tile {
-  box-shadow: -20px -20px 60px #1f1f1f, 20px 20px 60px #050505;
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.08),
+    -12px -12px 30px rgba(255, 255, 255, 0.06),
+    12px 12px 30px rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .shadow-soft-tile-sm {
-  box-shadow: -8px -8px 24px #1f1f1f, 8px 8px 24px #050505;
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+    -6px -6px 14px rgba(255, 255, 255, 0.06),
+    6px 6px 14px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.shadow-soft-tile-xs {
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.08),
+    -3px -3px 8px rgba(255, 255, 255, 0.04),
+    3px 3px 8px rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .shadow-deep-field {
-  box-shadow: inset 5px 5px 15px #050505, inset -5px -5px 15px #1a1a1a;
+  box-shadow:
+    inset 6px 6px 14px rgba(0, 0, 0, 0.9),
+    inset -6px -6px 14px rgba(255, 255, 255, 0.04),
+    0px 1px 0px rgba(255, 255, 255, 0.05);
 }
 
-.shadow-deep-field-lg {
-  box-shadow: inset 8px 8px 24px #050505, inset -8px -8px 24px #1a1a1a;
+.shadow-deep-field-sm {
+  box-shadow:
+    inset 4px 4px 10px rgba(0, 0, 0, 0.9),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.03);
 }
 
 .shadow-ridge {
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.5), -6px -6px 10px -1px rgba(255,255,255,0.02);
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.05),
+    4px 4px 10px rgba(0, 0, 0, 0.6),
+    -4px -4px 10px rgba(255, 255, 255, 0.03);
 }
 
-/* Glow Effects */
+/* Glow Effects - v2.0 (Brighter) */
 .shadow-glow-green {
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.7);
 }
 
 .shadow-glow-blue {
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+}
+
+.shadow-glow-white {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
 }
 
 .text-glow {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
 }
 
 .text-glow-strong {
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.35);
 }
 
-/* LED Indicator */
+/* LED Indicator - v2.0 */
 .led-indicator {
   width: 8px;
   height: 8px;
   border-radius: 9999px;
   background-color: #22C55E;
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.7);
 }
 
-.led-indicator-pulse {
-  animation: glowPulse 2s ease-in-out infinite;
-}
-
-/* Subtle Border */
+/* Subtle Borders */
 .border-subtle {
   border: 1px solid rgba(255, 255, 255, 0.02);
 }
@@ -797,112 +655,35 @@ Add these to your `globals.css`:
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Typography */
-.heading-display {
-  font-size: 4.5rem;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #EAEAEA;
-}
-
-.heading-1 {
-  font-size: 3rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: #EAEAEA;
-}
-
-.heading-2 {
-  font-size: 2.25rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
-  color: #EAEAEA;
-}
-
-.heading-3 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: #EAEAEA;
-}
-
-.body-large {
-  font-size: 1.125rem;
-  font-weight: 400;
-  line-height: 1.6;
-  color: rgba(234, 234, 234, 0.8);
-}
-
-.body {
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.6;
-  color: rgba(234, 234, 234, 0.8);
-}
-
-.caption {
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  color: #888888;
-}
-
-.overline {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #888888;
-}
-
-/* Hover Effects */
+/* Hover & Interaction Effects */
 .hover-lift {
   transition: all 300ms ease;
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: -24px -24px 70px #1f1f1f, 24px 24px 70px #050505;
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
-/* Press Effect */
 .press-effect {
   transition: all 150ms ease;
 }
 
 .press-effect:active {
   transform: scale(0.98);
-  box-shadow: inset 5px 5px 15px #050505, inset -5px -5px 15px #1a1a1a;
+  box-shadow:
+    inset 6px 6px 14px rgba(0, 0, 0, 0.9),
+    inset -6px -6px 14px rgba(255, 255, 255, 0.04);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Glow Pulse Animation */
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.7);
   }
   50% {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.9);
   }
-}
-
-.animate-fade-in {
-  animation: fadeIn 500ms ease-out forwards;
 }
 
 .animate-glow-pulse {
@@ -914,45 +695,36 @@ Add these to your `globals.css`:
 
 ## 10. Usage Examples
 
-### Example: Hero Section
+### Example: Hero Section with High-Fidelity Styling
 
 ```tsx
 export function HeroSection() {
   return (
-    <section className="bg-base min-h-screen flex items-center justify-center px-6">
+    <section className="bg-bg-base min-h-screen flex items-center justify-center px-6">
       <div className="max-w-4xl text-center">
-        {/* Overline */}
-        <span className="overline text-text-muted mb-4 block">
-          Brand Intelligence Platform
-        </span>
-
-        {/* Headline */}
-        <h1 className="heading-display text-glow mb-6">
-          Track Your Brand's
-          <br />
-          <span className="text-text-muted">Digital Presence</span>
+        <h1 className="text-5xl md:text-7xl font-medium tracking-tight text-text-primary text-glow mb-6">
+          Track Your Brand
         </h1>
 
-        {/* Subheadline */}
-        <p className="body-large max-w-2xl mx-auto mb-10">
-          Monitor mentions, analyze sentiment, and understand your
-          brand's impact across every channel.
+        <p className="text-lg text-text-secondary max-w-2xl mx-auto mb-10">
+          Monitor mentions, analyze sentiment, and understand your brand's impact.
         </p>
 
-        {/* CTA Button */}
-        <button className="
-          bg-surface
-          text-primary
-          px-8 py-4
-          rounded-lg
-          font-medium
-          shadow-soft-tile-sm
-          border-subtle
-          hover-lift
-          press-effect
+        {/* Search Bar - Trench Style */}
+        <div className="
+          bg-bg-depressed
+          rounded-full
+          shadow-deep-field
+          px-6 py-4
+          max-w-xl mx-auto
+          flex items-center gap-3
         ">
-          Get Started
-        </button>
+          <input
+            type="text"
+            placeholder="Enter your brand..."
+            className="bg-transparent text-text-primary w-full outline-none placeholder:text-text-muted"
+          />
+        </div>
       </div>
     </section>
   );
@@ -963,76 +735,18 @@ export function HeroSection() {
 
 ```tsx
 export function FeatureGrid() {
-  const features = [
-    { icon: <ChartIcon />, title: 'Analytics', desc: 'Real-time insights' },
-    { icon: <BellIcon />, title: 'Alerts', desc: 'Instant notifications' },
-    { icon: <GlobeIcon />, title: 'Global', desc: 'Worldwide coverage' },
-  ];
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {features.map((feature) => (
-        <div
-          key={feature.title}
-          className="
-            bg-surface
-            rounded-xl
-            p-8
-            shadow-soft-tile
-            border-subtle
-            hover-lift
-          "
-        >
-          {/* Icon Container */}
-          <div className="
-            w-12 h-12
-            rounded-lg
-            bg-depressed
-            shadow-deep-field
-            flex items-center justify-center
-            mb-6
-          ">
-            <span className="text-text-muted">{feature.icon}</span>
-          </div>
-
-          {/* Title */}
-          <h3 className="heading-3 mb-3">{feature.title}</h3>
-
-          {/* Description */}
-          <p className="text-text-muted">{feature.desc}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
-
-### Example: Search Input
-
-```tsx
-export function SearchInput() {
-  return (
-    <div className="max-w-md">
-      <label className="overline block mb-2">Search</label>
       <div className="
-        bg-depressed
-        rounded-lg
-        shadow-deep-field
-        px-4 py-3
-        flex items-center gap-3
+        bg-gradient-surface
+        rounded-xl
+        p-8
+        shadow-soft-tile
+        border border-white/[0.02]
+        hover-lift
       ">
-        <SearchIcon className="w-5 h-5 text-text-subtle" />
-        <input
-          type="text"
-          className="
-            bg-transparent
-            w-full
-            text-primary
-            placeholder:text-text-subtle
-            outline-none
-          "
-          placeholder="Search brands..."
-        />
+        <h3 className="text-text-primary text-xl font-medium mb-2">Analytics</h3>
+        <p className="text-text-secondary">Real-time data processing.</p>
       </div>
     </div>
   );
@@ -1045,31 +759,26 @@ export function SearchInput() {
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  BRANK DESIGN SYSTEM - QUICK REFERENCE                      │
+│  BRANK DESIGN SYSTEM v2.0 - HIGH-FIDELITY VOLUMETRIC        │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  BACKGROUNDS                    SHADOWS                     │
-│  ───────────                    ───────                     │
-│  Base:    #050505               Soft Tile:  Raised cards    │
-│  Surface: #111111               Deep Field: Inputs          │
-│  Elevated:#1a1a1a               Ridge:      Subtle borders  │
-│  Depressed:#0a0a0a              Glow:       LED indicators  │
+│  BACKGROUNDS                    SHADOWS (NEW)               │
+│  ───────────                    ───────────                 │
+│  Base:    #050505               Soft Tile:  + Rim Light     │
+│  Surface: #141414 (lighter)     Deep Field: + Lip Highlight │
+│  Depressed:#000000 (pure)       Ridge:      + Bevel         │
 │                                                             │
-│  TEXT                           ACCENTS                     │
-│  ────                           ───────                     │
-│  Primary:  #EAEAEA              Success: #22C55E (LEDs)     │
-│  Muted:    #888888              Warning: #F59E0B            │
-│  Subtle:   #666666              Error:   #EF4444            │
+│  TEXT (BRIGHTER)                KEY CHANGES                 │
+│  ───────────────                ───────────                 │
+│  Primary:  #F0F0F0              • White alpha highlights    │
+│  Secondary:#A3A3A3              • Tighter blur (30px)       │
+│  Muted:    #666666              • Gradient surfaces         │
+│                                 • 1px rim lights            │
 │                                                             │
-│  TYPOGRAPHY                     TRANSITIONS                 │
-│  ──────────                     ───────────                 │
-│  Font:     Geist / Inter        Default: 300ms ease         │
-│  Headers:  font-medium          Hover:   translateY(-4px)   │
-│  Tracking: -0.02em              Press:   scale(0.98)        │
-│                                                             │
-│  BORDER                         LIGHT SOURCE                │
-│  ──────                         ────────────                │
-│  Color: rgba(255,255,255,0.02)  Direction: Top-Left ↘       │
+│  GRADIENTS                                                  │
+│  ─────────                                                  │
+│  Surface: 145deg #161616 → #121212                          │
+│  Button:  145deg #1A1A1A → #141414                          │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -1081,6 +790,7 @@ export function SearchInput() {
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2024-01-XX | Initial design system documentation |
+| 2.0.0 | 2024-01-XX | High-Fidelity Volumetric update: rim lights, tighter shadows, gradient surfaces, brighter text |
 
 ---
 
