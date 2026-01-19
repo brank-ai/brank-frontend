@@ -17,6 +17,7 @@ export interface MentionRateByLLM {
   gemini?: number;
   grok?: number;
   perplexity?: number;
+  [key: string]: number | undefined;
 }
 
 export interface SentimentScoreByLLM {
@@ -24,6 +25,7 @@ export interface SentimentScoreByLLM {
   gemini?: number;
   grok?: number;
   perplexity?: number;
+  [key: string]: number | undefined;
 }
 
 export interface RankByLLMs {
@@ -31,6 +33,7 @@ export interface RankByLLMs {
   gemini?: number;
   grok?: number;
   perplexity?: number;
+  [key: string]: number | undefined;
 }
 
 export interface CitationsByLLM {
@@ -38,6 +41,7 @@ export interface CitationsByLLM {
   gemini?: number;
   grok?: number;
   perplexity?: number;
+  [key: string]: number | undefined;
 }
 
 export interface BrandRanking {

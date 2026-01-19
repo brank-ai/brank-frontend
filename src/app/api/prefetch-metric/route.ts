@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMetrics } from '@/lib/backend';
 
+// Mark this route as dynamic to prevent static optimization during build
+export const dynamic = 'force-dynamic';
+
 /**
  * Prefetch endpoint to warm backend cache before user reaches analytics page
  * This is a fire-and-forget request from the Hero form submission

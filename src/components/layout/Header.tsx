@@ -3,37 +3,47 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, CalendlyModal } from '@/components/ui';
+import { CalendlyModal } from '@/components/ui';
 
 export default function Header() {
   const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
   return (
     <>
-      <header className="w-full bg-black px-4 py-3 sm:px-6 sm:py-4">
+      <header className="w-full bg-bg-base px-4 py-3 sm:px-6 sm:py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3 cursor-pointer group">
-            <Image 
+            <Image
               src="/images/brank-logo.svg"
               alt="Brank Logo"
               width={20}
               height={20}
-              className="text-white sm:w-6 sm:h-6"
+              className="text-text-primary sm:w-6 sm:h-6"
             />
-            <span className="text-white text-lg sm:text-xl font-semibold tracking-tight group-hover:bg-gradient-to-r group-hover:from-[#00FFBB] group-hover:to-[#00B7FF] group-hover:bg-clip-text group-hover:text-transparent transition-all">
+            <span className="text-text-primary text-lg sm:text-xl font-medium tracking-tight transition-all group-hover:text-glow">
               Brank
             </span>
           </Link>
-          
+
+          {/* CTA Button - Volumetric Soft Tile Style v2.0 */}
           <div>
-            <Button 
-              variant="white" 
-              size="md"
-              className="px-4 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm font-medium rounded-md"
+            <button
+              className="
+                px-4 py-2 sm:px-6 sm:py-2.5
+                text-xs sm:text-sm font-medium
+                rounded-lg
+                text-text-primary
+                shadow-soft-tile-xs
+                hover:brightness-110
+                active:shadow-deep-field-sm
+                active:scale-[0.98]
+                transition-all duration-300
+              "
               onClick={() => setIsCalendlyOpen(true)}
             >
               Learn More
-            </Button>
+            </button>
           </div>
         </div>
       </header>

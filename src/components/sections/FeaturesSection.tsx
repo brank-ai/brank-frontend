@@ -22,15 +22,15 @@ const ChatGPTIcon = () => (
 
 export default function FeaturesSection() {
   return (
-    <section className="w-full bg-background py-[60px] md:py-[80px]">
+    <section className="w-full bg-bg-base py-[60px] md:py-[80px]">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="mb-[80px] md:mb-[120px]">
           <div className="max-w-[320px]">
-            <p className="text-foreground/50 font-roboto text-lg md:text-[22px] font-normal leading-[1.2] md:leading-[25.78px] mb-5">
+            <p className="text-text-muted font-sans text-lg md:text-[22px] font-normal leading-[1.2] md:leading-[25.78px] mb-5">
               Some copy here
             </p>
-            <h2 className="text-foreground font-mackinac text-2xl md:text-[28px] font-normal leading-[1.25] md:leading-[35px]">
+            <h2 className="text-text-primary text-2xl md:text-[28px] font-normal leading-[1.25] md:leading-[35px]">
               Raking{' '}
               <span className="font-bold italic">Brand Visibility</span>
             </h2>

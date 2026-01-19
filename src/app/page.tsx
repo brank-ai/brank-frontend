@@ -1,9 +1,7 @@
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
 import HeroSection from '@/components/sections/HeroSection';
-import VisibilitySection from '@/components/sections/VisibilitySection';
-import AIExposureSection from '@/components/sections/AIExposureSection';
-import { Reveal } from '@/components/ui';
+import MainContentSection from '@/components/sections/MainContentSection';
 import { getLandingPageData } from '@/lib/backend';
 
 export default async function Home() {
@@ -17,20 +15,13 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-base">
       <Header />
       <main>
         <HeroSection brandData={brandData} />
-        <Reveal delay={0.24} duration={2.0}>
-          <VisibilitySection />
-        </Reveal>
-        <Reveal delay={0.24} duration={2.0}>
-          <AIExposureSection />
-        </Reveal>
+        <MainContentSection />
       </main>
-      <Reveal delay={0.24} duration={2.0}>
-        <Footer />
-      </Reveal>
+      <Footer />
     </div>
   );
 }

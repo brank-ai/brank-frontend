@@ -1,0 +1,756 @@
+'use client';
+
+import { useState } from 'react';
+import { Reveal } from '@/components/ui';
+
+/* ============================================
+   SUB-COMPONENTS: Command Console Design System
+   ============================================ */
+
+interface BadgeProps {
+  children: React.ReactNode;
+}
+
+function Badge({ children }: BadgeProps) {
+  return (
+    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-bg-surface border border-white/[0.05] text-text-secondary shadow-soft-tile-xs mb-6 tracking-wide uppercase">
+      {children}
+    </span>
+  );
+}
+
+interface SectionHeadingProps {
+  children: React.ReactNode;
+}
+
+function SectionHeading({ children }: SectionHeadingProps) {
+  return (
+    <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-text-primary text-glow mb-6 leading-tight">
+      {children}
+    </h2>
+  );
+}
+
+interface SectionTextProps {
+  children: React.ReactNode;
+}
+
+function SectionText({ children }: SectionTextProps) {
+  return (
+    <p className="text-base sm:text-lg text-text-secondary leading-relaxed mb-8">
+      {children}
+    </p>
+  );
+}
+
+interface FeatureListButtonProps {
+  title: string;
+  description: string;
+  active: boolean;
+  onClick?: () => void;
+}
+
+function FeatureListButton({ title, description, active, onClick }: FeatureListButtonProps) {
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        group relative p-5 sm:p-6 rounded-xl border transition-all duration-300 cursor-pointer
+        ${active
+          ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
+          : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'}
+      `}
+    >
+      {/* Active LED indicator */}
+      {active && (
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 sm:h-12 bg-green-500 rounded-r-full shadow-glow-green" />
+      )}
+
+      <h3 className={`text-lg sm:text-xl font-medium mb-2 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}>
+        {title}
+      </h3>
+      <p className="text-text-secondary text-sm leading-relaxed">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+interface ConsoleScreenProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+function ConsoleScreen({ children, className = '' }: ConsoleScreenProps) {
+  return (
+    <div className={`relative w-full rounded-2xl bg-bg-base border border-white/[0.05] shadow-deep-field p-4 sm:p-6 flex items-center justify-center overflow-hidden ${className}`}>
+      {/* Grid Texture */}
+      <div
+        className="absolute inset-0 opacity-30 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: '24px 24px',
+        }}
+      />
+      {children}
+
+      {/* Screen Glare/Reflection highlight */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.1] to-transparent" />
+    </div>
+  );
+}
+
+/* ============================================
+   MOCK VISUALS FOR CONSOLE SCREENS
+   ============================================ */
+
+/* LLM Icons */
+function ChatGPTIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z" />
+    </svg>
+  );
+}
+
+function GeminiIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm0 3.6c4.636 0 8.4 3.764 8.4 8.4s-3.764 8.4-8.4 8.4S3.6 16.636 3.6 12 7.364 3.6 12 3.6z" />
+      <path d="M12 6l1.5 3.5L17 11l-3.5 1.5L12 16l-1.5-3.5L7 11l3.5-1.5z" />
+    </svg>
+  );
+}
+
+function GrokIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3.5 11.5L12 3l8.5 8.5L12 20 3.5 11.5zm8.5-5.657L6.157 11.5 12 17.343l5.843-5.843L12 5.843z" />
+    </svg>
+  );
+}
+
+function PerplexityIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" fill="none" />
+    </svg>
+  );
+}
+
+function GridIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="7" height="7" />
+      <rect x="14" y="3" width="7" height="7" />
+      <rect x="3" y="14" width="7" height="7" />
+      <rect x="14" y="14" width="7" height="7" />
+    </svg>
+  );
+}
+
+function LinkIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+  );
+}
+
+interface KnowScreenContentProps {
+  activeFeature: number;
+}
+
+function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
+  // Mentions Screen (Image 1) - Comparison with percentages
+  if (activeFeature === 0) {
+    const llmData = [
+      { name: 'CHATGPT', value: '46%', icon: ChatGPTIcon, hasValue: true },
+      { name: 'GEMINI', value: '44%', icon: GeminiIcon, hasValue: true },
+      { name: 'GROK', value: 'Pro', icon: GrokIcon, hasValue: false },
+      { name: 'PERPLEXITY', value: 'Pro', icon: PerplexityIcon, hasValue: false },
+    ];
+
+    return (
+      <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
+        {/* Header */}
+        <div className="flex items-center gap-2 mb-6 sm:mb-8">
+          <GridIcon className="w-4 h-4 text-text-muted" />
+          <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
+            Comparison
+          </span>
+        </div>
+
+        {/* LLM List */}
+        <div className="space-y-4 sm:space-y-5">
+          {llmData.map((llm, i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <llm.icon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
+                <span className="text-text-secondary text-sm sm:text-base font-medium tracking-wide uppercase">
+                  {llm.name}
+                </span>
+              </div>
+              {llm.hasValue ? (
+                <span className="text-text-primary text-base sm:text-lg font-medium">
+                  {llm.value}
+                </span>
+              ) : (
+                <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-bg-surface text-text-secondary text-xs sm:text-sm font-medium shadow-soft-tile-xs">
+                  Pro
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Sentiment Score Screen (Image 2) - Comparison with numbers
+  if (activeFeature === 1) {
+    const llmData = [
+      { name: 'CHATGPT', value: '61', icon: ChatGPTIcon, hasValue: true },
+      { name: 'GEMINI', value: '73', icon: GeminiIcon, hasValue: true },
+      { name: 'GROK', value: 'Pro', icon: GrokIcon, hasValue: false },
+      { name: 'PERPLEXITY', value: 'Pro', icon: PerplexityIcon, hasValue: false },
+    ];
+
+    return (
+      <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
+        {/* Header */}
+        <div className="flex items-center gap-2 mb-6 sm:mb-8">
+          <GridIcon className="w-4 h-4 text-text-muted" />
+          <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
+            Comparison
+          </span>
+        </div>
+
+        {/* LLM List */}
+        <div className="space-y-4 sm:space-y-5">
+          {llmData.map((llm, i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <llm.icon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
+                <span className="text-text-secondary text-sm sm:text-base font-medium tracking-wide uppercase">
+                  {llm.name}
+                </span>
+              </div>
+              {llm.hasValue ? (
+                <span className="text-text-primary text-base sm:text-lg font-medium">
+                  {llm.value}
+                </span>
+              ) : (
+                <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-bg-surface text-text-secondary text-xs sm:text-sm font-medium shadow-soft-tile-xs">
+                  Pro
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Citations Screen (Image 3) - Sources by relevance
+  const sources = [
+    { url: 'https://samsung.com', value: '37%' },
+    { url: 'https://techradar.com', value: '35%' },
+    { url: 'https://apple.com', value: '28.5%' },
+    { url: 'https://cnet.com', value: '28%' },
+    { url: 'https://store.google.com', value: '19.5%' },
+  ];
+
+  return (
+    <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-2">
+        <ChatGPTIcon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
+        <span className="text-text-primary text-base sm:text-lg font-medium">
+          ChatGPT
+        </span>
+      </div>
+      <p className="text-text-muted text-xs sm:text-sm mb-4 sm:mb-6">
+        Showing top sources by relevance
+      </p>
+
+      {/* Sources List */}
+      <div className="space-y-3 sm:space-y-4">
+        {sources.map((source, i) => (
+          <div key={i} className="flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <LinkIcon className="w-4 h-4 text-text-subtle" />
+              <span className="text-text-secondary text-xs sm:text-sm font-medium">
+                {source.url}
+              </span>
+            </div>
+            <span className="text-text-muted text-xs sm:text-sm">
+              {source.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface ImproveScreenContentProps {
+  activeFeature: number;
+}
+
+function ImproveScreenContent({ activeFeature }: ImproveScreenContentProps) {
+  // Source Analysis Screen - Sources with impact badges
+  if (activeFeature === 0) {
+    const sources = [
+      { url: 'https://techradar.com', value: '56%', impact: 'HIGH IMPACT', impactColor: 'bg-green-500', dotColor: 'bg-green-500' },
+      { url: 'https://cnet.com', value: '47%', impact: 'HIGH IMPACT', impactColor: 'bg-green-500', dotColor: 'bg-green-500' },
+      { url: 'https://apple.com', value: '38%', impact: 'MEDIUM IMPACT', impactColor: 'bg-orange-500', dotColor: 'bg-orange-500' },
+      { url: 'https://samsung.com', value: '35.5%', impact: 'MEDIUM IMPACT', impactColor: 'bg-orange-500', dotColor: 'bg-orange-500' },
+      { url: 'https://theverge.com', value: '25%', impact: 'LOW IMPACT', impactColor: 'bg-gray-500', dotColor: 'bg-gray-400' },
+    ];
+
+    return (
+      <div className="relative z-10 w-full py-3 sm:py-4 px-2 sm:px-4">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-1">
+          <GeminiIcon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
+          <span className="text-text-primary text-base sm:text-lg font-medium">
+            Gemini
+          </span>
+        </div>
+        <p className="text-text-muted text-xs sm:text-sm mb-4 sm:mb-5">
+          Showing top sources by relevance
+        </p>
+
+        {/* Sources List */}
+        <div className="space-y-2 sm:space-y-3">
+          {sources.map((source, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between bg-bg-surface rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 border border-white/[0.03]"
+            >
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                <LinkIcon className="w-4 h-4 text-text-subtle flex-shrink-0" />
+                <span className="text-text-secondary text-xs sm:text-sm font-medium truncate">
+                  {source.url}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 ml-2">
+                <span className="text-text-muted text-xs sm:text-sm font-mono">
+                  {source.value}
+                </span>
+                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-bg-base border border-white/[0.05]">
+                  <div className={`w-2 h-2 rounded-full ${source.dotColor}`} />
+                  <span className="text-text-secondary text-[9px] sm:text-[10px] font-medium tracking-wide whitespace-nowrap">
+                    {source.impact}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Gap Analysis Screen - Competitor comparison table
+  const competitors = [
+    { name: 'Samsung', chatgpt: '46%', gemini: '38%', perplexity: '41%' },
+    { name: 'Apple', chatgpt: '52%', gemini: '61%', perplexity: '55%' },
+    { name: 'Google', chatgpt: '38%', gemini: '72%', perplexity: '45%' },
+  ];
+
+  return (
+    <div className="relative z-10 w-full py-3 sm:py-4 px-2 sm:px-4">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-4 sm:mb-5">
+        <GridIcon className="w-4 h-4 text-text-muted" />
+        <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
+          Competitor Analysis
+        </span>
+      </div>
+
+      {/* Table Header */}
+      <div className="grid grid-cols-4 gap-2 sm:gap-3 mb-3 px-2 sm:px-3">
+        <div className="text-text-subtle text-[10px] sm:text-xs font-medium uppercase tracking-wide">
+          Brand
+        </div>
+        <div className="flex items-center justify-center gap-1">
+          <ChatGPTIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">ChatGPT</span>
+        </div>
+        <div className="flex items-center justify-center gap-1">
+          <GeminiIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Gemini</span>
+        </div>
+        <div className="flex items-center justify-center gap-1">
+          <PerplexityIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Perplexity</span>
+        </div>
+      </div>
+
+      {/* Table Rows */}
+      <div className="space-y-2">
+        {competitors.map((competitor, i) => (
+          <div
+            key={i}
+            className="grid grid-cols-4 gap-2 sm:gap-3 bg-bg-surface rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 border border-white/[0.03] items-center"
+          >
+            <span className="text-text-secondary text-xs sm:text-sm font-medium truncate">
+              {competitor.name}
+            </span>
+            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
+              {competitor.chatgpt}
+            </span>
+            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
+              {competitor.gemini}
+            </span>
+            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
+              {competitor.perplexity}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Your Brand Row - Highlighted */}
+      <div className="mt-3 grid grid-cols-4 gap-2 sm:gap-3 bg-gradient-surface rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 border border-green-500/20 items-center shadow-soft-tile-xs">
+        <span className="text-green-500 text-xs sm:text-sm font-medium">
+          Your Brand
+        </span>
+        <span className="text-green-400 text-xs sm:text-sm font-mono text-center font-medium">
+          61%
+        </span>
+        <span className="text-green-400 text-xs sm:text-sm font-mono text-center font-medium">
+          58%
+        </span>
+        <span className="text-green-400 text-xs sm:text-sm font-mono text-center font-medium">
+          64%
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function BotIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 0 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 0 0 0 3 1.5 1.5 0 0 0 0-3M12 17.5c-1.5 0-2.5-.5-2.5-.5v1s1 .5 2.5.5 2.5-.5 2.5-.5v-1s-1 .5-2.5.5z" />
+    </svg>
+  );
+}
+
+function UserIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+    </svg>
+  );
+}
+
+function CreateScreenContent() {
+  const contentTypes = ['Poster', 'Reel', 'Tweet', 'Post', 'Article / Blog'];
+  const platforms = [
+    { name: 'LinkedIn', icon: 'in' },
+    { name: 'Twitter', icon: '𝕏' },
+    { name: 'Instagram', icon: '📷' },
+    { name: 'Medium', icon: '●●' },
+    { name: 'HackMD.io', icon: '��' },
+  ];
+
+  return (
+    <div className="relative z-10 w-full h-full flex flex-col py-3 sm:py-4 px-3 sm:px-6">
+      <div className="flex flex-1 min-h-0">
+        {/* Left Side - Chat Interface */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-bg-surface rounded-lg flex items-center justify-center">
+                <BotIcon className="w-4 h-4 sm:w-5 sm:h-5 text-text-muted" />
+              </div>
+              <span className="text-text-primary text-sm sm:text-lg font-medium">
+                AI-First Content Assistant
+              </span>
+            </div>
+
+            {/* Dropdown */}
+            <div className="relative">
+              <div className="flex items-center gap-2 px-3 py-1.5 sm:py-2 bg-bg-surface rounded-lg text-text-secondary text-xs sm:text-sm border border-white/[0.05]">
+                <span>Create: Poster</span>
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+
+              {/* Dropdown Menu (Visual Only) */}
+              <div className="absolute right-0 top-full mt-1 bg-bg-surface rounded-lg border border-white/[0.05] overflow-hidden shadow-soft-tile-sm z-10 hidden sm:block">
+                {contentTypes.map((type, i) => (
+                  <div
+                    key={type}
+                    className={`px-4 py-2 text-xs sm:text-sm cursor-pointer ${
+                      i === 0
+                        ? 'bg-bg-elevated text-text-primary'
+                        : 'text-text-secondary hover:bg-bg-elevated'
+                    }`}
+                  >
+                    {type}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="flex-1 space-y-2 sm:space-y-3 overflow-hidden">
+            {/* Bot Message */}
+            <div className="flex gap-2 sm:gap-3">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 bg-bg-surface rounded-lg flex items-center justify-center flex-shrink-0">
+                <BotIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-text-muted text-[10px] sm:text-xs mb-1 block">Bot</span>
+                <div className="bg-bg-surface rounded-xl rounded-tl-sm p-2 sm:p-3 border border-white/[0.03]">
+                  <p className="text-text-secondary text-[10px] sm:text-xs leading-relaxed line-clamp-2 sm:line-clamp-3">
+                    Hey there! You&apos;re wanting to content creating and engage, the creative and target custom content propositive...
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bot Follow-up */}
+            <div className="flex gap-2 sm:gap-3 pl-8 sm:pl-10">
+              <div className="flex-1 min-w-0">
+                <div className="bg-bg-surface/50 rounded-xl p-2 sm:p-2.5 border border-white/[0.02] inline-block">
+                  <p className="text-text-muted text-[9px] sm:text-[10px]">
+                    What type of content would you like to create today?
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* User Message */}
+            <div className="flex gap-2 sm:gap-3">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 bg-bg-surface rounded-lg flex items-center justify-center flex-shrink-0">
+                <UserIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-text-muted text-[10px] sm:text-xs mb-1 block">User</span>
+                <div className="bg-bg-surface rounded-xl rounded-tl-sm p-2 sm:p-3 border border-white/[0.03]">
+                  <p className="text-text-secondary text-[10px] sm:text-xs leading-relaxed line-clamp-2">
+                    I need help creating a LinkedIn post about our new product launch and its key features.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Platform Buttons */}
+        <div className="hidden sm:flex flex-col justify-center gap-3 ml-4 sm:ml-6">
+          {platforms.map((platform) => (
+            <div
+              key={platform.name}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-bg-surface rounded-xl border border-white/[0.03] text-text-secondary text-xs sm:text-sm whitespace-nowrap hover:bg-bg-elevated transition-colors cursor-pointer"
+            >
+              <span className="text-xs sm:text-sm">{platform.icon}</span>
+              <span>{platform.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Input Text Box at Bottom */}
+      <div className="mt-3 sm:mt-4 flex items-center gap-2 sm:gap-3">
+        <div className="flex-1 flex items-center bg-bg-surface rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 border border-white/[0.05] shadow-deep-field-sm">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            className="flex-1 bg-transparent text-text-primary text-xs sm:text-sm outline-none placeholder:text-text-muted"
+            readOnly
+          />
+          <button className="ml-2 sm:ml-3 p-1.5 sm:p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================
+   MAIN COMPONENT: Feature Stack
+   ============================================ */
+
+export default function MainContentSection() {
+  const [knowActiveFeature, setKnowActiveFeature] = useState(0);
+  const [improveActiveFeature, setImproveActiveFeature] = useState(0);
+
+  const knowFeatures = [
+    {
+      title: 'Mentions',
+      description: 'Track how frequently your brand is mentioned across AI platforms.',
+    },
+    {
+      title: 'Sentiment Score',
+      description: 'Analyze the context of AI responses to maintain reputation.',
+    },
+    {
+      title: 'Citations',
+      description: 'Monitor which sources AI models cite when mentioning you.',
+    },
+  ];
+
+  const improveFeatures = [
+    {
+      title: 'Source Analysis',
+      description: 'Pinpoint high-authority domains influencing your brand.',
+    },
+    {
+      title: 'Gap Analysis',
+      description: 'See where competitors have an edge and close the gap.',
+    },
+  ];
+
+  return (
+    <div className="w-full bg-bg-base overflow-hidden">
+
+      {/* ==========================================
+          SECTION 1: KNOW (The Monitor)
+         ========================================== */}
+      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <Reveal variant="fadeUp" duration={1.2} y={30}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
+
+            {/* Left: Content */}
+            <div className="order-2 lg:order-1">
+              <Badge>Visibility Intelligence</Badge>
+              <SectionHeading>
+                Know what AI models{' '}
+                <br className="hidden sm:block" />
+                <span className="text-text-muted">think about you.</span>
+              </SectionHeading>
+              <SectionText>
+                Track frequency across platforms. Understand your visibility in AI-generated responses and benchmark against competitors.
+              </SectionText>
+
+              <div className="space-y-3 sm:space-y-4">
+                {knowFeatures.map((feature, index) => (
+                  <FeatureListButton
+                    key={feature.title}
+                    title={feature.title}
+                    description={feature.description}
+                    active={knowActiveFeature === index}
+                    onClick={() => setKnowActiveFeature(index)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Right: The Console Visual */}
+            <div className="relative order-1 lg:order-2">
+              {/* The Physical Bezel */}
+              <div className="bg-gradient-surface p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-soft-tile border border-white/[0.02]">
+                <ConsoleScreen className="aspect-[4/3]">
+                  <KnowScreenContent activeFeature={knowActiveFeature} />
+                </ConsoleScreen>
+              </div>
+
+              {/* Decorative Background Glow */}
+              <div className="absolute -inset-10 bg-green-500/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
+            </div>
+
+          </div>
+        </Reveal>
+      </section>
+
+
+      {/* ==========================================
+          SECTION 2: IMPROVE (The Tuner)
+         ========================================== */}
+      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
+        <Reveal variant="fadeUp" duration={1.2} y={30}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
+
+            {/* Left: Visual (Zig-zag layout) */}
+            <div className="relative">
+              <div className="bg-gradient-surface p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-soft-tile border border-white/[0.02]">
+                <ConsoleScreen className="aspect-[4/3]">
+                  <ImproveScreenContent activeFeature={improveActiveFeature} />
+                </ConsoleScreen>
+              </div>
+
+              {/* Decorative Background Glow */}
+              <div className="absolute -inset-10 bg-blue-500/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
+            </div>
+
+            {/* Right: Content */}
+            <div>
+              <Badge>Optimization Engine</Badge>
+              <SectionHeading>
+                Improve your rankings{' '}
+                <br className="hidden sm:block" />
+                <span className="text-text-muted">across all LLMs.</span>
+              </SectionHeading>
+              <SectionText>
+                Identify the sources that matter. We tell you exactly which domains are feeding data to the models so you can dominate the input layer.
+              </SectionText>
+
+              <div className="space-y-3 sm:space-y-4">
+                {improveFeatures.map((feature, index) => (
+                  <FeatureListButton
+                    key={feature.title}
+                    title={feature.title}
+                    description={feature.description}
+                    active={improveActiveFeature === index}
+                    onClick={() => setImproveActiveFeature(index)}
+                  />
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </Reveal>
+      </section>
+
+
+      {/* ==========================================
+          SECTION 3: CREATE (The Forge)
+         ========================================== */}
+      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
+        <Reveal variant="fadeUp" duration={1.2} y={30}>
+          {/* Centered Header */}
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+            <Badge>Content Forge</Badge>
+            <SectionHeading>
+              Create AI-first content{' '}
+              <br className="hidden sm:block" />
+              <span className="text-text-muted">that bots love.</span>
+            </SectionHeading>
+            <SectionText>
+              Don&apos;t guess. Generate content structured specifically to be scraped, indexed, and cited by Large Language Models.
+            </SectionText>
+          </div>
+
+          {/* Full Width Visual */}
+          <div className="bg-gradient-surface p-3 sm:p-4 rounded-2xl sm:rounded-[2rem] shadow-soft-tile border border-white/[0.02]">
+            <ConsoleScreen className="aspect-[16/9] sm:aspect-[21/10] min-h-[280px] sm:min-h-[380px]">
+              <CreateScreenContent />
+            </ConsoleScreen>
+          </div>
+
+          {/* Decorative Background Glow */}
+          <div className="relative">
+            <div className="absolute -inset-20 bg-white/5 blur-[120px] -z-10 rounded-full pointer-events-none" />
+          </div>
+        </Reveal>
+      </section>
+
+    </div>
+  );
+}

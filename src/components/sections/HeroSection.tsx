@@ -2,48 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Reveal } from '@/components/ui';
+import { Reveal, RotatingText } from '@/components/ui';
+import LogoTicker from '@/components/ui/LogoTicker';
 import { LandingPageResponse } from '@/types/backend';
-import { BRAND_KEY_MAP } from '@/lib/backend';
 
 interface HeroSectionProps {
   brandData?: LandingPageResponse;
 }
 
-// Static brand information (logos and names)
-const BRAND_INFO = [
-  { name: 'Asics', logo: '/images/brand-logos/Asics.svg' },
-  { name: 'Coinbase', logo: '/images/brand-logos/Coinbase.svg' },
-  { name: 'Cult', logo: '/images/brand-logos/Cult.svg' },
-  { name: 'Decathlon', logo: '/images/brand-logos/Decathlon.svg' },
-  { name: 'LeetCode', logo: '/images/brand-logos/LeetCode.svg' },
-  { name: 'Nothing', logo: '/images/brand-logos/Nothing.svg' },
-  { name: 'Zerodha', logo: '/images/brand-logos/Zerodha.svg' },
-];
-
-// Mock data as fallback
-const MOCK_MENTIONS: Record<string, number> = {
-  'Asics': 82,
-  'Coinbase': 91,
-  'Cult': 78,
-  'Decathlon': 65,
-  'LeetCode': 88,
-  'Nothing': 73,
-  'Zerodha': 79,
-};
-
 export default function HeroSection({ brandData }: HeroSectionProps) {
-  // Merge static brand info with dynamic data from backend
-  const brands = BRAND_INFO.map(brand => {
-    const backendKey = BRAND_KEY_MAP[brand.name];
-    const mentions = brandData?.[backendKey as keyof LandingPageResponse] || MOCK_MENTIONS[brand.name] || 0;
-    return {
-      ...brand,
-      mentions: Math.round(mentions),
-    };
-  });
-  const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [brandName, setBrandName] = useState('');
   const router = useRouter();
 
@@ -51,137 +18,121 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
     e.preventDefault();
     if (brandName.trim()) {
       const brand = brandName.trim();
-      
+
       // Fire-and-forget prefetch to warm backend cache
       fetch(`/api/prefetch-metric?website=${encodeURIComponent(brand)}`).catch(() => {
         // Silently ignore prefetch errors
       });
-      
+
       router.push(`/progress?brand=${encodeURIComponent(brand)}`);
     }
   };
 
   return (
-    <section className="relative min-h-[70vh] w-full overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/images/hero-section-min.jpg')`
-        }}
-      />
-
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80" />
-
-      {/* Bottom gradient for smooth transition */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent to-black z-10" />
-
+    <section className="relative min-h-screen w-full overflow-hidden bg-bg-base">
       {/* Content - Centered */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-[70vh] px-4 sm:px-8 md:px-16 lg:px-24 pb-32">
-        {/* Main Headline - Centered with serif font */}
-        <Reveal trigger="mount" variant="fadeIn" duration={2.0} initiallyVisible={false}>
-          <div className="mb-6 max-w-4xl text-center">
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-normal leading-tight text-white">
-              Measure and improve how
-            </h1>
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-normal leading-tight">
-              <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent italic">AI recommends</span>
-              <span className="text-white"> your brand.</span>
-            </h1>
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-8 md:px-16 lg:px-24">
+        <div className="w-full flex flex-col items-center relative translate-y-16">
+          {/* Main Headline - Positioned absolutely above the search bar */}
+          <div className="absolute bottom-full w-full flex flex-col items-center mb-10 sm:mb-14 md:mb-18">
+            {/* Animated Logo */}
+            <Reveal trigger="mount" variant="fadeUp" delay={0.1} duration={2.0} y={16} initiallyVisible={false}>
+              <div className="mb-2 sm:mb-4">
+                 <div
+                   className="
+                     w-32 h-12 sm:w-48 sm:h-16 md:w-64 md:h-20
+                     bg-[linear-gradient(to_right,white_0%,white_45%,#22c55e_49%,#22c55e_51%,white_55%,white_100%)]
+                     bg-[length:400%_auto]
+                     animate-shine-wave-slow
+                   "
+                   style={{
+                     maskImage: 'url(/images/brank-logo.svg)',
+                     maskRepeat: 'no-repeat',
+                     maskPosition: 'center',
+                     maskSize: 'contain',
+                     WebkitMaskImage: 'url(/images/brank-logo.svg)',
+                     WebkitMaskRepeat: 'no-repeat',
+                     WebkitMaskPosition: 'center',
+                     WebkitMaskSize: 'contain'
+                   }}
+                 />
+              </div>
+            </Reveal>
+
+            <Reveal trigger="mount" variant="fadeUp" delay={0.25} duration={2.0} y={16} initiallyVisible={false}>
+              <div className="w-full sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px] overflow-visible">
+                <h1 className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-text-primary flex flex-col sm:flex-row sm:items-center items-center gap-2 md:gap-3 sm:pl-24 md:pl-32 lg:pl-40 overflow-visible">
+                  <span className="shrink-0 text-glow">Track your brand across</span>
+                  <RotatingText
+                    items={[
+                      { name: 'ChatGPT', logo: '/images/LLMs/chatgpt.svg' },
+                      { name: 'Gemini', logo: '/images/LLMs/gemini.svg' },
+                      { name: 'Grok', logo: '/images/LLMs/grok.svg' },
+                      { name: 'Perplexity', logo: '/images/LLMs/perplexity.svg' },
+                    ]}
+                    rotationInterval={2500}
+                    className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl"
+                  />
+                </h1>
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
 
-        {/* Search Bar - Dark style with cyan arrow */}
-        <Reveal trigger="mount" variant="fadeUp" delay={0.25} duration={2.0} y={16} initiallyVisible={false}>
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden w-full max-w-md md:max-w-2xl lg:max-w-6xl border border-white/10"
-          >
-            <input
-              type="text"
-              placeholder="Search your brand"
-              value={brandName}
-              onChange={(e) => setBrandName(e.target.value)}
-              className="flex-1 min-w-0 bg-transparent text-white placeholder-gray-400 px-2.5 py-2 sm:px-5 sm:py-3 text-[16px] leading-6 focus:outline-none"
-            />
-            <button 
-              type="submit"
-              className="shrink-0 bg-transparent text-gray-400 px-2.5 py-2 sm:px-4 sm:py-3 hover:[&>svg]:stroke-[url(#arrowGradient)] transition-all duration-150 group active:scale-95"
+          {/* Search Bar - Deep Field (Depressed) Style */}
+          <Reveal trigger="mount" variant="fadeIn" duration={2.0} initiallyVisible={false}>
+            <form
+              onSubmit={handleSubmit}
+              className="
+                flex items-center
+                rounded-full
+                w-[85vw] sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px]
+                bg-bg-surface
+                shadow-soft-tile-sm
+                border border-subtle
+              "
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="sm:w-5 sm:h-5 stroke-current group-hover:stroke-[#00FFBB]" strokeWidth="2">
-                <defs>
-                  <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style={{ stopColor: '#00FFBB', stopOpacity: 1 }} />
-                    <stop offset="100%" style={{ stopColor: '#00B7FF', stopOpacity: 1 }} />
-                  </linearGradient>
-                </defs>
-                <path d="M5 12h14M12 5l7 7-7 7" className="group-hover:stroke-[url(#arrowGradient)]" />
-              </svg>
-            </button>
-          </form>
-        </Reveal>
-      </div>
-
-
-      {/* Brand Scroll Marquee */}
-      <div
-        className="absolute bottom-0 left-0 right-0 z-20 py-3 sm:py-6"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => {
-          setIsPaused(false);
-          setHoveredBrand(null);
-        }}
-      >
-        <div
-          className={`flex items-center gap-8 sm:gap-16 ${isPaused ? 'animate-pause' : 'animate-marquee'}`}
-          style={{ width: 'max-content' }}
-        >
-          {/* Render brands 4 times for seamless infinite loop */}
-          {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
-            <div
-              key={`${brand.name}-${index}`}
-              className="relative flex items-center gap-2 sm:gap-3 cursor-pointer group"
-              onMouseEnter={() => setHoveredBrand(`${brand.name}-${index}`)}
-              onMouseLeave={() => setHoveredBrand(null)}
-            >
-              {/* Tooltip */}
-              {hoveredBrand === `${brand.name}-${index}` && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-6 sm:mb-8 animate-fadeIn z-50">
-                  <div className="relative bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-lg px-4 py-3 sm:px-5 sm:py-4 border border-white/20 shadow-2xl shadow-black/50 w-[260px] sm:w-[320px] flex items-center">
-                    {/* Glow effect */}
-                    <div className="absolute inset-0 rounded-lg bg-[#00FFBB]/10 blur-xl -z-10" />
-
-                    <p className="text-white/90 text-xs sm:text-sm leading-snug text-center line-clamp-2 w-full">
-                      Out of 100 user prompts LLMs recall{' '}
-                      <span className="bg-gradient-to-r from-[#00FFBB] to-[#00B7FF] bg-clip-text text-transparent font-bold">
-                        {brand.name}
-                      </span>
-                      {' '}{brand.mentions} times
-                    </p>
-
-                    {/* Tooltip arrow */}
-                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[8px] border-transparent border-t-white/20" />
-                  </div>
-                </div>
-              )}
-
-              {/* Brand Logo */}
-              <img
-                src={brand.logo}
-                alt={brand.name}
-                className="h-6 sm:h-10 w-auto object-contain brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity duration-300"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
+              <input
+                type="text"
+                placeholder="Get Brank's analysis of your brand."
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                className="
+                  flex-1 min-w-0
+                  bg-transparent
+                  text-text-primary/80
+                  placeholder-text-subtle
+                  pl-[5%] pr-2
+                  py-2 text-sm
+                  sm:py-3 md:py-4
+                  sm:text-base md:text-lg lg:text-xl
+                  font-sans
+                  focus:outline-none
+                "
               />
+              <button
+                type="submit"
+                className="
+                  pr-3 sm:pr-5 md:pr-6
+                  flex items-center shrink-0
+                  text-text-muted
+                  hover:text-text-primary
+                  transition-colors duration-300
+                "
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+            </form>
+          </Reveal>
 
-              {/* Percentage */}
-              <span className="text-white/70 text-xs sm:text-sm font-medium group-hover:text-white transition-colors whitespace-nowrap">
-                {brand.mentions}%
-              </span>
+          {/* Logo Ticker - Infinite scroll of trusted brands */}
+          <Reveal trigger="mount" variant="fadeIn" delay={0.5} duration={2.0} initiallyVisible={false}>
+            <div className="w-full mt-12 sm:mt-16 md:mt-20">
+              <LogoTicker />
             </div>
-          ))}
+          </Reveal>
         </div>
       </div>
     </section>
