@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Reveal, SlowProgressBar } from '@/components/ui';
 
-const steps = [
+const steps: ReadonlyArray<{ name: string; insight: string }> = [
   {
     name: 'Fetching Rank',
     insight: 'Track where your brand appears in LLM-generated recommendations. Move higher in rankings by optimizing your brand\'s authority signals and content structure.',
@@ -21,7 +21,7 @@ const steps = [
     name: 'Aggregating Mentions',
     insight: 'See how often LLMs mention your brand. Increase mentions by creating high-signal content that AI systems are more likely to ingest.',
   },
-] as const;
+];
 
 function ProgressContent() {
   const router = useRouter();
@@ -116,12 +116,12 @@ function ProgressContent() {
 
             {/* Current Step Name */}
             <h2 className="text-text-primary text-xl font-medium mb-3 text-center">
-              {steps[currentStep].name}
+              {steps[currentStep]!.name}
             </h2>
 
             {/* Insight Paragraph */}
             <p className="text-text-muted text-sm sm:text-base leading-relaxed text-center h-20">
-              {steps[currentStep].insight}
+              {steps[currentStep]!.insight}
             </p>
           </>
         )}
