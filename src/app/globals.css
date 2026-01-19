@@ -114,6 +114,16 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
+.shadow-soft-tile-glass {
+  background: linear-gradient(145deg, rgba(22, 22, 22, 0.5), rgba(18, 18, 18, 0.5));
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.06),
+    -8px -8px 20px rgba(255, 255, 255, 0.04),
+    8px 8px 20px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+}
+
 /* Deep Field (Depressed) - Inputs, Search Bars, Code Snippets */
 .shadow-deep-field {
   background: #000000;
