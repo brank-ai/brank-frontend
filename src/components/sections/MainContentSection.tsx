@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Reveal } from '@/components/ui';
 
 /* ============================================
@@ -55,7 +56,7 @@ function FeatureListButton({ title, description, active, onClick }: FeatureListB
     <div
       onClick={onClick}
       className={`
-        group relative p-5 sm:p-6 rounded-xl border transition-all duration-300 cursor-pointer
+        group relative p-3 sm:p-4 rounded-xl border transition-all duration-300 cursor-pointer
         ${active
           ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
           : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'}
@@ -63,15 +64,75 @@ function FeatureListButton({ title, description, active, onClick }: FeatureListB
     >
       {/* Active LED indicator */}
       {active && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 sm:h-12 bg-green-500 rounded-r-full shadow-glow-green" />
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 sm:h-10 bg-green-500 rounded-r-full shadow-glow-green" />
       )}
 
-      <h3 className={`text-lg sm:text-xl font-medium mb-2 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}>
+      <h3 className={`text-base sm:text-lg font-medium mb-1 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}>
         {title}
       </h3>
-      <p className="text-text-secondary text-sm leading-relaxed">
+      <p className="text-text-secondary text-xs sm:text-sm leading-relaxed">
         {description}
       </p>
+    </div>
+  );
+}
+
+interface MobileExpandableCardProps {
+  title: string;
+  description: string;
+  active: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+
+function MobileExpandableCard({ title, description, active, onClick, children }: MobileExpandableCardProps) {
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        group relative rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden
+        ${active
+          ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
+          : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'}
+      `}
+    >
+      {/* Header - Always visible */}
+      <div className="p-3 relative">
+        {/* Active LED indicator */}
+        {active && (
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-green-500 rounded-r-full shadow-glow-green" />
+        )}
+
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <h3 className={`text-base font-medium mb-1 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}>
+              {title}
+            </h3>
+            <p className="text-text-secondary text-xs leading-relaxed">
+              {description}
+            </p>
+          </div>
+          <svg
+            className={`w-4 h-4 text-text-muted transition-transform duration-300 ml-2 flex-shrink-0 ${active ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Expandable Content - Image */}
+      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${active ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="px-3 pb-3">
+          <div className="bg-gradient-surface p-2 rounded-xl shadow-soft-tile border border-white/[0.02]">
+            <ConsoleScreen className="aspect-[4/3]">
+              {children}
+            </ConsoleScreen>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -257,42 +318,121 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
   }
 
   // Citations Screen (Image 3) - Sources by relevance
-  const sources = [
-    { url: 'https://samsung.com', value: '37%' },
-    { url: 'https://techradar.com', value: '35%' },
-    { url: 'https://apple.com', value: '28.5%' },
-    { url: 'https://cnet.com', value: '28%' },
-    { url: 'https://store.google.com', value: '19.5%' },
+  if (activeFeature === 2) {
+    const sources = [
+      { url: 'https://samsung.com', value: '37%' },
+      { url: 'https://techradar.com', value: '35%' },
+      { url: 'https://apple.com', value: '28.5%' },
+      { url: 'https://cnet.com', value: '28%' },
+      { url: 'https://store.google.com', value: '19.5%' },
+    ];
+
+    return (
+      <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-2">
+          <ChatGPTIcon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
+          <span className="text-text-primary text-base sm:text-lg font-medium">
+            ChatGPT
+          </span>
+        </div>
+        <p className="text-text-muted text-xs sm:text-sm mb-4 sm:mb-6">
+          Showing top sources by relevance
+        </p>
+
+        {/* Sources List */}
+        <div className="space-y-3 sm:space-y-4">
+          {sources.map((source, i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <LinkIcon className="w-4 h-4 text-text-subtle" />
+                <span className="text-text-secondary text-xs sm:text-sm font-medium">
+                  {source.url}
+                </span>
+              </div>
+              <span className="text-text-muted text-xs sm:text-sm">
+                {source.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Ranking Screen (Image 4) - Brand rankings across LLMs
+  const rankings = [
+    { name: 'Samsung', chatgpt: 2, gemini: 3, perplexity: 1 },
+    { name: 'Apple', chatgpt: 1, gemini: 2, perplexity: 3 },
+    { name: 'Google', chatgpt: 3, gemini: 1, perplexity: 2 },
   ];
 
   return (
-    <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
+    <div className="relative z-10 w-full py-3 sm:py-4 px-2 sm:px-4">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-2">
-        <ChatGPTIcon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
-        <span className="text-text-primary text-base sm:text-lg font-medium">
-          ChatGPT
+      <div className="flex items-center gap-2 mb-4 sm:mb-5">
+        <GridIcon className="w-4 h-4 text-text-muted" />
+        <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
+          Brand Ranking
         </span>
       </div>
-      <p className="text-text-muted text-xs sm:text-sm mb-4 sm:mb-6">
-        Showing top sources by relevance
-      </p>
 
-      {/* Sources List */}
-      <div className="space-y-3 sm:space-y-4">
-        {sources.map((source, i) => (
-          <div key={i} className="flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <LinkIcon className="w-4 h-4 text-text-subtle" />
-              <span className="text-text-secondary text-xs sm:text-sm font-medium">
-                {source.url}
-              </span>
-            </div>
-            <span className="text-text-muted text-xs sm:text-sm">
-              {source.value}
+      {/* Table Header */}
+      <div className="grid grid-cols-4 gap-2 sm:gap-3 mb-3 px-2 sm:px-3">
+        <div className="text-text-subtle text-[10px] sm:text-xs font-medium uppercase tracking-wide">
+          Brand
+        </div>
+        <div className="flex items-center justify-center gap-1">
+          <ChatGPTIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">ChatGPT</span>
+        </div>
+        <div className="flex items-center justify-center gap-1">
+          <GeminiIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Gemini</span>
+        </div>
+        <div className="flex items-center justify-center gap-1">
+          <PerplexityIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Perplexity</span>
+        </div>
+      </div>
+
+      {/* Table Rows */}
+      <div className="space-y-2">
+        {rankings.map((brand, i) => (
+          <div
+            key={i}
+            className="grid grid-cols-4 gap-2 sm:gap-3 bg-bg-surface rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 border border-white/[0.03] items-center"
+          >
+            <span className="text-text-secondary text-xs sm:text-sm font-medium truncate">
+              {brand.name}
+            </span>
+            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
+              #{brand.chatgpt}
+            </span>
+            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
+              #{brand.gemini}
+            </span>
+            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
+              #{brand.perplexity}
             </span>
           </div>
         ))}
+      </div>
+
+      {/* Your Brand Row - Highlighted */}
+      <div className="mt-3 grid grid-cols-4 gap-2 sm:gap-3 bg-gradient-surface rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 border border-green-500/20 items-center shadow-soft-tile-xs">
+        <span className="text-green-500 text-xs sm:text-sm font-medium">
+          Your Brand
+        </span>
+        <span className="text-green-400 text-xs sm:text-sm font-mono text-center font-medium">
+          #7
+        </span>
+        <span className="text-green-400 text-xs sm:text-sm font-mono text-center font-medium">
+          #7
+        </span>
+        <span className="text-green-400 text-xs sm:text-sm font-mono text-center font-medium">
+          #7
+        </span>
       </div>
     </div>
   );
@@ -451,132 +591,301 @@ function UserIcon({ className = '' }: { className?: string }) {
   );
 }
 
+function HackMDIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none">
+      {/* Back square - darker */}
+      <rect x="6" y="6" width="12" height="12" rx="3" fill="#4B5563" />
+      {/* Front square - lighter/blue */}
+      <rect x="8" y="8" width="12" height="12" rx="3" fill="#6366F1" />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+  );
+}
+
+function TwitterIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  );
+}
+
+function InstagramIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+  );
+}
+
+function MediumIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+    </svg>
+  );
+}
+
 function CreateScreenContent() {
   const contentTypes = ['Poster', 'Reel', 'Tweet', 'Post', 'Article / Blog'];
   const platforms = [
-    { name: 'LinkedIn', icon: 'in' },
-    { name: 'Twitter', icon: '𝕏' },
-    { name: 'Instagram', icon: '📷' },
-    { name: 'Medium', icon: '●●' },
-    { name: 'HackMD.io', icon: '��' },
+    { name: 'LinkedIn', icon: LinkedInIcon },
+    { name: 'Twitter', icon: TwitterIcon },
+    { name: 'Instagram', icon: InstagramIcon },
+    { name: 'Medium', icon: MediumIcon },
+    { name: 'HackMD.io', icon: HackMDIcon },
   ];
 
   return (
-    <div className="relative z-10 w-full h-full flex flex-col py-3 sm:py-4 px-3 sm:px-6">
-      <div className="flex flex-1 min-h-0">
-        {/* Left Side - Chat Interface */}
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-bg-surface rounded-lg flex items-center justify-center">
-                <BotIcon className="w-4 h-4 sm:w-5 sm:h-5 text-text-muted" />
-              </div>
-              <span className="text-text-primary text-sm sm:text-lg font-medium">
-                AI-First Content Assistant
-              </span>
+    <div className="relative z-10 w-full h-full flex flex-col py-2 sm:py-4 px-2 sm:px-6">
+      {/* ===== MOBILE LAYOUT ===== */}
+      <div className="flex flex-col h-full sm:hidden">
+        {/* Mobile Header - Logo left, Create center, Post on right */}
+        <div className="flex items-center justify-between mb-3 px-1">
+          {/* Left - Small logo and title */}
+          <div className="flex items-center gap-1.5">
+            <div className="w-5 h-5 bg-white rounded flex items-center justify-center p-0.5">
+              <Image
+                src="/images/brank-logo.svg"
+                alt="Brank"
+                width={16}
+                height={16}
+                className="w-full h-full object-contain invert"
+              />
             </div>
+            <span className="text-text-primary text-[10px] font-medium">
+              Content Assistant
+            </span>
+          </div>
 
-            {/* Dropdown */}
-            <div className="relative">
-              <div className="flex items-center gap-2 px-3 py-1.5 sm:py-2 bg-bg-surface rounded-lg text-text-secondary text-xs sm:text-sm border border-white/[0.05]">
-                <span>Create: Poster</span>
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+          {/* Center - Create Dropdown */}
+          <div className="flex items-center gap-1 px-2 py-1 bg-bg-surface rounded-md text-text-secondary text-[10px] border border-white/[0.05]">
+            <span>Create: Poster</span>
+            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
 
-              {/* Dropdown Menu (Visual Only) */}
-              <div className="absolute right-0 top-full mt-1 bg-bg-surface rounded-lg border border-white/[0.05] overflow-hidden shadow-soft-tile-sm z-10 hidden sm:block">
-                {contentTypes.map((type, i) => (
-                  <div
-                    key={type}
-                    className={`px-4 py-2 text-xs sm:text-sm cursor-pointer ${
-                      i === 0
-                        ? 'bg-bg-elevated text-text-primary'
-                        : 'text-text-secondary hover:bg-bg-elevated'
-                    }`}
-                  >
-                    {type}
-                  </div>
-                ))}
+          {/* Right - Post on Dropdown */}
+          <div className="flex items-center gap-1 px-2 py-1 bg-bg-surface rounded-md text-text-secondary text-[10px] border border-white/[0.05]">
+            <span>Post on</span>
+            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Mobile Chat Messages - More space */}
+        <div className="flex-1 space-y-2 overflow-hidden">
+          {/* Bot Message */}
+          <div className="flex gap-2">
+            <div className="w-5 h-5 bg-bg-surface rounded flex items-center justify-center flex-shrink-0">
+              <BotIcon className="w-3 h-3 text-text-muted" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-text-muted text-[9px] mb-0.5 block">Bot</span>
+              <div className="bg-bg-surface rounded-lg rounded-tl-sm p-2 border border-white/[0.03]">
+                <p className="text-text-secondary text-[10px] leading-relaxed">
+                  Hey there! You&apos;re wanting to create content and engage your audience. Let me help you craft the perfect message for your brand.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Chat Messages */}
-          <div className="flex-1 space-y-2 sm:space-y-3 overflow-hidden">
-            {/* Bot Message */}
-            <div className="flex gap-2 sm:gap-3">
-              <div className="w-6 h-6 sm:w-7 sm:h-7 bg-bg-surface rounded-lg flex items-center justify-center flex-shrink-0">
-                <BotIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <span className="text-text-muted text-[10px] sm:text-xs mb-1 block">Bot</span>
-                <div className="bg-bg-surface rounded-xl rounded-tl-sm p-2 sm:p-3 border border-white/[0.03]">
-                  <p className="text-text-secondary text-[10px] sm:text-xs leading-relaxed line-clamp-2 sm:line-clamp-3">
-                    Hey there! You&apos;re wanting to content creating and engage, the creative and target custom content propositive...
-                  </p>
-                </div>
+          {/* Bot Follow-up */}
+          <div className="flex gap-2 pl-7">
+            <div className="flex-1 min-w-0">
+              <div className="bg-bg-surface/50 rounded-lg p-1.5 border border-white/[0.02] inline-block">
+                <p className="text-text-muted text-[9px]">
+                  What type of content would you like to create today?
+                </p>
               </div>
             </div>
+          </div>
 
-            {/* Bot Follow-up */}
-            <div className="flex gap-2 sm:gap-3 pl-8 sm:pl-10">
-              <div className="flex-1 min-w-0">
-                <div className="bg-bg-surface/50 rounded-xl p-2 sm:p-2.5 border border-white/[0.02] inline-block">
-                  <p className="text-text-muted text-[9px] sm:text-[10px]">
-                    What type of content would you like to create today?
-                  </p>
-                </div>
+          {/* User Message */}
+          <div className="flex gap-2">
+            <div className="w-5 h-5 bg-bg-surface rounded flex items-center justify-center flex-shrink-0">
+              <UserIcon className="w-3 h-3 text-text-muted" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-text-muted text-[9px] mb-0.5 block">User</span>
+              <div className="bg-bg-surface rounded-lg rounded-tl-sm p-2 border border-white/[0.03]">
+                <p className="text-text-secondary text-[10px] leading-relaxed">
+                  I need help creating a LinkedIn post about our new product launch and its key features.
+                </p>
               </div>
             </div>
+          </div>
 
-            {/* User Message */}
-            <div className="flex gap-2 sm:gap-3">
-              <div className="w-6 h-6 sm:w-7 sm:h-7 bg-bg-surface rounded-lg flex items-center justify-center flex-shrink-0">
-                <UserIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <span className="text-text-muted text-[10px] sm:text-xs mb-1 block">User</span>
-                <div className="bg-bg-surface rounded-xl rounded-tl-sm p-2 sm:p-3 border border-white/[0.03]">
-                  <p className="text-text-secondary text-[10px] sm:text-xs leading-relaxed line-clamp-2">
-                    I need help creating a LinkedIn post about our new product launch and its key features.
-                  </p>
-                </div>
+          {/* Additional Bot Response for more height */}
+          <div className="flex gap-2">
+            <div className="w-5 h-5 bg-bg-surface rounded flex items-center justify-center flex-shrink-0">
+              <BotIcon className="w-3 h-3 text-text-muted" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-text-muted text-[9px] mb-0.5 block">Bot</span>
+              <div className="bg-bg-surface rounded-lg rounded-tl-sm p-2 border border-white/[0.03]">
+                <p className="text-text-secondary text-[10px] leading-relaxed">
+                  Great choice! Here&apos;s a draft optimized for LinkedIn&apos;s algorithm and AI discoverability...
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side - Platform Buttons */}
-        <div className="hidden sm:flex flex-col justify-center gap-3 ml-4 sm:ml-6">
-          {platforms.map((platform) => (
-            <div
-              key={platform.name}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-bg-surface rounded-xl border border-white/[0.03] text-text-secondary text-xs sm:text-sm whitespace-nowrap hover:bg-bg-elevated transition-colors cursor-pointer"
-            >
-              <span className="text-xs sm:text-sm">{platform.icon}</span>
-              <span>{platform.name}</span>
-            </div>
-          ))}
+        {/* Mobile Input */}
+        <div className="mt-2 flex items-center gap-2">
+          <div className="flex-1 flex items-center bg-bg-surface rounded-lg px-2 py-2 border border-white/[0.05]">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              className="flex-1 bg-transparent text-text-primary text-[10px] outline-none placeholder:text-text-muted"
+              readOnly
+            />
+            <button className="ml-2 p-1 bg-white rounded hover:bg-gray-100 transition-colors">
+              <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Input Text Box at Bottom */}
-      <div className="mt-3 sm:mt-4 flex items-center gap-2 sm:gap-3">
-        <div className="flex-1 flex items-center bg-bg-surface rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 border border-white/[0.05] shadow-deep-field-sm">
-          <input
-            type="text"
-            placeholder="Type your message..."
-            className="flex-1 bg-transparent text-text-primary text-xs sm:text-sm outline-none placeholder:text-text-muted"
-            readOnly
-          />
-          <button className="ml-2 sm:ml-3 p-1.5 sm:p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors">
-            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+      {/* ===== DESKTOP LAYOUT ===== */}
+      <div className="hidden sm:flex sm:flex-col sm:h-full">
+        <div className="flex flex-1 min-h-0">
+          {/* Left Side - Chat Interface */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center p-1.5">
+                  <Image
+                    src="/images/brank-logo.svg"
+                    alt="Brank"
+                    width={24}
+                    height={24}
+                    className="w-full h-full object-contain invert"
+                  />
+                </div>
+                <span className="text-text-primary text-lg font-medium">
+                  AI-First Content Assistant
+                </span>
+              </div>
+
+              {/* Dropdown */}
+              <div className="relative">
+                <div className="flex items-center gap-2 px-3 py-2 bg-bg-surface rounded-lg text-text-secondary text-sm border border-white/[0.05]">
+                  <span>Create: Poster</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+
+                {/* Dropdown Menu (Visual Only) */}
+                <div className="absolute right-0 top-full mt-1 bg-bg-surface rounded-lg border border-white/[0.05] overflow-hidden shadow-soft-tile-sm z-10">
+                  {contentTypes.map((type, i) => (
+                    <div
+                      key={type}
+                      className={`px-4 py-2 text-sm cursor-pointer ${
+                        i === 0
+                          ? 'bg-bg-elevated text-text-primary'
+                          : 'text-text-secondary hover:bg-bg-elevated'
+                      }`}
+                    >
+                      {type}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 space-y-3 overflow-hidden">
+              {/* Bot Message */}
+              <div className="flex gap-3">
+                <div className="w-7 h-7 bg-bg-surface rounded-lg flex items-center justify-center flex-shrink-0">
+                  <BotIcon className="w-4 h-4 text-text-muted" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-text-muted text-xs mb-1 block">Bot</span>
+                  <div className="bg-bg-surface rounded-xl rounded-tl-sm p-3 border border-white/[0.03]">
+                    <p className="text-text-secondary text-xs leading-relaxed line-clamp-3">
+                      Hey there! You&apos;re wanting to content creating and engage, the creative and target custom content propositive...
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bot Follow-up */}
+              <div className="flex gap-3 pl-10">
+                <div className="flex-1 min-w-0">
+                  <div className="bg-bg-surface/50 rounded-xl p-2.5 border border-white/[0.02] inline-block">
+                    <p className="text-text-muted text-[10px]">
+                      What type of content would you like to create today?
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Message */}
+              <div className="flex gap-3">
+                <div className="w-7 h-7 bg-bg-surface rounded-lg flex items-center justify-center flex-shrink-0">
+                  <UserIcon className="w-4 h-4 text-text-muted" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-text-muted text-xs mb-1 block">User</span>
+                  <div className="bg-bg-surface rounded-xl rounded-tl-sm p-3 border border-white/[0.03]">
+                    <p className="text-text-secondary text-xs leading-relaxed line-clamp-2">
+                      I need help creating a LinkedIn post about our new product launch and its key features.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Platform Buttons */}
+          <div className="flex flex-col justify-center gap-3 ml-6">
+            {platforms.map((platform) => {
+              const IconComponent = platform.icon;
+              return (
+                <div
+                  key={platform.name}
+                  className="flex items-center gap-2 px-4 py-3 bg-bg-surface rounded-xl border border-white/[0.03] text-text-secondary text-sm whitespace-nowrap hover:bg-bg-elevated transition-colors cursor-pointer"
+                >
+                  <IconComponent className="w-4 h-4" />
+                  <span>{platform.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Input Text Box at Bottom */}
+        <div className="mt-4 flex items-center gap-3">
+          <div className="flex-1 flex items-center bg-bg-surface rounded-xl px-4 py-3 border border-white/[0.05] shadow-deep-field-sm">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              className="flex-1 bg-transparent text-text-primary text-sm outline-none placeholder:text-text-muted"
+              readOnly
+            />
+            <button className="ml-3 p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors">
+              <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -604,6 +913,10 @@ export default function MainContentSection() {
       title: 'Citations',
       description: 'Monitor which sources AI models cite when mentioning you.',
     },
+    {
+      title: 'Ranking',
+      description: "Find out your brand's ranking across LLMs.",
+    },
   ];
 
   const improveFeatures = [
@@ -623,12 +936,12 @@ export default function MainContentSection() {
       {/* ==========================================
           SECTION 1: KNOW (The Monitor)
          ========================================== */}
-      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-4 sm:pt-6 lg:pt-8 pb-8 sm:pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <Reveal variant="fadeUp" duration={1.2} y={30}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
-
+          {/* Desktop Layout */}
+          <div className="hidden sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 items-center">
             {/* Left: Content */}
-            <div className="order-2 lg:order-1">
+            <div className="order-1">
               <Badge>Visibility Intelligence</Badge>
               <SectionHeading>
                 Know what AI models{' '}
@@ -639,7 +952,7 @@ export default function MainContentSection() {
                 Track frequency across platforms. Understand your visibility in AI-generated responses and benchmark against competitors.
               </SectionText>
 
-              <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-2 sm:space-y-3">
                 {knowFeatures.map((feature, index) => (
                   <FeatureListButton
                     key={feature.title}
@@ -653,18 +966,40 @@ export default function MainContentSection() {
             </div>
 
             {/* Right: The Console Visual */}
-            <div className="relative order-1 lg:order-2">
-              {/* The Physical Bezel */}
+            <div className="relative order-2">
               <div className="bg-gradient-surface p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-soft-tile border border-white/[0.02]">
                 <ConsoleScreen className="aspect-[4/3]">
                   <KnowScreenContent activeFeature={knowActiveFeature} />
                 </ConsoleScreen>
               </div>
-
-              {/* Decorative Background Glow */}
               <div className="absolute -inset-10 bg-green-500/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
             </div>
+          </div>
 
+          {/* Mobile Layout - Expandable Cards */}
+          <div className="sm:hidden">
+            <Badge>Visibility Intelligence</Badge>
+            <SectionHeading>
+              Know what AI models{' '}
+              <span className="text-text-muted">think about you.</span>
+            </SectionHeading>
+            <SectionText>
+              Track frequency across platforms. Understand your visibility in AI-generated responses and benchmark against competitors.
+            </SectionText>
+
+            <div className="space-y-2">
+              {knowFeatures.map((feature, index) => (
+                <MobileExpandableCard
+                  key={feature.title}
+                  title={feature.title}
+                  description={feature.description}
+                  active={knowActiveFeature === index}
+                  onClick={() => setKnowActiveFeature(index)}
+                >
+                  <KnowScreenContent activeFeature={index} />
+                </MobileExpandableCard>
+              ))}
+            </div>
           </div>
         </Reveal>
       </section>
@@ -673,24 +1008,22 @@ export default function MainContentSection() {
       {/* ==========================================
           SECTION 2: IMPROVE (The Tuner)
          ========================================== */}
-      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
         <Reveal variant="fadeUp" duration={1.2} y={30}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
-
+          {/* Desktop Layout */}
+          <div className="hidden sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 items-center">
             {/* Left: Visual (Zig-zag layout) */}
-            <div className="relative">
+            <div className="relative lg:order-1">
               <div className="bg-gradient-surface p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-soft-tile border border-white/[0.02]">
                 <ConsoleScreen className="aspect-[4/3]">
                   <ImproveScreenContent activeFeature={improveActiveFeature} />
                 </ConsoleScreen>
               </div>
-
-              {/* Decorative Background Glow */}
               <div className="absolute -inset-10 bg-blue-500/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
             </div>
 
             {/* Right: Content */}
-            <div>
+            <div className="lg:order-2">
               <Badge>Optimization Engine</Badge>
               <SectionHeading>
                 Improve your rankings{' '}
@@ -701,7 +1034,7 @@ export default function MainContentSection() {
                 Identify the sources that matter. We tell you exactly which domains are feeding data to the models so you can dominate the input layer.
               </SectionText>
 
-              <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-2 sm:space-y-3">
                 {improveFeatures.map((feature, index) => (
                   <FeatureListButton
                     key={feature.title}
@@ -713,7 +1046,32 @@ export default function MainContentSection() {
                 ))}
               </div>
             </div>
+          </div>
 
+          {/* Mobile Layout - Expandable Cards */}
+          <div className="sm:hidden">
+            <Badge>Optimization Engine</Badge>
+            <SectionHeading>
+              Improve your rankings{' '}
+              <span className="text-text-muted">across all LLMs.</span>
+            </SectionHeading>
+            <SectionText>
+              Identify the sources that matter. We tell you exactly which domains are feeding data to the models so you can dominate the input layer.
+            </SectionText>
+
+            <div className="space-y-2">
+              {improveFeatures.map((feature, index) => (
+                <MobileExpandableCard
+                  key={feature.title}
+                  title={feature.title}
+                  description={feature.description}
+                  active={improveActiveFeature === index}
+                  onClick={() => setImproveActiveFeature(index)}
+                >
+                  <ImproveScreenContent activeFeature={index} />
+                </MobileExpandableCard>
+              ))}
+            </div>
           </div>
         </Reveal>
       </section>
@@ -722,7 +1080,7 @@ export default function MainContentSection() {
       {/* ==========================================
           SECTION 3: CREATE (The Forge)
          ========================================== */}
-      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
         <Reveal variant="fadeUp" duration={1.2} y={30}>
           {/* Centered Header */}
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
@@ -738,8 +1096,8 @@ export default function MainContentSection() {
           </div>
 
           {/* Full Width Visual */}
-          <div className="bg-gradient-surface p-3 sm:p-4 rounded-2xl sm:rounded-[2rem] shadow-soft-tile border border-white/[0.02]">
-            <ConsoleScreen className="aspect-[16/9] sm:aspect-[21/10] min-h-[280px] sm:min-h-[380px]">
+          <div className="bg-gradient-surface p-2 sm:p-4 rounded-2xl sm:rounded-[2rem] shadow-soft-tile border border-white/[0.02]">
+            <ConsoleScreen className="aspect-[3/4] sm:aspect-[21/10] min-h-[380px] sm:min-h-[380px]">
               <CreateScreenContent />
             </ConsoleScreen>
           </div>

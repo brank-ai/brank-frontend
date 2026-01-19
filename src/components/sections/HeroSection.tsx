@@ -129,7 +129,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
 
           {/* Logo Ticker - Infinite scroll of trusted brands */}
           <Reveal trigger="mount" variant="fadeIn" delay={0.5} duration={2.0} initiallyVisible={false}>
-            <div className="w-full mt-12 sm:mt-16 md:mt-20">
+            <div className="w-full mt-6 sm:mt-8 md:mt-10">
               <LogoTicker />
             </div>
           </Reveal>
