@@ -68,6 +68,11 @@ export default function Footer() {
                     </a>
                   </li>
                   <li>
+                    <a href="/pricing" className="hover:text-text-primary transition-colors duration-300">
+                      Pricing
+                    </a>
+                  </li>
+                  <li>
                     <a href="#" className="hover:text-text-primary transition-colors duration-300">
                       Brand Kit
                     </a>

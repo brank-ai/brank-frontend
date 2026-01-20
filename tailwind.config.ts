@@ -91,6 +91,10 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
         glowPulse: {
           '0%, 100%': { boxShadow: '0 0 10px rgba(34, 197, 94, 0.6)' },
           '50%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.8)' },
@@ -104,6 +108,8 @@ const config: Config = {
         'shine-wave': 'shine-wave 3s linear infinite',
         'shine-wave-slow': 'shine-wave-slow 8s linear infinite',
         'fade-in': 'fadeIn 500ms ease-out forwards',
+        fadeIn: 'fadeIn 300ms ease-out forwards',
+        scaleIn: 'scaleIn 200ms ease-out forwards',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
         'hover-lift': 'hoverLift 300ms ease forwards',
       },

@@ -26,8 +26,17 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* CTA Button - Volumetric Soft Tile Style v2.0 */}
-          <div>
+          {/* Navigation & CTA */}
+          <div className="flex items-center gap-6 sm:gap-8">
+            {/* Pricing Link - Hidden on mobile */}
+            <Link
+              href="/pricing"
+              className="hidden sm:block text-text-muted hover:text-text-primary transition-colors duration-300 text-sm font-medium"
+            >
+              Pricing
+            </Link>
+
+            {/* CTA Button - Volumetric Soft Tile Style v2.0 */}
             <button
               className="
                 px-4 py-2 sm:px-6 sm:py-2.5
