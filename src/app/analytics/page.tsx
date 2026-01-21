@@ -2,12 +2,13 @@ import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { MetricCard } from '@/components/ui/MetricCard';
-import { Reveal } from '@/components/ui';
+import { Reveal, Tooltip } from '@/components/ui';
 import { ComparisonCard } from '@/components/analytics/ComparisonCard';
 import { CitationCard } from '@/components/analytics/CitationCard';
 import { getMetrics } from '@/lib/backend';
 import { BackendMetricResponse } from '@/types/backend';
 import { LLMComparison, CitationLLM } from '@/types';
+import { cn } from '@/lib/utils';
 
 // LLM metadata for icons and display names
 const LLM_METADATA: Record<string, { name: string; icon: string }> = {
@@ -88,6 +89,97 @@ function mapRankingData(
   }));
 }
 
+// Helper functions for dynamic AI insights
+function getMentionsInsight(
+  mentionRate: number, 
+  brandName: string,
+  topCitedSources: string[]
+): string {
+  const sourcesText = topCitedSources.length > 0 
+    ? `${topCitedSources.slice(0, 2).join(' and ')}`
+    : 'sources in Citation Overview';
+  
+  if (mentionRate >= 90) {
+    return `Excellent visibility! Maintain by:\n1. Using Brank's engine to parse video content for LLM readability\n2. Strengthening presence on ${sourcesText}`;
+  } else if (mentionRate >= 60) {
+    return `Good visibility with growth potential. Actions:\n1. Use Brank's workflows to automate content creation\n2. Get featured on ${sourcesText} (see Citation Overview)`;
+  } else if (mentionRate >= 30) {
+    return `Needs improvement. Priorities:\n1. Run Brank's audit to optimize your website for LLM crawling\n2. Target ${sourcesText} shown in Citation Overview`;
+  } else {
+    return `Low visibility—act now. Steps:\n1. Run Brank's audit to make your website LLM-friendly\n2. Use Brank's workflows to create comprehensive content`;
+  }
+}
+
+function getSentimentInsight(
+  sentimentScore: number, 
+  brandName: string,
+  topCitedSources: string[]
+): string {
+  const sourcesText = topCitedSources.length > 0
+    ? `${topCitedSources.slice(0, 2).join(' and ')}`
+    : 'sources in Citation Overview';
+  
+  if (sentimentScore >= 80) {
+    return `Strong positive sentiment! Maintain by:\n1. Using Brank's workflows to publish customer success stories\n2. Monitoring reputation on ${sourcesText}`;
+  } else if (sentimentScore >= 60) {
+    return `Moderate sentiment—room to improve. Actions:\n1. Use Brank's deeper analysis to identify root causes of negative sentiment\n2. Address issues on ${sourcesText}`;
+  } else if (sentimentScore >= 40) {
+    return `Mixed signals detected. Priorities:\n1. Run Brank's deeper analysis to source root causes of negative sentiment\n2. Fix issues on ${sourcesText} (Citation Overview)`;
+  } else {
+    return `Sentiment needs urgent attention. Steps:\n1. Use Brank's deeper analysis to identify negative sentiment drivers\n2. Launch PR campaigns addressing root issues`;
+  }
+}
+
+function getRankingInsight(
+  avgRank: number, 
+  brandName: string,
+  topCitedSources: string[]
+): string {
+  const sourcesText = topCitedSources.length > 0
+    ? `${topCitedSources.slice(0, 2).join(' and ')}`
+    : 'key sources';
+  
+  if (avgRank <= 2) {
+    return `Top-tier ranking! Defend by:\n1. Using Brank's engine to parse video content and expand LLM-readable formats\n2. Monitoring competitors on ${sourcesText}`;
+  } else if (avgRank <= 5) {
+    return `Good ranking with upside. Climb higher by:\n1. Using Brank's workflows to create targeted use-case content\n2. Strengthening presence on ${sourcesText} (Citation Overview)`;
+  } else if (avgRank <= 10) {
+    return `Ranking needs work. Actions:\n1. Use Brank's workflows to automate comparison content creation\n2. Get featured on ${sourcesText} (see Citation Overview)`;
+  } else {
+    return `Low ranking—strategic focus needed. Steps:\n1. Use Brank's audit to optimize website structure\n2. Target ${sourcesText} (Citation Overview) for citations`;
+  }
+}
+
+function getCitationInsight(
+  totalCitations: number,
+  topSources: Array<{url: string, count: number}>,
+  brandName: string
+): string {
+  const hasHighAuthoritySources = topSources.some(source => 
+    ['wikipedia', 'forbes', 'techcrunch', 'nytimes', 'wsj', 'g2', 'capterra', 'trustpilot']
+      .some(auth => source.url.toLowerCase().includes(auth))
+  );
+  
+  const topSourcesList = topSources.slice(0, 2).map(s => {
+    try {
+      const url = new URL(s.url.startsWith('http') ? s.url : `https://${s.url}`);
+      return url.hostname.replace('www.', '');
+    } catch {
+      return s.url;
+    }
+  }).join(' and ');
+  
+  if (totalCitations >= 50 && hasHighAuthoritySources) {
+    return `Strong citations from trusted sources (${topSourcesList}). Next steps:\n1. Use Brank's engine to parse video content for broader LLM coverage\n2. Keep existing profiles updated`;
+  } else if (totalCitations >= 25) {
+    return `Moderate coverage. LLMs source from ${topSourcesList}. Actions:\n1. Use Brank's workflows to create content for tier-1 publications\n2. Update info on existing platforms`;
+  } else if (totalCitations >= 10) {
+    return `Limited citations. Currently on ${topSourcesList}. Priorities:\n1. Run Brank's audit to optimize website for citations\n2. Target similar authoritative platforms`;
+  } else {
+    return `Minimal citations—limits visibility. Actions:\n1. Use Brank's workflows to create content for authoritative publications\n2. Run Brank's audit to identify high-impact citation opportunities`;
+  }
+}
+
 interface AnalyticsPageProps {
   searchParams?: {
     brand?: string;
@@ -139,8 +231,59 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   const rankingLLMs = mapRankingData(metricsData.rankByLLMs);
   const citationLLMs = mapCitationData(metricsData.citationOverview);
 
+  // Extract top cited sources across all LLMs
+  const topCitedSources = citationLLMs
+    .flatMap(llm => llm.sources)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+    .map(source => {
+      // Extract domain name for readability
+      try {
+        const url = new URL(source.url.startsWith('http') ? source.url : `https://${source.url}`);
+        return url.hostname.replace('www.', '');
+      } catch {
+        return source.url;
+      }
+    });
+
+  // Generate dynamic insights based on actual metrics
+  const mentionsInsight = getMentionsInsight(
+    Math.round(metricsData.averageMentionRate * 100),
+    brandName,
+    topCitedSources
+  );
+
+  const sentimentInsight = getSentimentInsight(
+    Math.round(metricsData.averageSentiment),
+    brandName,
+    topCitedSources
+  );
+
+  const rankingInsight = getRankingInsight(
+    metricsData.averageRanking || 0,
+    brandName,
+    topCitedSources
+  );
+
+  const citationInsight = getCitationInsight(
+    Math.round(metricsData.citations),
+    citationLLMs.flatMap(llm => llm.sources).slice(0, 5),
+    brandName
+  );
+
   const shouldShowRankingProButton = (llmName: string) => {
     return llmName === 'Grok' || llmName === 'Perplexity';
+  };
+
+  // Determine ranking performance level
+  const getRankingPerformanceLevel = (rank: number): { label: string; color: string } => {
+    if (rank <= 2) {
+      return { label: 'Excellent', color: 'text-green-500' };
+    } else if (rank > 2 && rank < 5) {
+      return { label: 'Fair', color: 'text-orange-400' };
+    } else {
+      return { label: 'Poor', color: 'text-red-500' };
+    }
   };
 
   return (
@@ -170,28 +313,28 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
             <MetricCard
               label="Total Mentions"
               value={`${Math.round(metricsData.averageMentionRate * 100)}%`}
-              info="Total number of mentions across all LLMs"
+              info={`Out of 100 user prompts related to ${brandName}, AI models mention ${brandName} in 45 responses.`}
             />
           </Reveal>
           <Reveal delay={0.15} duration={0.6}>
             <MetricCard
               label="Total Citations"
               value={Math.round(metricsData.citations)}
-              info="Total number of citations from sources"
+              info={`The total number of external resources LLMs referenced when generating responses about ${brandName}.`}
             />
           </Reveal>
           <Reveal delay={0.2} duration={0.6}>
             <MetricCard
-              label="Avg Sentiment"
-              value={Math.round(metricsData.averageSentiment)}
-              info="Average sentiment score across platforms"
+              label="Average Sentiment Score"
+              value={`${Math.round(metricsData.averageSentiment)}%`}
+              info={`The average sentiment score out of 100 across LLMs when users ask questions directly about ${brandName}.`}
             />
           </Reveal>
           <Reveal delay={0.25} duration={0.6}>
             <MetricCard
-              label="Avg Ranking"
+              label="Overall Ranking"
               value={metricsData.averageRanking ? metricsData.averageRanking.toFixed(1) : 'N/A'}
-              info="Average ranking position"
+              info={`The average position of ${brandName} within its category across all LLMs.`}
             />
           </Reveal>
         </div>
@@ -202,14 +345,16 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
             <ComparisonCard
               title="Mentions Rate"
               comparisons={mentionsRateComparisons}
-              insight="Track how often your brand appears in LLM-generated recommendations across different platforms."
+              insight={mentionsInsight}
+              tooltip={`The number of times each LLM recommends ${brandName} across 100 relevant user prompts.`}
             />
           </Reveal>
           <Reveal delay={0.15} duration={0.6}>
             <ComparisonCard
               title="Sentiment Score"
               comparisons={sentimentScoreComparisons}
-              insight="Understand how LLMs perceive your brand sentiment across different AI platforms."
+              insight={sentimentInsight}
+              tooltip={`Sentiment score for ${brandName} across individual LLMs.`}
             />
           </Reveal>
         </div>
@@ -226,22 +371,23 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                     <h3 className="text-text-primary text-lg sm:text-xl md:text-2xl font-normal">
                       Ranking Overview
                     </h3>
-                    <button
-                      className="text-text-subtle hover:text-text-muted transition-all duration-150 active:scale-95"
-                      title="Information about Ranking Overview"
-                    >
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
+                    <Tooltip content={`The position of ${brandName} within its category for each LLM.`}>
+                      <button
+                        className="text-text-subtle hover:text-text-muted transition-all duration-150 active:scale-95"
                       >
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 16v-4M12 8h.01" />
-                      </svg>
-                    </button>
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 16v-4M12 8h.01" />
+                        </svg>
+                      </button>
+                    </Tooltip>
                   </div>
 
                   {/* AI Insight with Gradient on Icon and Text */}
@@ -259,9 +405,11 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                         AI INSIGHT
                       </h4>
                     </div>
-                    <p className="text-text-muted text-sm leading-relaxed">
-                      Your brand ranks #{metricsData.averageRanking ? metricsData.averageRanking.toFixed(1) : 'N/A'} on average across AI platforms. Higher rankings mean better visibility in AI-generated recommendations.
-                    </p>
+                    <div className="text-text-muted text-sm leading-relaxed space-y-1">
+                      {rankingInsight.split('\n').map((line, index) => (
+                        <p key={index}>{line}</p>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -290,20 +438,29 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                     </span>
                   </div>
 
-                  {/* Rankings List */}
-                  <div className="space-y-4">
+                  {/* Rankings List - Enhanced Card Style */}
+                  <div className="space-y-3">
                     {rankingLLMs.map((llm, index) => (
                       <Reveal key={index} delay={0.15 + index * 0.05} duration={0.5}>
-                        <div className="flex items-center justify-between">
+                        <div className="
+                          flex items-center justify-between
+                          bg-bg-elevated
+                          border border-subtle
+                          rounded-xl
+                          px-4 py-3
+                          shadow-soft-tile-xs
+                          hover:shadow-soft-tile-sm
+                          transition-all duration-300
+                        ">
                           <div className="flex items-center gap-3 min-w-0">
                             <Image
                               src={llm.icon}
                               alt={llm.name}
-                              width={16}
-                              height={16}
-                              className="object-contain opacity-70"
+                              width={20}
+                              height={20}
+                              className="object-contain opacity-90 flex-shrink-0"
                             />
-                            <span className="text-gray-500 text-xs sm:text-sm uppercase tracking-wide truncate">
+                            <span className="text-text-primary text-xs sm:text-sm uppercase tracking-wide truncate font-medium">
                               {llm.name}
                             </span>
                           </div>
@@ -324,9 +481,25 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                               Pro
                             </button>
                           ) : llm.rank > 0 ? (
-                            <span className="text-text-primary text-xs sm:text-sm font-normal">
-                              #{llm.rank.toFixed(1)}
-                            </span>
+                            <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+                              <span className="text-text-primary text-sm font-medium">
+                                #{llm.rank.toFixed(1)}
+                              </span>
+                              <span className={cn(
+                                'flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide',
+                                getRankingPerformanceLevel(llm.rank).color,
+                                getRankingPerformanceLevel(llm.rank).color === 'text-green-500' && 'bg-green-500/10',
+                                getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' && 'bg-orange-400/10',
+                                getRankingPerformanceLevel(llm.rank).color === 'text-red-500' && 'bg-red-500/10'
+                              )}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${
+                                  getRankingPerformanceLevel(llm.rank).color === 'text-green-500' ? 'bg-green-500' :
+                                  getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' ? 'bg-orange-400' :
+                                  'bg-red-500'
+                                }`} />
+                                {getRankingPerformanceLevel(llm.rank).label}
+                              </span>
+                            </div>
                           ) : (
                             <span className="text-text-muted text-xs sm:text-sm font-normal">
                               N/A
@@ -365,9 +538,11 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                 <h4 className="text-text-primary text-sm font-medium mb-2 uppercase tracking-wider">
                   AI INSIGHT
                 </h4>
-                <p className="text-text-muted text-sm leading-relaxed">
-                  Discover which sources LLMs reference when mentioning your brand. Strengthen your presence by publishing in high-authority sources that AI models trust.
-                </p>
+                <div className="text-text-muted text-sm leading-relaxed space-y-1">
+                  {citationInsight.split('\n').map((line, index) => (
+                    <p key={index}>{line}</p>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

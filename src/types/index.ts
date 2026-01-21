@@ -144,6 +144,7 @@ export interface ComparisonCardProps {
   title: string;
   comparisons: LLMComparison[];
   insight: string;
+  tooltip?: string;
   className?: string;
 }
 

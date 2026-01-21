@@ -4,18 +4,36 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ComparisonCardProps } from '@/types';
 import { cn } from '@/lib/utils';
-import { ProModal } from '@/components/ui';
+import { ProModal, Tooltip } from '@/components/ui';
 
 const ComparisonCard: React.FC<ComparisonCardProps> = ({
   title,
   comparisons,
   insight,
+  tooltip,
   className,
 }) => {
   const [isProModalOpen, setIsProModalOpen] = useState(false);
 
   const shouldShowProButton = (llmName: string) => {
     return llmName === 'Grok' || llmName === 'Perplexity';
+  };
+
+  // Determine performance level based on value and metric type
+  const getPerformanceLevel = (value: number): { label: string; color: string } => {
+    // For Mentions Rate and Sentiment Score
+    if (title.includes('Rate') || title.includes('Sentiment')) {
+      if (value < 30) {
+        return { label: 'Poor', color: 'text-red-500' };
+      } else if (value >= 30 && value < 90) {
+        return { label: 'Fair', color: 'text-orange-400' };
+      } else {
+        return { label: 'Excellent', color: 'text-green-500' };
+      }
+    }
+    
+    // Default: no level indicator
+    return { label: '', color: '' };
   };
 
   return (
@@ -48,22 +66,25 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
               <h3 className="text-text-primary text-lg sm:text-xl md:text-2xl font-medium tracking-tight">
                 {title}
               </h3>
-              <button
-                className="text-text-subtle hover:text-text-muted transition-all duration-300 active:scale-95"
-                title={`Information about ${title}`}
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16v-4M12 8h.01" />
-                </svg>
-              </button>
+              {tooltip && (
+                <Tooltip content={tooltip}>
+                  <button
+                    className="text-text-subtle hover:text-text-muted transition-all duration-300 active:scale-95"
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4M12 8h.01" />
+                    </svg>
+                  </button>
+                </Tooltip>
+              )}
             </div>
 
             {/* AI Insight */}
@@ -80,7 +101,11 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
                   AI INSIGHT
                 </h4>
               </div>
-              <p className="text-text-muted text-sm leading-relaxed">{insight}</p>
+              <div className="text-text-muted text-sm leading-relaxed space-y-1">
+                {insight.split('\n').map((line, index) => (
+                  <p key={index}>{line}</p>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -105,22 +130,31 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
               </span>
             </div>
 
-            {/* Comparisons List */}
-            <div className="space-y-4">
+            {/* Comparisons List - Enhanced Card Style */}
+            <div className="space-y-3">
               {comparisons.map((comparison, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between"
+                  className="
+                    flex items-center justify-between
+                    bg-bg-elevated
+                    border border-subtle
+                    rounded-xl
+                    px-4 py-3
+                    shadow-soft-tile-xs
+                    hover:shadow-soft-tile-sm
+                    transition-all duration-300
+                  "
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <Image
                       src={comparison.icon}
                       alt={comparison.llm}
-                      width={16}
-                      height={16}
-                      className="object-contain opacity-70"
+                      width={20}
+                      height={20}
+                      className="object-contain opacity-90 flex-shrink-0"
                     />
-                    <span className="text-text-muted text-xs sm:text-sm uppercase tracking-wide truncate">
+                    <span className="text-text-primary text-xs sm:text-sm uppercase tracking-wide truncate font-medium">
                       {comparison.llm}
                     </span>
                   </div>
@@ -144,9 +178,31 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
                       Pro
                     </button>
                   ) : (
-                    <span className="text-text-primary text-xs sm:text-sm font-medium">
-                      {comparison.value}{title.includes('Rate') ? '%' : ''}
-                    </span>
+                    <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+                      {(title.includes('Rate') || title.includes('Sentiment')) && (
+                        <>
+                          <span className="text-text-primary text-sm font-medium">
+                            {comparison.value}
+                            {title.includes('Rate') || title.includes('Sentiment') ? '%' : ''}
+                          </span>
+                          <span className={cn(
+                            'flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide',
+                            getPerformanceLevel(comparison.value).color,
+                            getPerformanceLevel(comparison.value).color === 'text-green-500' && 'bg-green-500/10',
+                            getPerformanceLevel(comparison.value).color === 'text-orange-400' && 'bg-orange-400/10',
+                            getPerformanceLevel(comparison.value).color === 'text-red-500' && 'bg-red-500/10'
+                          )}>
+                            <span className={cn(
+                              'w-1.5 h-1.5 rounded-full',
+                              getPerformanceLevel(comparison.value).color === 'text-green-500' && 'bg-green-500',
+                              getPerformanceLevel(comparison.value).color === 'text-orange-400' && 'bg-orange-400',
+                              getPerformanceLevel(comparison.value).color === 'text-red-500' && 'bg-red-500'
+                            )} />
+                            {getPerformanceLevel(comparison.value).label}
+                          </span>
+                        </>
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
