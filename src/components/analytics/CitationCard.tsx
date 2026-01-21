@@ -10,6 +10,34 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
   const [isProModalOpen, setIsProModalOpen] = useState(false);
   const shouldBlur = llm.name === 'Grok' || llm.name === 'Perplexity';
 
+  // Determine impact level based on ranking position
+  const getImpactLevel = (index: number): { label: string; color: string; bgColor: string; dotColor: string } => {
+    const rank = index + 1; // Convert 0-based index to 1-based rank
+    
+    if (rank === 1) {
+      return { 
+        label: 'HIGH IMPACT', 
+        color: 'text-green-500',
+        bgColor: 'bg-green-500/10',
+        dotColor: 'bg-green-500'
+      };
+    } else if (rank === 2 || rank === 3) {
+      return { 
+        label: 'MEDIUM IMPACT', 
+        color: 'text-orange-400',
+        bgColor: 'bg-orange-400/10',
+        dotColor: 'bg-orange-400'
+      };
+    } else {
+      return { 
+        label: 'LOW IMPACT', 
+        color: 'text-gray-400',
+        bgColor: 'bg-gray-400/10',
+        dotColor: 'bg-gray-400'
+      };
+    }
+  };
+
   return (
     <>
       <div
@@ -48,37 +76,66 @@ const CitationCard: React.FC<CitationCardProps> = ({ llm, className }) => {
             {llm.subtitle}
           </p>
 
-          {/* Sources */}
-          <div className={cn('space-y-2', shouldBlur && 'blur-sm select-none')}>
-            {llm.sources.map((source, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between py-2"
-              >
-                <div className="flex items-center gap-2 min-w-0 flex-1">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-text-subtle"
-                  >
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                  </svg>
-                  <span className="text-text-secondary text-xs sm:text-sm truncate">
-                    {source.url}
-                  </span>
-                </div>
-                <span className="text-text-muted text-xs sm:text-sm flex-shrink-0 pl-2">
-                  {source.count}%
-                </span>
-              </div>
-            ))}
+          {/* Sources - Enhanced Card Style */}
+          <div className={cn('space-y-3', shouldBlur && 'blur-sm select-none')}>
+            {llm.sources.map((source, index) => {
+              const impact = getImpactLevel(index);
+              return (
+                <a
+                  key={index}
+                  href={source.url.startsWith('http') ? source.url : `https://${source.url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    flex items-center justify-between
+                    bg-bg-elevated
+                    border border-subtle
+                    rounded-xl
+                    px-4 py-3
+                    shadow-soft-tile-xs
+                    hover:shadow-soft-tile-sm
+                    hover:border-text-muted/30
+                    transition-all duration-300
+                    cursor-pointer
+                    group
+                  "
+                >
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-text-subtle group-hover:text-text-primary flex-shrink-0 transition-colors duration-300"
+                    >
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                    <span className="text-text-primary group-hover:text-white text-xs sm:text-sm truncate font-medium transition-colors duration-300">
+                      {source.url}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+                    <span className="text-text-primary text-sm font-medium">
+                      {source.count}%
+                    </span>
+                    <span className={cn(
+                      'flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide',
+                      impact.color,
+                      impact.bgColor
+                    )}>
+                      <span className={cn('w-1.5 h-1.5 rounded-full', impact.dotColor)} />
+                      {impact.label}
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
           </div>
 
           {/* Pro Button Overlay */}
