@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 const logos = [
@@ -13,26 +14,104 @@ const logos = [
   { name: 'Zerodha', src: '/images/brand-logos/Zerodha.svg' },
 ];
 
+// Insightful phrases for each metric
+const mentionPhrases = [
+  'Trending in AI conversations',
+  'Frequently recommended',
+  'Top-of-mind for users',
+  'Highly discussed brand',
+  'Rising in AI visibility',
+  'Gaining momentum fast',
+  'Dominating discussions',
+];
+
+const citationPhrases = [
+  'Cited as industry leader',
+  'Referenced as top choice',
+  'Trusted source in AI',
+  'Go-to recommendation',
+  'Preferred by AI models',
+  'Consistently referenced',
+  'Authority in category',
+];
+
+const sentimentPhrases = [
+  'Overwhelmingly positive',
+  'Strong brand affinity',
+  'Highly favorable tone',
+  'Trusted & respected',
+  'Positive perception',
+  'Well-regarded brand',
+  'Excellent reputation',
+];
+
+const scorePhrases = [
+  'Outperforming competitors',
+  'Category frontrunner',
+  'Above industry average',
+  'Strong market position',
+  'Leading the pack',
+  'Top-tier performance',
+  'Exceptional visibility',
+];
+
+interface BrandInsight {
+  phrase: string;
+  percent: number;
+}
+
+interface BrandInsights {
+  mentions: BrandInsight;
+  citations: BrandInsight;
+  sentiment: BrandInsight;
+  score: BrandInsight;
+}
+
 function TickerItem({ logo }: { logo: { name: string; src: string } }) {
-  const [stats, setStats] = useState({ mentions: 0, citations: 0 });
+  const router = useRouter();
+  const [insights, setInsights] = useState<BrandInsights>({
+    mentions: { phrase: '', percent: 0 },
+    citations: { phrase: '', percent: 0 },
+    sentiment: { phrase: '', percent: 0 },
+    score: { phrase: '', percent: 0 },
+  });
   const [isHovered, setIsHovered] = useState(false);
 
-  // Generate random stats on mount to avoid hydration mismatch
+  // Generate random insights on mount to avoid hydration mismatch
   useEffect(() => {
-    setStats({
-      mentions: Math.floor(Math.random() * 29) + 71, // 71% to 99%
-      citations: Math.floor(Math.random() * 29) + 71, // 71% to 99%
+    const getRandomPhrase = (phrases: readonly string[]): string => {
+      const index = Math.floor(Math.random() * phrases.length);
+      return phrases[index] ?? '';
+    };
+
+    setInsights({
+      mentions: {
+        phrase: getRandomPhrase(mentionPhrases),
+        percent: Math.floor(Math.random() * 25) + 65, // 65-89%
+      },
+      citations: {
+        phrase: getRandomPhrase(citationPhrases),
+        percent: Math.floor(Math.random() * 25) + 70, // 70-94%
+      },
+      sentiment: {
+        phrase: getRandomPhrase(sentimentPhrases),
+        percent: Math.floor(Math.random() * 20) + 75, // 75-94%
+      },
+      score: {
+        phrase: getRandomPhrase(scorePhrases),
+        percent: Math.floor(Math.random() * 25) + 72, // 72-96%
+      },
     });
   }, []);
 
   return (
     <div
-      className="relative flex items-center justify-center shrink-0 h-32 sm:h-24 md:h-28 px-4"
+      className="relative flex items-center justify-center shrink-0 h-36 sm:h-32 md:h-36 px-4 cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => setIsHovered(!isHovered)}
+      onClick={() => router.push(`/progress?brand=${encodeURIComponent(logo.name)}`)}
       style={{
-        width: isHovered ? '240px' : '160px',
+        width: isHovered ? '320px' : '160px',
         transition: 'width 0.4s cubic-bezier(0.2, 0, 0.2, 1)',
       }}
     >
@@ -55,46 +134,31 @@ function TickerItem({ logo }: { logo: { name: string; src: string } }) {
       </div>
 
       {/* Expanded Card View - Volumetric Design */}
-    <div
+      <div
         className={`
-          absolute top-4 bottom-1 inset-x-0 sm:inset-y-0
+          absolute inset-x-0 inset-y-0
           bg-bg-surface
           border border-subtle
           rounded-xl
           shadow-soft-tile-sm hover:shadow-soft-tile
-          flex flex-col items-center justify-center
-          p-5 sm:p-4
+          flex flex-col items-start justify-center
+          px-4 py-2
           transition-all duration-300 ease-in-out
           overflow-hidden
           group/card
           ${isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
         `}
       >
-        {/* Volumetric Accents (from MetricCard) */}
         {/* Left accent LED indicator */}
         <div
           className="
             absolute left-0 top-0 bottom-0 w-1
-            bg-green-500
-            shadow-glow-green
+            bg-green-700
           "
         />
 
-        {/* Subtle grid pattern texture */}
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: '16px 16px',
-            backgroundPosition: 'center',
-          }}
-        />
-
         {/* Small Logo at Top */}
-        <div className="relative w-full h-8 mb-3 shrink-0 z-10">
+        <div className="relative w-full h-5 mb-1.5 shrink-0 z-10">
           <Image
             src={logo.src}
             alt={logo.name}
@@ -103,16 +167,28 @@ function TickerItem({ logo }: { logo: { name: string; src: string } }) {
           />
         </div>
 
-        {/* Stats Grid */}
-        <div className="w-full grid grid-cols-2 gap-2 text-center z-10">
-          <div className="flex flex-col items-center p-1.5 bg-bg-base/50 rounded-lg border border-subtle/50">
-            <span className="text-[10px] uppercase tracking-wider text-text-muted mb-0.5">Mentions</span>
-            <span className="text-sm font-medium text-text-primary text-glow">{stats.mentions}%</span>
-          </div>
-          <div className="flex flex-col items-center p-1.5 bg-bg-base/50 rounded-lg border border-subtle/50">
-            <span className="text-[10px] uppercase tracking-wider text-text-muted mb-0.5">Citations</span>
-            <span className="text-sm font-medium text-text-primary text-glow">{stats.citations}%</span>
-          </div>
+        {/* Insights List */}
+        <div className="w-full flex flex-col gap-1 z-10 pl-2">
+          <p className="text-xs leading-relaxed text-left">
+            <span className="font-semibold text-green-500">{insights.mentions.percent}%</span>
+            <span className="text-text-muted"> Mentions</span>
+            <span className="text-text-secondary"> · {insights.mentions.phrase}</span>
+          </p>
+          <p className="text-xs leading-relaxed text-left">
+            <span className="font-semibold text-green-500">{insights.citations.percent}%</span>
+            <span className="text-text-muted"> Citations</span>
+            <span className="text-text-secondary"> · {insights.citations.phrase}</span>
+          </p>
+          <p className="text-xs leading-relaxed text-left">
+            <span className="font-semibold text-green-500">{insights.sentiment.percent}%</span>
+            <span className="text-text-muted"> Sentiment</span>
+            <span className="text-text-secondary"> · {insights.sentiment.phrase}</span>
+          </p>
+          <p className="text-xs leading-relaxed text-left">
+            <span className="font-semibold text-green-500">{insights.score.percent}%</span>
+            <span className="text-text-muted"> Score</span>
+            <span className="text-text-secondary"> · {insights.score.phrase}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -126,12 +202,12 @@ export default function LogoTicker() {
       <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 z-10 bg-gradient-to-r from-bg-base to-transparent pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 z-10 bg-gradient-to-l from-bg-base to-transparent pointer-events-none" />
 
-      {/* 
+      {/*
         Container with pause on hover.
-        Using group-hover:animate-pause on the scrolling container to stop movement 
+        Using group-hover:paused utility to stop movement
         when the user hovers anywhere over the ticker section.
       */}
-      <div className="flex w-fit animate-marquee group-hover:animate-pause items-center gap-8 sm:gap-12 md:gap-16">
+      <div className="flex w-fit animate-marquee group-hover:paused items-center gap-8 sm:gap-12 md:gap-16">
         {[
           ...logos, ...logos, ...logos, ...logos,
           ...logos, ...logos, ...logos, ...logos,

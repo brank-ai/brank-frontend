@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CalendlyModal } from '@/components/ui';
+import { LearnMoreModal } from '@/components/ui';
 
 export default function Header() {
-  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -40,7 +40,7 @@ export default function Header() {
                 active:scale-[0.98]
                 transition-all duration-300
               "
-              onClick={() => setIsCalendlyOpen(true)}
+              onClick={() => setIsModalOpen(true)}
             >
               Learn More
             </button>
@@ -48,9 +48,9 @@ export default function Header() {
         </div>
       </header>
 
-      <CalendlyModal
-        isOpen={isCalendlyOpen}
-        onClose={() => setIsCalendlyOpen(false)}
+      <LearnMoreModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </>
   );

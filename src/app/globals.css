@@ -427,6 +427,11 @@ body {
   animation-play-state: paused;
 }
 
+/* Utility to pause any animation on group hover */
+.group:hover .group-hover\:paused {
+  animation-play-state: paused !important;
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out forwards;
 }
