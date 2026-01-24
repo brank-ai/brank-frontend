@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { CalendlyModal } from '@/components/ui';
+import { LearnMoreModal } from '@/components/ui';
 
 export default function Footer() {
-  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -21,7 +21,7 @@ export default function Footer() {
             {/* CTA Button - Volumetric White Style */}
             <div className="flex items-center justify-center">
               <button
-                onClick={() => setIsCalendlyOpen(true)}
+                onClick={() => setIsModalOpen(true)}
                 className="
                   bg-bg-elevated
                   text-text-primary
@@ -132,9 +132,9 @@ export default function Footer() {
         </div>
       </footer>
 
-      <CalendlyModal
-        isOpen={isCalendlyOpen}
-        onClose={() => setIsCalendlyOpen(false)}
+      <LearnMoreModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </>
   );

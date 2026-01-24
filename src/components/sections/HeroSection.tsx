@@ -41,7 +41,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
                  <div
                    className="
                      w-32 h-12 sm:w-48 sm:h-16 md:w-64 md:h-20
-                     bg-[linear-gradient(to_right,white_0%,white_45%,#22c55e_49%,#22c55e_51%,white_55%,white_100%)]
+                     bg-[linear-gradient(to_right,white_0%,white_45%,#00A8FF_49%,#00A8FF_51%,white_55%,white_100%)]
                      bg-[length:400%_auto]
                      animate-shine-wave-slow
                    "
@@ -129,7 +129,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
 
           {/* Logo Ticker - Infinite scroll of trusted brands */}
           <Reveal trigger="mount" variant="fadeIn" delay={0.5} duration={2.0} initiallyVisible={false}>
-            <div className="w-full mt-12 sm:mt-16 md:mt-20">
+            <div className="w-full mt-20 sm:mt-24 md:mt-32">
               <LogoTicker />
             </div>
           </Reveal>

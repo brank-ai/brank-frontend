@@ -23,11 +23,19 @@ const config: Config = {
         'bg-elevated': '#1a1a1a',
         'bg-depressed': '#000000', // Pure black for v2.0
         
-        // Design System v2.0: Accent Colors
-        'accent-success': 'var(--accent-success)',
-        'accent-warning': 'var(--accent-warning)',
-        'accent-error': 'var(--accent-error)',
-        'accent-info': 'var(--accent-info)',
+        // Design System v2.0: Accent Colors (Cyan-Blue Theme)
+        'accent-success': '#00A8FF',
+        'accent-warning': '#F59E0B',
+        'accent-error': '#EF4444',
+        'accent-info': '#33AAFF',
+
+        // Design System v2.0: Custom Blue Shades
+        'brand-blue': {
+          400: '#33AAFF',
+          500: '#00A8FF',
+          600: '#0088DD',
+          700: '#006BB8',
+        },
 
         // Design System v2.0: Text Colors (Brighter)
         'text-primary': '#F0F0F0',
@@ -72,9 +80,9 @@ const config: Config = {
         // Design System v2.0: Ridge (Subtle)
         'ridge': 'inset 1px 1px 0px rgba(255, 255, 255, 0.05), 4px 4px 8px rgba(0, 0, 0, 0.6), -4px -4px 8px rgba(255, 255, 255, 0.03)',
 
-        // Glow Effects
-        'glow-green': '0 0 10px rgba(34, 197, 94, 0.6)',
-        'glow-blue': '0 0 10px rgba(59, 130, 246, 0.6)',
+        // Glow Effects (Cyan-Blue Theme)
+        'glow-cyan': '0 0 10px rgba(0, 168, 255, 0.6)',
+        'glow-cyan-strong': '0 0 15px rgba(0, 168, 255, 0.8)',
         'glow-white': '0 0 20px rgba(255, 255, 255, 0.2)',
         'glow-white-lg': '0 0 40px rgba(255, 255, 255, 0.3)',
       },
@@ -96,8 +104,8 @@ const config: Config = {
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 10px rgba(34, 197, 94, 0.6)' },
-          '50%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.8)' },
+          '0%, 100%': { boxShadow: '0 0 10px rgba(0, 168, 255, 0.6)' },
+          '50%': { boxShadow: '0 0 20px rgba(0, 168, 255, 0.8)' },
         },
         hoverLift: {
           '0%': { transform: 'translateY(0)' },

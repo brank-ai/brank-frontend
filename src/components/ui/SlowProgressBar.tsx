@@ -32,7 +32,7 @@ export function SlowProgressBar({ className }: SlowProgressBarProps) {
   return (
     <div className={cn('w-full h-1 bg-bg-surface rounded-full overflow-hidden', className)}>
       <div
-        className="h-full bg-accent-success shadow-glow-green transition-all duration-100 ease-linear rounded-full"
+        className="h-full bg-accent-success shadow-glow-cyan transition-all duration-100 ease-linear rounded-full"
         style={{ width: `${progress}%` }}
       />
     </div>

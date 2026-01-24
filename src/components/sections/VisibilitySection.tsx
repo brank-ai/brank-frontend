@@ -161,7 +161,7 @@ export default function VisibilitySection() {
                 {activeMetric === index && (
                   <div
                     key={`loader-${index}`}
-                    className="absolute bottom-0 left-0 h-0.5 sm:h-1 bg-green-500 shadow-glow-green w-full origin-left animate-loader"
+                    className="absolute bottom-0 left-0 h-0.5 sm:h-1 bg-brand-blue-500 shadow-glow-cyan w-full origin-left animate-loader"
                     onAnimationEnd={handleLoaderComplete}
                   ></div>
                 )}

@@ -26,8 +26,8 @@ function MetricCard({ title, description }: MetricCardProps) {
         className="
           absolute left-0 top-0 bottom-0 w-1
           bg-text-muted/30
-          group-hover:bg-green-500
-          group-hover:shadow-glow-green
+          group-hover:bg-brand-blue-500
+          group-hover:shadow-glow-cyan
           transition-all duration-300
         "
       />
