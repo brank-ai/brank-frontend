@@ -227,89 +227,155 @@ interface KnowScreenContentProps {
 }
 
 function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
+  // Helper function for Mentions Rate performance level
+  const getMentionsPerformanceLevel = (value: number): { label: string; color: string } => {
+    if (value >= 90) {
+      return { label: 'Excellent', color: 'text-green-500' };
+    } else if (value >= 30) {
+      return { label: 'Fair', color: 'text-orange-400' };
+    } else {
+      return { label: 'Poor', color: 'text-red-500' };
+    }
+  };
+
   // Mentions Screen (Image 1) - Comparison with percentages
   if (activeFeature === 0) {
     const llmData = [
-      { name: 'CHATGPT', value: '46%', icon: ChatGPTIcon, hasValue: true },
-      { name: 'GEMINI', value: '44%', icon: GeminiIcon, hasValue: true },
-      { name: 'GROK', value: 'Pro', icon: GrokIcon, hasValue: false },
-      { name: 'PERPLEXITY', value: 'Pro', icon: PerplexityIcon, hasValue: false },
+      { name: 'CHATGPT', value: 46, icon: ChatGPTIcon, hasValue: true },
+      { name: 'GEMINI', value: 44, icon: GeminiIcon, hasValue: true },
+      { name: 'GROK', value: 92, icon: GrokIcon, hasValue: true },
+      { name: 'PERPLEXITY', value: 67, icon: PerplexityIcon, hasValue: true },
     ];
 
     return (
       <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
         {/* Header */}
-        <div className="flex items-center gap-2 mb-6 sm:mb-8">
+        <div className="flex items-center gap-2 mb-6">
           <GridIcon className="w-4 h-4 text-text-muted" />
-          <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
-            Comparison
+          <span className="text-text-muted text-xs uppercase tracking-wider">
+            COMPARISON
           </span>
         </div>
 
-        {/* LLM List */}
-        <div className="space-y-4 sm:space-y-5">
+        {/* LLM List - Enhanced Card Style */}
+        <div className="space-y-3">
           {llmData.map((llm, i) => (
-            <div key={i} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <llm.icon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
-                <span className="text-text-secondary text-sm sm:text-base font-medium tracking-wide uppercase">
+            <div
+              key={i}
+              className="
+                flex items-center justify-between
+                bg-bg-elevated
+                border border-subtle
+                rounded-xl
+                px-4 py-3
+                shadow-soft-tile-xs
+                hover:shadow-soft-tile-sm
+                transition-all duration-300
+              "
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <llm.icon className="w-5 h-5 text-text-muted flex-shrink-0" />
+                <span className="text-text-primary text-xs sm:text-sm uppercase tracking-wide truncate font-medium">
                   {llm.name}
                 </span>
               </div>
-              {llm.hasValue ? (
-                <span className="text-text-primary text-base sm:text-lg font-medium">
-                  {llm.value}
+              <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+                <span className="text-text-primary text-sm font-medium">
+                  {llm.value}%
                 </span>
-              ) : (
-                <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-bg-surface text-text-secondary text-xs sm:text-sm font-medium shadow-soft-tile-xs">
-                  Pro
+                <span className={`
+                  flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
+                  ${getMentionsPerformanceLevel(llm.value).color}
+                  ${getMentionsPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500/10' : ''}
+                  ${getMentionsPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400/10' : ''}
+                  ${getMentionsPerformanceLevel(llm.value).color === 'text-red-500' ? 'bg-red-500/10' : ''}
+                `}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    getMentionsPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500' :
+                    getMentionsPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400' :
+                    'bg-red-500'
+                  }`} />
+                  {getMentionsPerformanceLevel(llm.value).label}
                 </span>
-              )}
+              </div>
             </div>
           ))}
         </div>
       </div>
     );
   }
+
+  // Helper function for Sentiment Score performance level
+  const getSentimentPerformanceLevel = (value: number): { label: string; color: string } => {
+    if (value >= 80) {
+      return { label: 'Excellent', color: 'text-green-500' };
+    } else if (value >= 40) {
+      return { label: 'Fair', color: 'text-orange-400' };
+    } else {
+      return { label: 'Poor', color: 'text-red-500' };
+    }
+  };
 
   // Sentiment Score Screen (Image 2) - Comparison with numbers
   if (activeFeature === 1) {
     const llmData = [
-      { name: 'CHATGPT', value: '61', icon: ChatGPTIcon, hasValue: true },
-      { name: 'GEMINI', value: '73', icon: GeminiIcon, hasValue: true },
-      { name: 'GROK', value: 'Pro', icon: GrokIcon, hasValue: false },
-      { name: 'PERPLEXITY', value: 'Pro', icon: PerplexityIcon, hasValue: false },
+      { name: 'CHATGPT', value: 61, icon: ChatGPTIcon, hasValue: true },
+      { name: 'GEMINI', value: 73, icon: GeminiIcon, hasValue: true },
+      { name: 'GROK', value: 85, icon: GrokIcon, hasValue: true },
+      { name: 'PERPLEXITY', value: 52, icon: PerplexityIcon, hasValue: true },
     ];
 
     return (
       <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
         {/* Header */}
-        <div className="flex items-center gap-2 mb-6 sm:mb-8">
+        <div className="flex items-center gap-2 mb-6">
           <GridIcon className="w-4 h-4 text-text-muted" />
-          <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
-            Comparison
+          <span className="text-text-muted text-xs uppercase tracking-wider">
+            COMPARISON
           </span>
         </div>
 
-        {/* LLM List */}
-        <div className="space-y-4 sm:space-y-5">
+        {/* LLM List - Enhanced Card Style */}
+        <div className="space-y-3">
           {llmData.map((llm, i) => (
-            <div key={i} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <llm.icon className="w-5 h-5 sm:w-6 sm:h-6 text-text-muted" />
-                <span className="text-text-secondary text-sm sm:text-base font-medium tracking-wide uppercase">
+            <div
+              key={i}
+              className="
+                flex items-center justify-between
+                bg-bg-elevated
+                border border-subtle
+                rounded-xl
+                px-4 py-3
+                shadow-soft-tile-xs
+                hover:shadow-soft-tile-sm
+                transition-all duration-300
+              "
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <llm.icon className="w-5 h-5 text-text-muted flex-shrink-0" />
+                <span className="text-text-primary text-xs sm:text-sm uppercase tracking-wide truncate font-medium">
                   {llm.name}
                 </span>
               </div>
-              {llm.hasValue ? (
-                <span className="text-text-primary text-base sm:text-lg font-medium">
-                  {llm.value}
+              <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+                <span className="text-text-primary text-sm font-medium">
+                  {llm.value}%
                 </span>
-              ) : (
-                <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-bg-surface text-text-secondary text-xs sm:text-sm font-medium shadow-soft-tile-xs">
-                  Pro
+                <span className={`
+                  flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
+                  ${getSentimentPerformanceLevel(llm.value).color}
+                  ${getSentimentPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500/10' : ''}
+                  ${getSentimentPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400/10' : ''}
+                  ${getSentimentPerformanceLevel(llm.value).color === 'text-red-500' ? 'bg-red-500/10' : ''}
+                `}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    getSentimentPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500' :
+                    getSentimentPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400' :
+                    'bg-red-500'
+                  }`} />
+                  {getSentimentPerformanceLevel(llm.value).label}
                 </span>
-              )}
+              </div>
             </div>
           ))}
         </div>
@@ -317,14 +383,42 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
     );
   }
 
+  // Helper function for Citation Impact level
+  const getImpactLevel = (index: number): { label: string; color: string; bgColor: string; dotColor: string } => {
+    const rank = index + 1; // Convert 0-based index to 1-based rank
+    
+    if (rank === 1) {
+      return { 
+        label: 'HIGH IMPACT', 
+        color: 'text-green-500',
+        bgColor: 'bg-green-500/10',
+        dotColor: 'bg-green-500'
+      };
+    } else if (rank === 2 || rank === 3) {
+      return { 
+        label: 'MEDIUM IMPACT', 
+        color: 'text-orange-400',
+        bgColor: 'bg-orange-400/10',
+        dotColor: 'bg-orange-400'
+      };
+    } else {
+      return { 
+        label: 'LOW IMPACT', 
+        color: 'text-gray-400',
+        bgColor: 'bg-gray-400/10',
+        dotColor: 'bg-gray-400'
+      };
+    }
+  };
+
   // Citations Screen (Image 3) - Sources by relevance
   if (activeFeature === 2) {
     const sources = [
-      { url: 'https://samsung.com', value: '37%' },
-      { url: 'https://techradar.com', value: '35%' },
-      { url: 'https://apple.com', value: '28.5%' },
-      { url: 'https://cnet.com', value: '28%' },
-      { url: 'https://store.google.com', value: '19.5%' },
+      { url: 'https://samsung.com', value: 37 },
+      { url: 'https://techradar.com', value: 35 },
+      { url: 'https://apple.com', value: 28.5 },
+      { url: 'https://cnet.com', value: 28 },
+      { url: 'https://store.google.com', value: 19.5 },
     ];
 
     return (
@@ -340,99 +434,140 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
           Showing top sources by relevance
         </p>
 
-        {/* Sources List */}
-        <div className="space-y-3 sm:space-y-4">
-          {sources.map((source, i) => (
-            <div key={i} className="flex items-center justify-between">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <LinkIcon className="w-4 h-4 text-text-subtle" />
-                <span className="text-text-secondary text-xs sm:text-sm font-medium">
-                  {source.url}
-                </span>
+        {/* Sources List - Enhanced Card Style */}
+        <div className="space-y-3">
+          {sources.map((source, i) => {
+            const impact = getImpactLevel(i);
+            return (
+              <div
+                key={i}
+                className="
+                  flex items-center justify-between
+                  bg-bg-elevated
+                  border border-subtle
+                  rounded-xl
+                  px-4 py-3
+                  shadow-soft-tile-xs
+                  hover:shadow-soft-tile-sm
+                  hover:border-text-muted/30
+                  transition-all duration-300
+                  group
+                "
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <LinkIcon className="w-4 h-4 text-text-subtle group-hover:text-text-primary flex-shrink-0 transition-colors duration-300" />
+                  <span className="text-text-primary group-hover:text-white text-xs sm:text-sm truncate font-medium transition-colors duration-300">
+                    {source.url}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+                  <span className="text-text-primary text-sm font-medium">
+                    {source.value}%
+                  </span>
+                  <span className={`
+                    flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
+                    ${impact.color}
+                    ${impact.bgColor}
+                  `}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${impact.dotColor}`} />
+                    {impact.label}
+                  </span>
+                </div>
               </div>
-              <span className="text-text-muted text-xs sm:text-sm">
-                {source.value}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
   }
 
-  // Ranking Screen (Image 4) - Brand rankings across LLMs
-  const rankings = [
-    { name: 'Samsung', chatgpt: 2, gemini: 3, perplexity: 1 },
-    { name: 'Apple', chatgpt: 1, gemini: 2, perplexity: 3 },
-    { name: 'Google', chatgpt: 3, gemini: 1, perplexity: 2 },
+  // Helper function for Ranking performance level
+  const getRankingPerformanceLevel = (rank: number): { label: string; color: string } => {
+    if (rank <= 2) {
+      return { label: 'Excellent', color: 'text-green-500' };
+    } else if (rank > 2 && rank < 5) {
+      return { label: 'Fair', color: 'text-orange-400' };
+    } else {
+      return { label: 'Poor', color: 'text-red-500' };
+    }
+  };
+
+  // Ranking Screen (Image 4) - Rank by LLMs
+  const rankingLLMs = [
+    { name: 'CHATGPT', rank: 3.5, icon: ChatGPTIcon, hasValue: true },
+    { name: 'GEMINI', rank: 4.2, icon: GeminiIcon, hasValue: true },
+    { name: 'GROK', rank: 1.8, icon: GrokIcon, hasValue: true },
+    { name: 'PERPLEXITY', rank: 6.3, icon: PerplexityIcon, hasValue: true },
   ];
 
   return (
-    <div className="relative z-10 w-full py-3 sm:py-4 px-2 sm:px-4">
+    <div className="relative z-10 w-full py-4 sm:py-6 px-2 sm:px-4">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4 sm:mb-5">
-        <GridIcon className="w-4 h-4 text-text-muted" />
-        <span className="text-text-muted text-xs sm:text-sm font-medium tracking-wider uppercase">
-          Brand Ranking
+      <div className="flex items-center gap-2 mb-6">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          className="text-text-muted"
+        >
+          <path
+            d="M3 13h8v8H3v-8zm10-10h8v18h-8V3z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <span className="text-text-muted text-xs uppercase tracking-wider">
+          RANK BY LLMs
         </span>
       </div>
 
-      {/* Table Header */}
-      <div className="grid grid-cols-4 gap-2 sm:gap-3 mb-3 px-2 sm:px-3">
-        <div className="text-text-subtle text-[10px] sm:text-xs font-medium uppercase tracking-wide">
-          Brand
-        </div>
-        <div className="flex items-center justify-center gap-1">
-          <ChatGPTIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">ChatGPT</span>
-        </div>
-        <div className="flex items-center justify-center gap-1">
-          <GeminiIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Gemini</span>
-        </div>
-        <div className="flex items-center justify-center gap-1">
-          <PerplexityIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Perplexity</span>
-        </div>
-      </div>
-
-      {/* Table Rows */}
-      <div className="space-y-2">
-        {rankings.map((brand, i) => (
+      {/* Rankings List - Enhanced Card Style */}
+      <div className="space-y-3">
+        {rankingLLMs.map((llm, index) => (
           <div
-            key={i}
-            className="grid grid-cols-4 gap-2 sm:gap-3 bg-bg-surface rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 border border-white/[0.03] items-center"
+            key={index}
+            className="
+              flex items-center justify-between
+              bg-bg-elevated
+              border border-subtle
+              rounded-xl
+              px-4 py-3
+              shadow-soft-tile-xs
+              hover:shadow-soft-tile-sm
+              transition-all duration-300
+            "
           >
-            <span className="text-text-secondary text-xs sm:text-sm font-medium truncate">
-              {brand.name}
-            </span>
-            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
-              #{brand.chatgpt}
-            </span>
-            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
-              #{brand.gemini}
-            </span>
-            <span className="text-text-primary text-xs sm:text-sm font-mono text-center">
-              #{brand.perplexity}
-            </span>
+            <div className="flex items-center gap-3 min-w-0">
+              <llm.icon className="w-5 h-5 text-text-muted flex-shrink-0" />
+              <span className="text-text-primary text-xs sm:text-sm uppercase tracking-wide truncate font-medium">
+                {llm.name}
+              </span>
+            </div>
+            <div className="flex items-center gap-3 flex-shrink-0 pl-3">
+              <span className="text-text-primary text-sm font-medium">
+                #{llm.rank.toFixed(1)}
+              </span>
+              <span className={`
+                flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
+                ${getRankingPerformanceLevel(llm.rank).color}
+                ${getRankingPerformanceLevel(llm.rank).color === 'text-green-500' ? 'bg-green-500/10' : ''}
+                ${getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' ? 'bg-orange-400/10' : ''}
+                ${getRankingPerformanceLevel(llm.rank).color === 'text-red-500' ? 'bg-red-500/10' : ''}
+              `}>
+                <span className={`w-1.5 h-1.5 rounded-full ${
+                  getRankingPerformanceLevel(llm.rank).color === 'text-green-500' ? 'bg-green-500' :
+                  getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' ? 'bg-orange-400' :
+                  'bg-red-500'
+                }`} />
+                {getRankingPerformanceLevel(llm.rank).label}
+              </span>
+            </div>
           </div>
         ))}
-      </div>
-
-      {/* Your Brand Row - Highlighted */}
-      <div className="mt-3 grid grid-cols-4 gap-2 sm:gap-3 bg-gradient-surface rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 border border-[#22C55E]/20 items-center shadow-soft-tile-xs">
-        <span className="text-[#22C55E] text-xs sm:text-sm font-medium">
-          Your Brand
-        </span>
-        <span className="text-[#4ADE80] text-xs sm:text-sm font-mono text-center font-medium">
-          #7
-        </span>
-        <span className="text-[#4ADE80] text-xs sm:text-sm font-mono text-center font-medium">
-          #7
-        </span>
-        <span className="text-[#4ADE80] text-xs sm:text-sm font-mono text-center font-medium">
-          #7
-        </span>
       </div>
     </div>
   );
