@@ -1226,7 +1226,7 @@ export default function MainContentSection() {
     {
       title: 'Sentiment Score',
       description:
-        'Analyze the context of AI responses to maintain reputation.',
+        'Analyze whether AI responses about your brand are positive, negative, or neutral.',
     },
     // {
     //   title: 'Citations',
@@ -1262,12 +1262,14 @@ export default function MainContentSection() {
             <div className="order-1">
               <Badge>Visibility Intelligence</Badge>
               <SectionHeading>
-                Know what AI models <br className="hidden sm:block" />
-                <span className="text-text-muted">think about your brand.</span>
+                <SectionHeading>
+              Discover How AI models <br className="md:hidden" />
+              <span className="text-text-muted">represent your brand.</span>
+            </SectionHeading>
               </SectionHeading>
               <SectionText>
-                Track frequency across platforms. Understand your visibility in
-                AI-generated responses and benchmark against competitors.
+                Measure your brand's visibility, sentiment, and positioning across <br className='hidden md:block'/> AI responses 
+
               </SectionText>
 
               <div className="space-y-2 sm:space-y-3">
@@ -1298,13 +1300,12 @@ export default function MainContentSection() {
           <div className="sm:hidden">
             <Badge>Visibility Intelligence</Badge>
             <SectionHeading>
-              Know what AI models <br className="md:hidden" />
-              <span className="text-text-muted">think about your brand.</span>
+              Discover How AI models <br className="md:hidden" />
+              <span className="text-text-muted">represent your brand.</span>
             </SectionHeading>
-            <SectionText>
-              Track frequency across platforms. Understand your visibility in
-              AI-generated responses and benchmark against competitors.
-            </SectionText>
+               <SectionText>
+                Measure your brand's visibility, sentiment, and positioning across <br className='hidden md:block'/> AI responses 
+              </SectionText>
 
             <div className="space-y-2">
               {knowFeatures.map((feature, index) => (

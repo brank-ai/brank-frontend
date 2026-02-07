@@ -111,6 +111,10 @@ const config: Config = {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(-4px)' },
         },
+        'scroll-up': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-50%)' },
+        },
       },
       animation: {
         'shine-wave': 'shine-wave 3s linear infinite',
@@ -120,6 +124,7 @@ const config: Config = {
         scaleIn: 'scaleIn 200ms ease-out forwards',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
         'hover-lift': 'hoverLift 300ms ease forwards',
+        'scroll-up': 'scroll-up linear infinite',
       },
     },
   },

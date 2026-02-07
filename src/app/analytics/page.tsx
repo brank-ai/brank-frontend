@@ -5,6 +5,7 @@ import { MetricCard } from '@/components/ui/MetricCard';
 import { Reveal, Tooltip } from '@/components/ui';
 import { ComparisonCard } from '@/components/analytics/ComparisonCard';
 import { CitationCard } from '@/components/analytics/CitationCard';
+import { PromptsSection } from '@/components/analytics/PromptsSection';
 import { getMetrics } from '@/lib/backend';
 import { BackendMetricResponse } from '@/types/backend';
 import { LLMComparison, CitationLLM } from '@/types';
@@ -627,13 +628,18 @@ export default async function AnalyticsPage({
         </Reveal>
 
         {/* Citation Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-2 md:mb-10 sm:mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-16">
           {citationLLMs.map((llm, index) => (
             <Reveal key={index} delay={0.1 + index * 0.05} duration={0.5}>
               <CitationCard llm={llm} />
             </Reveal>
           ))}
         </div>
+
+        {/* Prompts Overview */}
+        <Reveal delay={0.1} duration={0.6}>
+          <PromptsSection brandName={brandName} />
+        </Reveal>
       </main>
 
       <Reveal delay={0.1} duration={0.6}>

@@ -74,6 +74,25 @@ export interface BackendMetricResponse {
   website: string;
 }
 
+export interface PromptItem {
+  prompt_id: string;
+  prompt: string;
+}
+
+export interface PromptsPagination {
+  page: number;
+  per_page: number;
+  total_items: number;
+  total_pages: number;
+  has_next: boolean;
+  has_prev: boolean;
+}
+
+export interface PromptsResponse {
+  prompts: PromptItem[];
+  pagination: PromptsPagination;
+}
+
 export interface LandingPageResponse {
   asics: number;
   coinbase: number;

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface LearnMoreModalProps {
@@ -14,17 +15,20 @@ interface FormData {
   email: string;
 }
 
+type SubmitAction = 'check-now' | 'email';
+
 const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
   isOpen,
   onClose,
   initialBrandName,
 }) => {
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     brandName: initialBrandName || '',
     email: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitAction, setSubmitAction] = useState<SubmitAction | null>(null);
   const [error, setError] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -32,8 +36,8 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
   useEffect(() => {
     if (!isOpen) {
       setFormData({ brandName: initialBrandName || '', email: '' });
-      setIsSubmitted(false);
       setIsSubmitting(false);
+      setSubmitAction(null);
       setError(null);
     }
   }, [isOpen, initialBrandName]);
@@ -48,7 +52,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
   // Close on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape' && !isSubmitting) onClose();
     };
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
@@ -58,11 +62,15 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isSubmitting]);
 
   // Close on outside click
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+    if (
+      !isSubmitting &&
+      modalRef.current &&
+      !modalRef.current.contains(e.target as Node)
+    ) {
       onClose();
     }
   };
@@ -73,9 +81,18 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
     setError(null);
   };
 
+  const isValidDomain = (value: string): boolean => {
+    const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+    return domainRegex.test(value.trim());
+  };
+
   const validateForm = (): boolean => {
     if (!formData.brandName.trim()) {
-      setError('Please enter your brand name');
+      setError('Please enter your brand domain');
+      return false;
+    }
+    if (!isValidDomain(formData.brandName)) {
+      setError('Please enter a valid domain (e.g. google.com, apple.com)');
       return false;
     }
     if (!formData.email.trim()) {
@@ -90,35 +107,73 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitRequest = async (): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/brand-insight-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          brand_name: formData.brandName.trim(),
+          email: formData.email.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(
+          data?.error || `Request failed (${response.status})`
+        );
+      }
+
+      return true;
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Something went wrong';
+      setError(message);
+      toast.error(message);
+      return false;
+    }
+  };
+
+  const handleCheckNow = async () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitAction('check-now');
     setError(null);
 
-    // Simulate API call with a delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const success = await submitRequest();
 
-    try {
-      // TODO: Replace with actual API endpoint
-      await fetch('/api/learn-more', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-    } catch {
-      // Silently handle - we show success anyway since API doesn't exist yet
+    if (success) {
+      onClose();
+      router.push(
+        `/progress?brand=${encodeURIComponent(formData.brandName.trim())}`
+      );
+      return;
     }
 
     setIsSubmitting(false);
-    setIsSubmitted(true);
+    setSubmitAction(null);
+  };
 
-    onClose()
+  const handleEmailInsights = async () => {
+    if (!validateForm()) return;
 
-    toast.success(
-      'Thanks! Your brand is being reviewed and will be ready soon.'
-    );
+    setIsSubmitting(true);
+    setSubmitAction('email');
+    setError(null);
+
+    const success = await submitRequest();
+
+    if (success) {
+      onClose();
+      toast.success(
+        "We're processing your brand insights. You'll receive them in your inbox shortly."
+      );
+    }
+
+    setIsSubmitting(false);
+    setSubmitAction(null);
   };
 
   if (!isOpen) return null;
@@ -128,7 +183,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
 
-      {/* Modal - centered using inset and margin auto */}
+      {/* Modal */}
       <div
         ref={modalRef}
         style={{
@@ -150,6 +205,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
         {/* Close button */}
         <button
           onClick={onClose}
+          disabled={isSubmitting}
           className="
             absolute top-4 right-4 z-10
             w-8 h-8
@@ -158,6 +214,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
             text-text-muted hover:text-text-primary
             hover:bg-white/5
             transition-all duration-200
+            disabled:opacity-50
           "
           aria-label="Close modal"
         >
@@ -201,73 +258,33 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
               </svg>
             </div>
             <p className="text-text-secondary text-sm">
-              Processing your request...
+              {submitAction === 'check-now'
+                ? 'Setting up your brand analytics...'
+                : 'Submitting your request...'}
             </p>
-          </div>
-        ) : isSubmitted ? (
-          /* Success State */
-          <div className="text-center py-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#22C55E]/20 flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-[#22C55E]"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-text-primary mb-2">
-              We will reach out to you!
-            </h3>
-            <p className="text-text-secondary text-sm">
-              Our team will send your brand insights to your email shortly.
-            </p>
-            <button
-              onClick={onClose}
-              className="
-                mt-6 px-6 py-2.5
-                text-sm font-medium
-                rounded-lg
-                text-text-primary
-                shadow-soft-tile-xs
-                hover:brightness-110
-                active:shadow-deep-field-sm
-                active:scale-[0.98]
-                transition-all duration-300
-              "
-            >
-              Close
-            </button>
           </div>
         ) : (
           /* Form State */
           <>
             <h2 className="text-xl sm:text-2xl font-semibold text-text-primary mb-2">
-              Get insights for your brand
+              Analyse your brand
             </h2>
             <p className="text-text-muted text-sm mb-6">
-              Enter your details and we&apos;ll send you a comprehensive brand
-              analysis via email.
+              Enter your brand details to get AI-powered visibility insights.
             </p>
 
             <form
-              id="learn-more-form"
-              onSubmit={handleSubmit}
+              id="brand-insight-form"
+              onSubmit={e => e.preventDefault()}
               className="space-y-4"
             >
-              {/* Brand Name */}
+              {/* Brand Domain */}
               <div>
                 <label
                   htmlFor="brandName"
                   className="block text-sm text-text-secondary mb-1.5"
                 >
-                  Brand Name
+                  Brand Domain
                 </label>
                 <input
                   type="text"
@@ -275,7 +292,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
                   name="brandName"
                   value={formData.brandName}
                   onChange={handleChange}
-                  placeholder="e.g. Acme Inc"
+                  placeholder="e.g. google.com, apple.com"
                   className="
                     w-full px-4 py-3
                     bg-bg-base
@@ -323,27 +340,94 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
               {error && <p className="text-red-400 text-sm">{error}</p>}
             </form>
 
-            {/* Submit button - outside form space-y-4 for proper spacing */}
-            <button
-              type="submit"
-              form="learn-more-form"
-              disabled={isSubmitting}
-              className="
-                w-full mt-8 px-6 py-3
-                text-sm font-medium
-                rounded-lg
-                text-bg-base
-                bg-text-primary
-                hover:bg-text-secondary
-                disabled:opacity-50 disabled:cursor-not-allowed
-                active:scale-[0.98]
-                transition-all duration-300
-                flex items-center justify-center gap-2
-              "
-              onClick={handleSubmit}
-            >
-              Get Brand Insights
-            </button>
+            {/* Action Buttons */}
+            <div className="mt-6 space-y-3">
+              {/* Check Insights Now */}
+              <button
+                type="button"
+                disabled={isSubmitting}
+                onClick={handleCheckNow}
+                className="
+                  w-full px-6 py-3
+                  text-sm font-medium
+                  rounded-lg
+                  text-bg-base
+                  bg-text-primary
+                  hover:bg-text-secondary
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  active:scale-[0.98]
+                  transition-all duration-300
+                  flex items-center justify-center gap-2
+                "
+              >
+                {/* <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg> */}
+                Check Insights Now (~30s)
+              </button>
+              <p className="text-text-subtle text-xs text-center">
+                View your brand analytics instantly. May take up to 30 seconds
+                to fetch results.
+              </p>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3 py-1">
+                <div className="flex-1 h-px bg-subtle" />
+                <span className="text-text-subtle text-xs">or</span>
+                <div className="flex-1 h-px bg-subtle" />
+              </div>
+
+              {/* Get Insights via Email */}
+              <button
+                type="button"
+                disabled={isSubmitting}
+                onClick={handleEmailInsights}
+                className="
+                  w-full px-6 py-3
+                  text-sm font-medium
+                  rounded-lg
+                  text-text-primary
+                  bg-bg-elevated
+                  border border-subtle
+                  shadow-soft-tile-xs
+                  hover:bg-bg-surface
+                  hover:border-text-muted/20
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  active:scale-[0.98]
+                  transition-all duration-300
+                  flex items-center justify-center gap-2
+                "
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                Get Insights via Email
+              </button>
+              <p className="text-text-subtle text-xs text-center">
+                We&apos;ll process your brand and deliver a detailed report to
+                your inbox.
+              </p>
+            </div>
           </>
         )}
       </div>

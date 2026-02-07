@@ -1,9 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { PricingCard } from '@/components/pricing/PricingCard';
-import { Reveal } from '@/components/ui';
+import { Reveal, LearnMoreModal } from '@/components/ui';
 
 const pricingTiers = [
   {
@@ -61,9 +62,7 @@ const pricingTiers = [
 ];
 
 export default function PricingPage() {
-  const handleCtaClick = () => {
-    // TODO: Add action later
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-bg-base">
@@ -103,7 +102,7 @@ export default function PricingPage() {
                 features={tier.features}
                 ctaText={tier.ctaText}
                 isPopular={tier.isPopular}
-                onCtaClick={handleCtaClick}
+                onCtaClick={() => setIsModalOpen(true)}
               />
             </Reveal>
           ))}
@@ -111,6 +110,11 @@ export default function PricingPage() {
       </main>
 
       <Footer />
+
+      <LearnMoreModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

@@ -66,12 +66,12 @@ export default function Footer() {
                 </h4>
                 <ul className="space-y-2 sm:space-y-3 text-text-muted text-xs sm:text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <button
+                      onClick={() => setIsModalOpen(true)}
                       className="hover:text-text-primary transition-colors duration-300"
                     >
                       Contact us
-                    </a>
+                    </button>
                   </li>
                   <li>
                     <a
@@ -101,7 +101,8 @@ export default function Footer() {
                 <ul className="hidden md:flex md:flex-col space-y-2 sm:space-y-3 text-text-muted text-xs sm:text-sm">
                   <li>
                     <a
-                      href="#"
+                      href="https://x.com/brank_ai"
+                      target="_blank"
                       className="hover:text-text-primary transition-colors duration-300"
                     >
                       Twitter
