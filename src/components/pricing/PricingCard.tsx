@@ -35,7 +35,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
         'bg-bg-elevated',
         'border transition-all duration-300',
         isPopular
-          ? 'border-green-500/50 shadow-soft-tile hover:shadow-soft-tile-sm hover:border-green-500/70 scale-105 sm:scale-110'
+          ? 'border-green-500/50 shadow-soft-tile hover:shadow-soft-tile-sm hover:border-green-500/70 scale-100 md:scale-105 lg:scale-110'
           : 'border-subtle shadow-soft-tile-sm hover:shadow-soft-tile hover:border-white/20',
         'group'
       )}
@@ -88,7 +88,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
       {/* CTA Button */}
       <Button
-        variant={isPopular ? 'white' : 'primary'}
+        variant={isPopular ? 'primary' : 'primary'}
         size="lg"
         className="w-full mb-6 sm:mb-8"
         onClick={onCtaClick}
@@ -131,4 +131,3 @@ const PricingCard: React.FC<PricingCardProps> = ({
 };
 
 export { PricingCard };
-

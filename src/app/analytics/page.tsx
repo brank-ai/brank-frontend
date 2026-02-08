@@ -31,12 +31,12 @@ function mapLLMDataToComparisons(
       value: 0,
     }));
   }
-  
+
   return Object.entries(LLM_METADATA).map(([key, meta]) => ({
     llm: meta.name,
     icon: meta.icon,
-    value: isPercentage 
-      ? Math.round((llmData[key] || 0) * 100) 
+    value: isPercentage
+      ? Math.round((llmData[key] || 0) * 100)
       : Math.round(llmData[key] || 0),
   }));
 }
@@ -54,9 +54,10 @@ function mapCitationData(
       sources: [],
     }));
   }
-  
+
   return Object.entries(LLM_METADATA).map(([key, meta]) => {
-    const sources = citationOverview[key as keyof typeof citationOverview] || [];
+    const sources =
+      citationOverview[key as keyof typeof citationOverview] || [];
     return {
       name: meta.name,
       icon: meta.icon,
@@ -81,7 +82,7 @@ function mapRankingData(
       rank: 0,
     }));
   }
-  
+
   return Object.entries(LLM_METADATA).map(([key, meta]) => ({
     name: meta.name,
     icon: meta.icon,
@@ -91,14 +92,15 @@ function mapRankingData(
 
 // Helper functions for dynamic AI insights
 function getMentionsInsight(
-  mentionRate: number, 
+  mentionRate: number,
   brandName: string,
   topCitedSources: string[]
 ): string {
-  const sourcesText = topCitedSources.length > 0 
-    ? `${topCitedSources.slice(0, 2).join(' and ')}`
-    : 'sources in Citation Overview';
-  
+  const sourcesText =
+    topCitedSources.length > 0
+      ? `${topCitedSources.slice(0, 2).join(' and ')}`
+      : 'sources in Citation Overview';
+
   if (mentionRate >= 90) {
     return `Excellent visibility! Maintain by:\n1. Using Brank's engine to parse video content for LLM readability\n2. Strengthening presence on ${sourcesText}`;
   } else if (mentionRate >= 60) {
@@ -111,14 +113,15 @@ function getMentionsInsight(
 }
 
 function getSentimentInsight(
-  sentimentScore: number, 
+  sentimentScore: number,
   brandName: string,
   topCitedSources: string[]
 ): string {
-  const sourcesText = topCitedSources.length > 0
-    ? `${topCitedSources.slice(0, 2).join(' and ')}`
-    : 'sources in Citation Overview';
-  
+  const sourcesText =
+    topCitedSources.length > 0
+      ? `${topCitedSources.slice(0, 2).join(' and ')}`
+      : 'sources in Citation Overview';
+
   if (sentimentScore >= 80) {
     return `Strong positive sentiment! Maintain by:\n1. Using Brank's workflows to publish customer success stories\n2. Monitoring reputation on ${sourcesText}`;
   } else if (sentimentScore >= 60) {
@@ -131,14 +134,15 @@ function getSentimentInsight(
 }
 
 function getRankingInsight(
-  avgRank: number, 
+  avgRank: number,
   brandName: string,
   topCitedSources: string[]
 ): string {
-  const sourcesText = topCitedSources.length > 0
-    ? `${topCitedSources.slice(0, 2).join(' and ')}`
-    : 'key sources';
-  
+  const sourcesText =
+    topCitedSources.length > 0
+      ? `${topCitedSources.slice(0, 2).join(' and ')}`
+      : 'key sources';
+
   if (avgRank <= 2) {
     return `Top-tier ranking! Defend by:\n1. Using Brank's engine to parse video content and expand LLM-readable formats\n2. Monitoring competitors on ${sourcesText}`;
   } else if (avgRank <= 5) {
@@ -152,23 +156,36 @@ function getRankingInsight(
 
 function getCitationInsight(
   totalCitations: number,
-  topSources: Array<{url: string, count: number}>,
+  topSources: Array<{ url: string; count: number }>,
   brandName: string
 ): string {
-  const hasHighAuthoritySources = topSources.some(source => 
-    ['wikipedia', 'forbes', 'techcrunch', 'nytimes', 'wsj', 'g2', 'capterra', 'trustpilot']
-      .some(auth => source.url.toLowerCase().includes(auth))
+  const hasHighAuthoritySources = topSources.some(source =>
+    [
+      'wikipedia',
+      'forbes',
+      'techcrunch',
+      'nytimes',
+      'wsj',
+      'g2',
+      'capterra',
+      'trustpilot',
+    ].some(auth => source.url.toLowerCase().includes(auth))
   );
-  
-  const topSourcesList = topSources.slice(0, 2).map(s => {
-    try {
-      const url = new URL(s.url.startsWith('http') ? s.url : `https://${s.url}`);
-      return url.hostname.replace('www.', '');
-    } catch {
-      return s.url;
-    }
-  }).join(' and ');
-  
+
+  const topSourcesList = topSources
+    .slice(0, 2)
+    .map(s => {
+      try {
+        const url = new URL(
+          s.url.startsWith('http') ? s.url : `https://${s.url}`
+        );
+        return url.hostname.replace('www.', '');
+      } catch {
+        return s.url;
+      }
+    })
+    .join(' and ');
+
   if (totalCitations >= 50 && hasHighAuthoritySources) {
     return `Strong citations from trusted sources (${topSourcesList}). Next steps:\n1. Use Brank's engine to parse video content for broader LLM coverage\n2. Keep existing profiles updated`;
   } else if (totalCitations >= 25) {
@@ -186,9 +203,11 @@ interface AnalyticsPageProps {
   };
 }
 
-export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps) {
+export default async function AnalyticsPage({
+  searchParams,
+}: AnalyticsPageProps) {
   const brandName = searchParams?.brand || 'Unknown Brand';
-  
+
   let metricsData: BackendMetricResponse | null = null;
   let error: string | null = null;
 
@@ -226,8 +245,14 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   }
 
   // Map backend data to UI format
-  const mentionsRateComparisons = mapLLMDataToComparisons(metricsData.mentionRateByLLM, true);
-  const sentimentScoreComparisons = mapLLMDataToComparisons(metricsData.sentimentScoreByLLM, false);
+  const mentionsRateComparisons = mapLLMDataToComparisons(
+    metricsData.mentionRateByLLM,
+    true
+  );
+  const sentimentScoreComparisons = mapLLMDataToComparisons(
+    metricsData.sentimentScoreByLLM,
+    false
+  );
   const rankingLLMs = mapRankingData(metricsData.rankByLLMs);
   const citationLLMs = mapCitationData(metricsData.citationOverview);
 
@@ -239,7 +264,9 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
     .map(source => {
       // Extract domain name for readability
       try {
-        const url = new URL(source.url.startsWith('http') ? source.url : `https://${source.url}`);
+        const url = new URL(
+          source.url.startsWith('http') ? source.url : `https://${source.url}`
+        );
         return url.hostname.replace('www.', '');
       } catch {
         return source.url;
@@ -276,7 +303,9 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   };
 
   // Determine ranking performance level
-  const getRankingPerformanceLevel = (rank: number): { label: string; color: string } => {
+  const getRankingPerformanceLevel = (
+    rank: number
+  ): { label: string; color: string } => {
     if (rank <= 2) {
       return { label: 'Excellent', color: 'text-green-500' };
     } else if (rank > 2 && rank < 5) {
@@ -297,9 +326,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
           <div className="mb-8 sm:mb-12">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-2 sm:mb-4">
               AEO Analytics -{' '}
-              <span className="text-text-primary italic">
-                {brandName}
-              </span>
+              <span className="text-text-primary italic">{brandName}</span>
             </h1>
             <p className="text-text-secondary text-sm sm:text-base md:text-lg">
               Here&apos;s what we learnt about your brand.
@@ -333,7 +360,11 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
           <Reveal delay={0.25} duration={0.6}>
             <MetricCard
               label="Overall Ranking"
-              value={metricsData.averageRanking ? metricsData.averageRanking.toFixed(1) : 'N/A'}
+              value={
+                metricsData.averageRanking
+                  ? metricsData.averageRanking.toFixed(1)
+                  : 'N/A'
+              }
               info={`The average position of ${brandName} within its category across all LLMs.`}
             />
           </Reveal>
@@ -362,22 +393,22 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
         {/* Ranking Overview */}
         <Reveal delay={0.1} duration={0.6}>
           <div className="mb-10 sm:mb-16">
-            <div className="bg-bg-surface rounded-xl shadow-soft-tile-sm border border-subtle p-4 sm:p-6 md:p-12">
+            <div className="bg-bg-surface rounded-xl shadow-soft-tile-sm border border-subtle p-4 sm:p-6 md:p-12 ">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
                 {/* Left Side: Title + AI Insight */}
-                <div className="flex flex-col bg-bg-depressed -m-4 p-4 sm:-m-6 sm:p-6 md:-m-12 md:p-12 mr-0 md:pr-6 md:justify-between rounded-l-xl shadow-deep-field">
+                <div className="flex flex-col bg-bg-depressed -m-4 p-4 sm:-m-6 sm:p-6 md:-m-12 md:p-12 md:mr-0 md:pr-6 md:justify-between rounded-xl md:rounded-l-xl md:rounded-r-none shadow-deep-field">
                   {/* Title with Info Icon */}
-                  <div className="flex items-center gap-2 mb-4 sm:mb-6 md:mb-8">
-                    <h3 className="text-text-primary text-lg sm:text-xl md:text-2xl font-normal">
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-4 sm:mb-6 md:mb-8">
+                    <h3 className="text-text-primary text-lg sm:text-xl md:text-2xl font-normal leading-none">
                       Ranking Overview
                     </h3>
-                    <Tooltip content={`The position of ${brandName} within its category for each LLM.`}>
-                      <button
-                        className="text-text-subtle hover:text-text-muted transition-all duration-150 active:scale-95"
-                      >
+                    <Tooltip
+                      content={`The position of ${brandName} within its category for each LLM.`}
+                      position="bottom"
+                    >
+                      <button className="text-text-subtle hover:text-text-muted transition-all duration-150 active:scale-95 flex items-center">
                         <svg
-                          width="18"
-                          height="18"
+                          className="w-4 h-4 sm:w-[18px] sm:h-[18px]"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -395,9 +426,21 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                     <div className="flex items-center gap-2">
                       {/* Icon */}
                       <div className="flex-shrink-0">
-                        <svg width="20" height="20" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M21.2799 4.52692C21.6647 3.48715 23.1353 3.48716 23.5201 4.52692L27.8543 16.2401C27.9753 16.567 28.233 16.8247 28.5599 16.9457L40.2731 21.2799C41.3128 21.6647 41.3128 23.1353 40.2731 23.5201L28.5599 27.8543C28.233 27.9753 27.9753 28.233 27.8543 28.5599L23.5201 40.2731C23.1353 41.3128 21.6647 41.3128 21.2799 40.2731L16.9457 28.5599C16.8247 28.233 16.567 27.9753 16.2401 27.8543L4.52692 23.5201C3.48715 23.1353 3.48716 21.6647 4.52692 21.2799L16.2401 16.9457C16.567 16.8247 16.8247 16.567 16.9457 16.2401L21.2799 4.52692Z" fill="#EAEAEA"/>
-                          <path d="M34.777 5.29256C34.8625 5.06157 35.1892 5.06157 35.2747 5.29256L36.2375 7.89468C36.2644 7.96731 36.3217 8.02456 36.3943 8.05144L38.9964 9.01431C39.2274 9.09978 39.2274 9.42649 38.9964 9.51196L36.3943 10.4748C36.3217 10.5017 36.2644 10.559 36.2375 10.6316L35.2747 13.2337C35.1892 13.4647 34.8625 13.4647 34.777 13.2337L33.8141 10.6316C33.7873 10.559 33.73 10.5017 33.6574 10.4748L31.0553 9.51196C30.8243 9.42649 30.8243 9.09978 31.0553 9.01431L33.6574 8.05144C33.73 8.02456 33.7873 7.96731 33.8141 7.89468L34.777 5.29256Z" fill="#EAEAEA"/>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 45 45"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M21.2799 4.52692C21.6647 3.48715 23.1353 3.48716 23.5201 4.52692L27.8543 16.2401C27.9753 16.567 28.233 16.8247 28.5599 16.9457L40.2731 21.2799C41.3128 21.6647 41.3128 23.1353 40.2731 23.5201L28.5599 27.8543C28.233 27.9753 27.9753 28.233 27.8543 28.5599L23.5201 40.2731C23.1353 41.3128 21.6647 41.3128 21.2799 40.2731L16.9457 28.5599C16.8247 28.233 16.567 27.9753 16.2401 27.8543L4.52692 23.5201C3.48715 23.1353 3.48716 21.6647 4.52692 21.2799L16.2401 16.9457C16.567 16.8247 16.8247 16.567 16.9457 16.2401L21.2799 4.52692Z"
+                            fill="#EAEAEA"
+                          />
+                          <path
+                            d="M34.777 5.29256C34.8625 5.06157 35.1892 5.06157 35.2747 5.29256L36.2375 7.89468C36.2644 7.96731 36.3217 8.02456 36.3943 8.05144L38.9964 9.01431C39.2274 9.09978 39.2274 9.42649 38.9964 9.51196L36.3943 10.4748C36.3217 10.5017 36.2644 10.559 36.2375 10.6316L35.2747 13.2337C35.1892 13.4647 34.8625 13.4647 34.777 13.2337L33.8141 10.6316C33.7873 10.559 33.73 10.5017 33.6574 10.4748L31.0553 9.51196C30.8243 9.42649 30.8243 9.09978 31.0553 9.01431L33.6574 8.05144C33.73 8.02456 33.7873 7.96731 33.8141 7.89468L34.777 5.29256Z"
+                            fill="#EAEAEA"
+                          />
                         </svg>
                       </div>
                       {/* Text */}
@@ -416,7 +459,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                 {/* Right Side: Rank by LLMs */}
                 <div className="pl-0 md:pl-12">
                   {/* Rank Header */}
-                  <div className="flex items-center gap-2 mb-6">
+                  <div className="flex items-center gap-2 mb-6 mt-3 md:mt-0">
                     {/* Bar Chart Icon */}
                     <svg
                       width="16"
@@ -441,8 +484,13 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                   {/* Rankings List - Enhanced Card Style */}
                   <div className="space-y-3">
                     {rankingLLMs.map((llm, index) => (
-                      <Reveal key={index} delay={0.15 + index * 0.05} duration={0.5}>
-                        <div className="
+                      <Reveal
+                        key={index}
+                        delay={0.15 + index * 0.05}
+                        duration={0.5}
+                      >
+                        <div
+                          className="
                           flex items-center justify-between
                           bg-bg-elevated
                           border border-subtle
@@ -451,7 +499,8 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                           shadow-soft-tile-xs
                           hover:shadow-soft-tile-sm
                           transition-all duration-300
-                        ">
+                        "
+                        >
                           <div className="flex items-center gap-3 min-w-0">
                             <Image
                               src={llm.icon}
@@ -465,7 +514,8 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                             </span>
                           </div>
                           {shouldShowRankingProButton(llm.name) ? (
-                            <button className="
+                            <button
+                              className="
                               px-4 py-1.5
                               bg-bg-elevated
                               text-text-primary
@@ -477,7 +527,8 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                               hover:border-text-muted/20
                               active:scale-[0.98]
                               transition-all duration-300
-                            ">
+                            "
+                            >
                               Pro
                             </button>
                           ) : llm.rank > 0 ? (
@@ -485,18 +536,29 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
                               <span className="text-text-primary text-sm font-medium">
                                 #{llm.rank.toFixed(1)}
                               </span>
-                              <span className={cn(
-                                'flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide',
-                                getRankingPerformanceLevel(llm.rank).color,
-                                getRankingPerformanceLevel(llm.rank).color === 'text-green-500' && 'bg-green-500/10',
-                                getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' && 'bg-orange-400/10',
-                                getRankingPerformanceLevel(llm.rank).color === 'text-red-500' && 'bg-red-500/10'
-                              )}>
-                                <span className={`w-1.5 h-1.5 rounded-full ${
-                                  getRankingPerformanceLevel(llm.rank).color === 'text-green-500' ? 'bg-green-500' :
-                                  getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' ? 'bg-orange-400' :
-                                  'bg-red-500'
-                                }`} />
+                              <span
+                                className={cn(
+                                  'flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide',
+                                  getRankingPerformanceLevel(llm.rank).color,
+                                  getRankingPerformanceLevel(llm.rank).color ===
+                                    'text-green-500' && 'bg-green-500/10',
+                                  getRankingPerformanceLevel(llm.rank).color ===
+                                    'text-orange-400' && 'bg-orange-400/10',
+                                  getRankingPerformanceLevel(llm.rank).color ===
+                                    'text-red-500' && 'bg-red-500/10'
+                                )}
+                              >
+                                <span
+                                  className={`w-1.5 h-1.5 rounded-full ${
+                                    getRankingPerformanceLevel(llm.rank)
+                                      .color === 'text-green-500'
+                                      ? 'bg-green-500'
+                                      : getRankingPerformanceLevel(llm.rank)
+                                            .color === 'text-orange-400'
+                                        ? 'bg-orange-400'
+                                        : 'bg-red-500'
+                                  }`}
+                                />
                                 {getRankingPerformanceLevel(llm.rank).label}
                               </span>
                             </div>
@@ -528,14 +590,30 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
         <Reveal delay={0.15} duration={0.6}>
           <div className="bg-bg-surface rounded-xl shadow-soft-tile-sm border border-subtle p-4 sm:p-6 md:p-12 mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row items-start gap-3">
-              <div className="flex-shrink-0 text-text-primary">
-                <svg width="20" height="20" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21.2799 4.52692C21.6647 3.48715 23.1353 3.48716 23.5201 4.52692L27.8543 16.2401C27.9753 16.567 28.233 16.8247 28.5599 16.9457L40.2731 21.2799C41.3128 21.6647 41.3128 23.1353 40.2731 23.5201L28.5599 27.8543C28.233 27.9753 27.9753 28.233 27.8543 28.5599L23.5201 40.2731C23.1353 41.3128 21.6647 41.3128 21.2799 40.2731L16.9457 28.5599C16.8247 28.233 16.567 27.9753 16.2401 27.8543L4.52692 23.5201C3.48715 23.1353 3.48716 21.6647 4.52692 21.2799L16.2401 16.9457C16.567 16.8247 16.8247 16.567 16.9457 16.2401L21.2799 4.52692Z" fill="currentColor"/>
-                  <path d="M34.777 5.29256C34.8625 5.06157 35.1892 5.06157 35.2747 5.29256L36.2375 7.89468C36.2644 7.96731 36.3217 8.02456 36.3943 8.05144L38.9964 9.01431C39.2274 9.09978 39.2274 9.42649 38.9964 9.51196L36.3943 10.4748C36.3217 10.5017 36.2644 10.559 36.2375 10.6316L35.2747 13.2337C35.1892 13.4647 34.8625 13.4647 34.777 13.2337L33.8141 10.6316C33.7873 10.559 33.73 10.5017 33.6574 10.4748L31.0553 9.51196C30.8243 9.42649 30.8243 9.09978 31.0553 9.01431L33.6574 8.05144C33.73 8.02456 33.7873 7.96731 33.8141 7.89468L34.777 5.29256Z" fill="currentColor"/>
+              <div className="flex-shrink-0 text-text-primary flex gap-2">
+
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 45 45"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21.2799 4.52692C21.6647 3.48715 23.1353 3.48716 23.5201 4.52692L27.8543 16.2401C27.9753 16.567 28.233 16.8247 28.5599 16.9457L40.2731 21.2799C41.3128 21.6647 41.3128 23.1353 40.2731 23.5201L28.5599 27.8543C28.233 27.9753 27.9753 28.233 27.8543 28.5599L23.5201 40.2731C23.1353 41.3128 21.6647 41.3128 21.2799 40.2731L16.9457 28.5599C16.8247 28.233 16.567 27.9753 16.2401 27.8543L4.52692 23.5201C3.48715 23.1353 3.48716 21.6647 4.52692 21.2799L16.2401 16.9457C16.567 16.8247 16.8247 16.567 16.9457 16.2401L21.2799 4.52692Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M34.777 5.29256C34.8625 5.06157 35.1892 5.06157 35.2747 5.29256L36.2375 7.89468C36.2644 7.96731 36.3217 8.02456 36.3943 8.05144L38.9964 9.01431C39.2274 9.09978 39.2274 9.42649 38.9964 9.51196L36.3943 10.4748C36.3217 10.5017 36.2644 10.559 36.2375 10.6316L35.2747 13.2337C35.1892 13.4647 34.8625 13.4647 34.777 13.2337L33.8141 10.6316C33.7873 10.559 33.73 10.5017 33.6574 10.4748L31.0553 9.51196C30.8243 9.42649 30.8243 9.09978 31.0553 9.01431L33.6574 8.05144C33.73 8.02456 33.7873 7.96731 33.8141 7.89468L34.777 5.29256Z"
+                    fill="currentColor"
+                  />
                 </svg>
+                <h4 className="md:hidden text-text-primary text-sm font-medium mb-2 uppercase tracking-wider">
+                  AI INSIGHT
+                </h4>
               </div>
               <div className="flex-1">
-                <h4 className="text-text-primary text-sm font-medium mb-2 uppercase tracking-wider">
+                <h4 className="md:flex hidden text-text-primary text-sm font-medium mb-2 uppercase tracking-wider">
                   AI INSIGHT
                 </h4>
                 <div className="text-text-muted text-sm leading-relaxed space-y-1">
@@ -549,7 +627,7 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
         </Reveal>
 
         {/* Citation Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-2 md:mb-10 sm:mb-16">
           {citationLLMs.map((llm, index) => (
             <Reveal key={index} delay={0.1 + index * 0.05} duration={0.5}>
               <CitationCard llm={llm} />

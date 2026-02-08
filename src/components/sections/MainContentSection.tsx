@@ -26,7 +26,7 @@ interface SectionHeadingProps {
 
 function SectionHeading({ children }: SectionHeadingProps) {
   return (
-    <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-text-primary text-glow mb-6 leading-tight">
+    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight text-text-primary text-glow mb-4 sm:mb-6 leading-tight leading-[1.2]">
       {children}
     </h2>
   );
@@ -38,7 +38,7 @@ interface SectionTextProps {
 
 function SectionText({ children }: SectionTextProps) {
   return (
-    <p className="text-base sm:text-lg text-text-secondary leading-relaxed mb-8">
+    <p className="md:text-base text-xs text-text-secondary leading-relaxed mb-8">
       {children}
     </p>
   );
@@ -51,23 +51,32 @@ interface FeatureListButtonProps {
   onClick?: () => void;
 }
 
-function FeatureListButton({ title, description, active, onClick }: FeatureListButtonProps) {
+function FeatureListButton({
+  title,
+  description,
+  active,
+  onClick,
+}: FeatureListButtonProps) {
   return (
     <div
       onClick={onClick}
       className={`
         group relative p-3 sm:p-4 rounded-xl border transition-all duration-300 cursor-pointer
-        ${active
-          ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
-          : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'}
+        ${
+          active
+            ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
+            : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'
+        }
       `}
     >
       {/* Active LED indicator */}
       {active && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 sm:h-10 bg-[#22C55E] rounded-r-full shadow-glow-cyan" />
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full md:h-8 bg-[#22C55E] rounded-r-full shadow-glow-cyan" />
       )}
 
-      <h3 className={`text-base sm:text-lg font-medium mb-1 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}>
+      <h3
+        className={`text-base sm:text-lg font-medium mb-1 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}
+      >
         {title}
       </h3>
       <p className="text-text-secondary text-xs sm:text-sm leading-relaxed">
@@ -85,27 +94,37 @@ interface MobileExpandableCardProps {
   children?: React.ReactNode;
 }
 
-function MobileExpandableCard({ title, description, active, onClick, children }: MobileExpandableCardProps) {
+function MobileExpandableCard({
+  title,
+  description,
+  active,
+  onClick,
+  children,
+}: MobileExpandableCardProps) {
   return (
     <div
       onClick={onClick}
       className={`
         group relative rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden
-        ${active
-          ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
-          : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'}
+        ${
+          active
+            ? 'bg-gradient-surface shadow-soft-tile-sm border-white/[0.05]'
+            : 'border-white/[0.02] hover:bg-bg-surface-light hover:border-white/[0.05]'
+        }
       `}
     >
       {/* Header - Always visible */}
-      <div className="p-3 relative">
+      <div className="p-4 relative">
         {/* Active LED indicator */}
         {active && (
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#22C55E] rounded-r-full shadow-glow-cyan" />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-[#22C55E] rounded-r-full shadow-glow-cyan" />
         )}
 
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h3 className={`text-base font-medium mb-1 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}>
+            <h3
+              className={`text-base font-medium mb-1 transition-colors duration-300 ${active ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'}`}
+            >
               {title}
             </h3>
             <p className="text-text-secondary text-xs leading-relaxed">
@@ -118,18 +137,23 @@ function MobileExpandableCard({ title, description, active, onClick, children }:
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </div>
 
       {/* Expandable Content - Image */}
-      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${active ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="px-3 pb-3">
+      <div
+        className={`transition-all duration-300 ease-in-out overflow-hidden ${active ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        <div className="px-3 pb-2">
           <div className="bg-gradient-surface p-2 rounded-xl shadow-soft-tile border border-white/[0.02]">
-            <ConsoleScreen className="aspect-[4/3]">
-              {children}
-            </ConsoleScreen>
+            <ConsoleScreen>{children}</ConsoleScreen>
           </div>
         </div>
       </div>
@@ -144,7 +168,9 @@ interface ConsoleScreenProps {
 
 function ConsoleScreen({ children, className = '' }: ConsoleScreenProps) {
   return (
-    <div className={`relative w-full rounded-2xl bg-bg-base border border-white/[0.05] shadow-deep-field p-4 sm:p-6 flex items-center justify-center overflow-hidden ${className}`}>
+    <div
+      className={`relative w-full rounded-2xl bg-bg-base border border-white/[0.05] shadow-deep-field p-4 sm:p-6 flex items-center justify-center overflow-hidden ${className}`}
+    >
       {/* Grid Texture */}
       <div
         className="absolute inset-0 opacity-30 pointer-events-none"
@@ -197,14 +223,25 @@ function GrokIcon({ className = '' }: { className?: string }) {
 function PerplexityIcon({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" fill="none" />
+      <path
+        d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+      />
     </svg>
   );
 }
 
 function GridIcon({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <rect x="3" y="3" width="7" height="7" />
       <rect x="14" y="3" width="7" height="7" />
       <rect x="3" y="14" width="7" height="7" />
@@ -215,7 +252,13 @@ function GridIcon({ className = '' }: { className?: string }) {
 
 function LinkIcon({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
       <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
     </svg>
@@ -228,7 +271,9 @@ interface KnowScreenContentProps {
 
 function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
   // Helper function for Mentions Rate performance level
-  const getMentionsPerformanceLevel = (value: number): { label: string; color: string } => {
+  const getMentionsPerformanceLevel = (
+    value: number
+  ): { label: string; color: string } => {
     if (value >= 90) {
       return { label: 'Excellent', color: 'text-green-500' };
     } else if (value >= 30) {
@@ -283,18 +328,26 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
                 <span className="text-text-primary text-sm font-medium">
                   {llm.value}%
                 </span>
-                <span className={`
+                <span
+                  className={`
                   flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
                   ${getMentionsPerformanceLevel(llm.value).color}
                   ${getMentionsPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500/10' : ''}
                   ${getMentionsPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400/10' : ''}
                   ${getMentionsPerformanceLevel(llm.value).color === 'text-red-500' ? 'bg-red-500/10' : ''}
-                `}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    getMentionsPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500' :
-                    getMentionsPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400' :
-                    'bg-red-500'
-                  }`} />
+                `}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      getMentionsPerformanceLevel(llm.value).color ===
+                      'text-green-500'
+                        ? 'bg-green-500'
+                        : getMentionsPerformanceLevel(llm.value).color ===
+                            'text-orange-400'
+                          ? 'bg-orange-400'
+                          : 'bg-red-500'
+                    }`}
+                  />
                   {getMentionsPerformanceLevel(llm.value).label}
                 </span>
               </div>
@@ -306,7 +359,9 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
   }
 
   // Helper function for Sentiment Score performance level
-  const getSentimentPerformanceLevel = (value: number): { label: string; color: string } => {
+  const getSentimentPerformanceLevel = (
+    value: number
+  ): { label: string; color: string } => {
     if (value >= 80) {
       return { label: 'Excellent', color: 'text-green-500' };
     } else if (value >= 40) {
@@ -361,18 +416,26 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
                 <span className="text-text-primary text-sm font-medium">
                   {llm.value}%
                 </span>
-                <span className={`
+                <span
+                  className={`
                   flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
                   ${getSentimentPerformanceLevel(llm.value).color}
                   ${getSentimentPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500/10' : ''}
                   ${getSentimentPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400/10' : ''}
                   ${getSentimentPerformanceLevel(llm.value).color === 'text-red-500' ? 'bg-red-500/10' : ''}
-                `}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    getSentimentPerformanceLevel(llm.value).color === 'text-green-500' ? 'bg-green-500' :
-                    getSentimentPerformanceLevel(llm.value).color === 'text-orange-400' ? 'bg-orange-400' :
-                    'bg-red-500'
-                  }`} />
+                `}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      getSentimentPerformanceLevel(llm.value).color ===
+                      'text-green-500'
+                        ? 'bg-green-500'
+                        : getSentimentPerformanceLevel(llm.value).color ===
+                            'text-orange-400'
+                          ? 'bg-orange-400'
+                          : 'bg-red-500'
+                    }`}
+                  />
                   {getSentimentPerformanceLevel(llm.value).label}
                 </span>
               </div>
@@ -384,29 +447,31 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
   }
 
   // Helper function for Citation Impact level
-  const getImpactLevel = (index: number): { label: string; color: string; bgColor: string; dotColor: string } => {
+  const getImpactLevel = (
+    index: number
+  ): { label: string; color: string; bgColor: string; dotColor: string } => {
     const rank = index + 1; // Convert 0-based index to 1-based rank
-    
+
     if (rank === 1) {
-      return { 
-        label: 'HIGH IMPACT', 
+      return {
+        label: 'HIGH IMPACT',
         color: 'text-green-500',
         bgColor: 'bg-green-500/10',
-        dotColor: 'bg-green-500'
+        dotColor: 'bg-green-500',
       };
     } else if (rank === 2 || rank === 3) {
-      return { 
-        label: 'MEDIUM IMPACT', 
+      return {
+        label: 'MEDIUM IMPACT',
         color: 'text-orange-400',
         bgColor: 'bg-orange-400/10',
-        dotColor: 'bg-orange-400'
+        dotColor: 'bg-orange-400',
       };
     } else {
-      return { 
-        label: 'LOW IMPACT', 
+      return {
+        label: 'LOW IMPACT',
         color: 'text-gray-400',
         bgColor: 'bg-gray-400/10',
-        dotColor: 'bg-gray-400'
+        dotColor: 'bg-gray-400',
       };
     }
   };
@@ -460,17 +525,21 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
                     {source.url}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-3 flex-shrink-0 pl-3">
                   <span className="text-text-primary text-sm font-medium">
                     {source.value}%
                   </span>
-                  <span className={`
+                  <span
+                    className={`
                     flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
                     ${impact.color}
                     ${impact.bgColor}
-                  `}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${impact.dotColor}`} />
+                  `}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${impact.dotColor}`}
+                    />
                     {impact.label}
                   </span>
                 </div>
@@ -483,7 +552,9 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
   }
 
   // Helper function for Ranking performance level
-  const getRankingPerformanceLevel = (rank: number): { label: string; color: string } => {
+  const getRankingPerformanceLevel = (
+    rank: number
+  ): { label: string; color: string } => {
     if (rank <= 2) {
       return { label: 'Excellent', color: 'text-green-500' };
     } else if (rank > 2 && rank < 5) {
@@ -551,18 +622,26 @@ function KnowScreenContent({ activeFeature }: KnowScreenContentProps) {
               <span className="text-text-primary text-sm font-medium">
                 #{llm.rank.toFixed(1)}
               </span>
-              <span className={`
+              <span
+                className={`
                 flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wide
                 ${getRankingPerformanceLevel(llm.rank).color}
                 ${getRankingPerformanceLevel(llm.rank).color === 'text-green-500' ? 'bg-green-500/10' : ''}
                 ${getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' ? 'bg-orange-400/10' : ''}
                 ${getRankingPerformanceLevel(llm.rank).color === 'text-red-500' ? 'bg-red-500/10' : ''}
-              `}>
-                <span className={`w-1.5 h-1.5 rounded-full ${
-                  getRankingPerformanceLevel(llm.rank).color === 'text-green-500' ? 'bg-green-500' :
-                  getRankingPerformanceLevel(llm.rank).color === 'text-orange-400' ? 'bg-orange-400' :
-                  'bg-red-500'
-                }`} />
+              `}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    getRankingPerformanceLevel(llm.rank).color ===
+                    'text-green-500'
+                      ? 'bg-green-500'
+                      : getRankingPerformanceLevel(llm.rank).color ===
+                          'text-orange-400'
+                        ? 'bg-orange-400'
+                        : 'bg-red-500'
+                  }`}
+                />
                 {getRankingPerformanceLevel(llm.rank).label}
               </span>
             </div>
@@ -581,11 +660,41 @@ function ImproveScreenContent({ activeFeature }: ImproveScreenContentProps) {
   // Source Analysis Screen - Sources with impact badges
   if (activeFeature === 0) {
     const sources = [
-      { url: 'https://techradar.com', value: '56%', impact: 'HIGH IMPACT', impactColor: 'bg-[#22C55E]', dotColor: 'bg-[#22C55E]' },
-      { url: 'https://cnet.com', value: '47%', impact: 'HIGH IMPACT', impactColor: 'bg-[#22C55E]', dotColor: 'bg-[#22C55E]' },
-      { url: 'https://apple.com', value: '38%', impact: 'MEDIUM IMPACT', impactColor: 'bg-orange-500', dotColor: 'bg-orange-500' },
-      { url: 'https://samsung.com', value: '35.5%', impact: 'MEDIUM IMPACT', impactColor: 'bg-orange-500', dotColor: 'bg-orange-500' },
-      { url: 'https://theverge.com', value: '25%', impact: 'LOW IMPACT', impactColor: 'bg-gray-500', dotColor: 'bg-gray-400' },
+      {
+        url: 'https://techradar.com',
+        value: '56%',
+        impact: 'HIGH IMPACT',
+        impactColor: 'bg-[#22C55E]',
+        dotColor: 'bg-[#22C55E]',
+      },
+      {
+        url: 'https://cnet.com',
+        value: '47%',
+        impact: 'HIGH IMPACT',
+        impactColor: 'bg-[#22C55E]',
+        dotColor: 'bg-[#22C55E]',
+      },
+      {
+        url: 'https://apple.com',
+        value: '38%',
+        impact: 'MEDIUM IMPACT',
+        impactColor: 'bg-orange-500',
+        dotColor: 'bg-orange-500',
+      },
+      {
+        url: 'https://samsung.com',
+        value: '35.5%',
+        impact: 'MEDIUM IMPACT',
+        impactColor: 'bg-orange-500',
+        dotColor: 'bg-orange-500',
+      },
+      {
+        url: 'https://theverge.com',
+        value: '25%',
+        impact: 'LOW IMPACT',
+        impactColor: 'bg-gray-500',
+        dotColor: 'bg-gray-400',
+      },
     ];
 
     return (
@@ -656,15 +765,21 @@ function ImproveScreenContent({ activeFeature }: ImproveScreenContentProps) {
         </div>
         <div className="flex items-center justify-center gap-1">
           <ChatGPTIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">ChatGPT</span>
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">
+            ChatGPT
+          </span>
         </div>
         <div className="flex items-center justify-center gap-1">
           <GeminiIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Gemini</span>
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">
+            Gemini
+          </span>
         </div>
         <div className="flex items-center justify-center gap-1">
           <PerplexityIcon className="w-3 h-3 sm:w-4 sm:h-4 text-text-muted" />
-          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">Perplexity</span>
+          <span className="text-text-subtle text-[10px] sm:text-xs font-medium hidden sm:inline">
+            Perplexity
+          </span>
         </div>
       </div>
 
@@ -740,7 +855,7 @@ function HackMDIcon({ className = '' }: { className?: string }) {
 function LinkedInIcon({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
     </svg>
   );
 }
@@ -748,7 +863,7 @@ function LinkedInIcon({ className = '' }: { className?: string }) {
 function TwitterIcon({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
 }
@@ -756,7 +871,7 @@ function TwitterIcon({ className = '' }: { className?: string }) {
 function InstagramIcon({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
     </svg>
   );
 }
@@ -764,7 +879,7 @@ function InstagramIcon({ className = '' }: { className?: string }) {
 function MediumIcon({ className = '' }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+      <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
     </svg>
   );
 }
@@ -804,16 +919,36 @@ function CreateScreenContent() {
           {/* Center - Create Dropdown */}
           <div className="flex items-center gap-1 px-2 py-1 bg-bg-surface rounded-md text-text-secondary text-[10px] border border-white/[0.05]">
             <span>Create: Poster</span>
-            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className="w-2.5 h-2.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
 
           {/* Right - Post on Dropdown */}
           <div className="flex items-center gap-1 px-2 py-1 bg-bg-surface rounded-md text-text-secondary text-[10px] border border-white/[0.05]">
             <span>Post on</span>
-            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className="w-2.5 h-2.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
@@ -826,10 +961,14 @@ function CreateScreenContent() {
               <BotIcon className="w-3 h-3 text-text-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <span className="text-text-muted text-[9px] mb-0.5 block">Bot</span>
+              <span className="text-text-muted text-[9px] mb-0.5 block">
+                Bot
+              </span>
               <div className="bg-bg-surface rounded-lg rounded-tl-sm p-2 border border-white/[0.03]">
                 <p className="text-text-secondary text-[10px] leading-relaxed">
-                  Hey there! You&apos;re wanting to create content and engage your audience. Let me help you craft the perfect message for your brand.
+                  Hey there! You&apos;re wanting to create content and engage
+                  your audience. Let me help you craft the perfect message for
+                  your brand.
                 </p>
               </div>
             </div>
@@ -852,10 +991,13 @@ function CreateScreenContent() {
               <UserIcon className="w-3 h-3 text-text-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <span className="text-text-muted text-[9px] mb-0.5 block">User</span>
+              <span className="text-text-muted text-[9px] mb-0.5 block">
+                User
+              </span>
               <div className="bg-bg-surface rounded-lg rounded-tl-sm p-2 border border-white/[0.03]">
                 <p className="text-text-secondary text-[10px] leading-relaxed">
-                  I need help creating a LinkedIn post about our new product launch and its key features.
+                  I need help creating a LinkedIn post about our new product
+                  launch and its key features.
                 </p>
               </div>
             </div>
@@ -867,10 +1009,13 @@ function CreateScreenContent() {
               <BotIcon className="w-3 h-3 text-text-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <span className="text-text-muted text-[9px] mb-0.5 block">Bot</span>
+              <span className="text-text-muted text-[9px] mb-0.5 block">
+                Bot
+              </span>
               <div className="bg-bg-surface rounded-lg rounded-tl-sm p-2 border border-white/[0.03]">
                 <p className="text-text-secondary text-[10px] leading-relaxed">
-                  Great choice! Here&apos;s a draft optimized for LinkedIn&apos;s algorithm and AI discoverability...
+                  Great choice! Here&apos;s a draft optimized for
+                  LinkedIn&apos;s algorithm and AI discoverability...
                 </p>
               </div>
             </div>
@@ -887,8 +1032,18 @@ function CreateScreenContent() {
               readOnly
             />
             <button className="ml-2 p-1 bg-white rounded hover:bg-gray-100 transition-colors">
-              <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              <svg
+                className="w-3 h-3 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
               </svg>
             </button>
           </div>
@@ -921,8 +1076,18 @@ function CreateScreenContent() {
               <div className="relative">
                 <div className="flex items-center gap-2 px-3 py-2 bg-bg-surface rounded-lg text-text-secondary text-sm border border-white/[0.05]">
                   <span>Create: Poster</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
 
@@ -952,10 +1117,14 @@ function CreateScreenContent() {
                   <BotIcon className="w-4 h-4 text-text-muted" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-text-muted text-xs mb-1 block">Bot</span>
+                  <span className="text-text-muted text-xs mb-1 block">
+                    Bot
+                  </span>
                   <div className="bg-bg-surface rounded-xl rounded-tl-sm p-3 border border-white/[0.03]">
                     <p className="text-text-secondary text-xs leading-relaxed line-clamp-3">
-                      Hey there! You&apos;re wanting to content creating and engage, the creative and target custom content propositive...
+                      Hey there! You&apos;re wanting to content creating and
+                      engage, the creative and target custom content
+                      propositive...
                     </p>
                   </div>
                 </div>
@@ -978,10 +1147,13 @@ function CreateScreenContent() {
                   <UserIcon className="w-4 h-4 text-text-muted" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-text-muted text-xs mb-1 block">User</span>
+                  <span className="text-text-muted text-xs mb-1 block">
+                    User
+                  </span>
                   <div className="bg-bg-surface rounded-xl rounded-tl-sm p-3 border border-white/[0.03]">
                     <p className="text-text-secondary text-xs leading-relaxed line-clamp-2">
-                      I need help creating a LinkedIn post about our new product launch and its key features.
+                      I need help creating a LinkedIn post about our new product
+                      launch and its key features.
                     </p>
                   </div>
                 </div>
@@ -991,7 +1163,7 @@ function CreateScreenContent() {
 
           {/* Right Side - Platform Buttons */}
           <div className="flex flex-col justify-center gap-3 ml-6">
-            {platforms.map((platform) => {
+            {platforms.map(platform => {
               const IconComponent = platform.icon;
               return (
                 <div
@@ -1016,8 +1188,18 @@ function CreateScreenContent() {
               readOnly
             />
             <button className="ml-3 p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors">
-              <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              <svg
+                className="w-4 h-4 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
               </svg>
             </button>
           </div>
@@ -1038,16 +1220,18 @@ export default function MainContentSection() {
   const knowFeatures = [
     {
       title: 'Mentions',
-      description: 'Track how frequently your brand is mentioned across AI platforms.',
+      description:
+        'Track how frequently your brand is mentioned across AI platforms.',
     },
     {
       title: 'Sentiment Score',
-      description: 'Analyze the context of AI responses to maintain reputation.',
+      description:
+        'Analyze the context of AI responses to maintain reputation.',
     },
-    {
-      title: 'Citations',
-      description: 'Monitor which sources AI models cite when mentioning you.',
-    },
+    // {
+    //   title: 'Citations',
+    //   description: 'Monitor which sources AI models cite when mentioning you.',
+    // },
     {
       title: 'Ranking',
       description: "Find out your brand's ranking across LLMs.",
@@ -1067,7 +1251,6 @@ export default function MainContentSection() {
 
   return (
     <div className="w-full bg-bg-base overflow-hidden">
-
       {/* ==========================================
           SECTION 1: KNOW (The Monitor)
          ========================================== */}
@@ -1079,12 +1262,12 @@ export default function MainContentSection() {
             <div className="order-1">
               <Badge>Visibility Intelligence</Badge>
               <SectionHeading>
-                Know what AI models{' '}
-                <br className="hidden sm:block" />
+                Know what AI models <br className="hidden sm:block" />
                 <span className="text-text-muted">think about your brand.</span>
               </SectionHeading>
               <SectionText>
-                Track frequency across platforms. Understand your visibility in AI-generated responses and benchmark against competitors.
+                Track frequency across platforms. Understand your visibility in
+                AI-generated responses and benchmark against competitors.
               </SectionText>
 
               <div className="space-y-2 sm:space-y-3">
@@ -1115,11 +1298,12 @@ export default function MainContentSection() {
           <div className="sm:hidden">
             <Badge>Visibility Intelligence</Badge>
             <SectionHeading>
-              Know what AI models{' '}
+              Know what AI models <br className="md:hidden" />
               <span className="text-text-muted">think about your brand.</span>
             </SectionHeading>
             <SectionText>
-              Track frequency across platforms. Understand your visibility in AI-generated responses and benchmark against competitors.
+              Track frequency across platforms. Understand your visibility in
+              AI-generated responses and benchmark against competitors.
             </SectionText>
 
             <div className="space-y-2">
@@ -1138,7 +1322,6 @@ export default function MainContentSection() {
           </div>
         </Reveal>
       </section>
-
 
       {/* ==========================================
           SECTION 2: IMPROVE (The Tuner)
@@ -1161,12 +1344,13 @@ export default function MainContentSection() {
             <div className="lg:order-2">
               <Badge>Optimization Engine</Badge>
               <SectionHeading>
-                Improve your rankings{' '}
-                <br className="hidden sm:block" />
+                Improve your rankings <br className="hidden sm:block" />
                 <span className="text-text-muted">across all LLMs.</span>
               </SectionHeading>
               <SectionText>
-                Identify the sources that matter. We tell you exactly which domains are feeding data to the models so you can dominate the input layer.
+                Identify the sources that matter. We tell you exactly which
+                domains are feeding data to the models so you can dominate the
+                input layer.
               </SectionText>
 
               <div className="space-y-2 sm:space-y-3">
@@ -1187,11 +1371,13 @@ export default function MainContentSection() {
           <div className="sm:hidden">
             <Badge>Optimization Engine</Badge>
             <SectionHeading>
-              Improve your rankings{' '}
+              Improve your rankings <br className="md:hidden" />
               <span className="text-text-muted">across all LLMs.</span>
             </SectionHeading>
             <SectionText>
-              Identify the sources that matter. We tell you exactly which domains are feeding data to the models so you can dominate the input layer.
+              Identify the sources that matter. We tell you exactly which
+              domains are feeding data to the models so you can dominate the
+              input layer.
             </SectionText>
 
             <div className="space-y-2">
@@ -1211,22 +1397,21 @@ export default function MainContentSection() {
         </Reveal>
       </section>
 
-
       {/* ==========================================
           SECTION 3: CREATE (The Forge)
          ========================================== */}
       <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
         <Reveal variant="fadeUp" duration={1.2} y={30}>
           {/* Header */}
-          <div className="text-left sm:text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+          <div className="text-left sm:text-center max-w-3xl mx-auto md:mb-10 mb-8">
             <Badge>Content Forge</Badge>
             <SectionHeading>
-              Create AI-first content{' '}
-              <br className="hidden sm:block" />
+              Create AI-first content <br className="md:hidden" />
               <span className="text-text-muted">that bots love.</span>
             </SectionHeading>
             <SectionText>
-              Don&apos;t guess. Generate content structured specifically to be scraped, indexed, and cited by Large Language Models.
+              Don&apos;t guess. Generate content structured specifically to be
+              scraped, indexed, and cited by Large Language Models.
             </SectionText>
           </div>
 
@@ -1243,7 +1428,6 @@ export default function MainContentSection() {
           </div>
         </Reveal>
       </section>
-
     </div>
   );
 }

@@ -21,18 +21,17 @@ const MetricCard: React.FC<MetricCardProps> = ({
         'flex flex-col items-center justify-center',
         'transition-all duration-300',
         'hover:shadow-soft-tile',
+        'h-full min-h-[120px] sm:min-h-[140px]',
         className
       )}
     >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-text-muted text-[10px] sm:text-xs uppercase tracking-wider text-center font-medium">
+      <div className="flex items-center gap-1 sm:gap-2 mb-3">
+        <span className="text-text-muted text-[10px] sm:text-xs uppercase tracking-wider text-center font-medium leading-tight">
           {label}
         </span>
         {info && (
           <Tooltip content={info}>
-            <button
-              className="text-text-subtle hover:text-text-muted transition-colors duration-300"
-            >
+            <button className="text-text-subtle hover:text-text-muted transition-colors duration-300">
               <svg
                 width="12"
                 height="12"

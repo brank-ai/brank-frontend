@@ -24,7 +24,9 @@ const Button: React.FC<ButtonProps> = ({
   const variants = {
     // Primary - Volumetric Soft Tile v2.0 (Raised with gradient)
     primary: `
+      bg-bg-surface
       text-text-primary
+      border border-subtle
       shadow-soft-tile-sm
       hover:brightness-110
       active:shadow-deep-field-sm
@@ -67,24 +69,19 @@ const Button: React.FC<ButtonProps> = ({
       hover:bg-text-secondary
       active:shadow-deep-field-sm
       active:scale-[0.98]
-    `
+    `,
   };
 
   const sizes = {
     sm: 'h-8 px-3 text-sm',
     md: 'h-10 px-4 py-2',
-    lg: 'h-12 px-8 text-lg'
+    lg: 'h-12 px-8 text-lg',
   };
 
   return (
     <button
       type={type}
-      className={cn(
-        baseStyles,
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      className={cn(baseStyles, variants[variant], sizes[size], className)}
       disabled={disabled || loading}
       onClick={onClick}
       {...props}

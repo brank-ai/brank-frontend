@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 interface LearnMoreModalProps {
   isOpen: boolean;
@@ -13,7 +14,11 @@ interface FormData {
   email: string;
 }
 
-const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initialBrandName }) => {
+const LearnMoreModal: React.FC<LearnMoreModalProps> = ({
+  isOpen,
+  onClose,
+  initialBrandName,
+}) => {
   const [formData, setFormData] = useState<FormData>({
     brandName: initialBrandName || '',
     email: '',
@@ -64,7 +69,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
     setError(null);
   };
 
@@ -93,7 +98,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
     setError(null);
 
     // Simulate API call with a delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     try {
       // TODO: Replace with actual API endpoint
@@ -108,15 +113,18 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
 
     setIsSubmitting(false);
     setIsSubmitted(true);
+
+    onClose()
+
+    toast.success(
+      'Thanks! Your brand is being reviewed and will be ready soon.'
+    );
   };
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50"
-      onClick={handleBackdropClick}
-    >
+    <div className="fixed inset-0 z-50" onClick={handleBackdropClick}>
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
 
@@ -153,34 +161,70 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
           "
           aria-label="Close modal"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
-
-        {/* Left accent */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#22C55E] rounded-l-2xl" />
 
         {isSubmitting ? (
           /* Loading State */
           <div className="text-center py-12">
             <div className="w-16 h-16 mx-auto mb-6">
-              <svg className="w-full h-full animate-spin text-[#22C55E]" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              <svg
+                className="w-full h-full animate-spin text-[#22C55E]"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
               </svg>
             </div>
-            <p className="text-text-secondary text-sm">Processing your request...</p>
+            <p className="text-text-secondary text-sm">
+              Processing your request...
+            </p>
           </div>
         ) : isSubmitted ? (
           /* Success State */
           <div className="text-center py-8">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#22C55E]/20 flex items-center justify-center">
-              <svg className="w-8 h-8 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-8 h-8 text-[#22C55E]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-text-primary mb-2">We will reach out to you!</h3>
+            <h3 className="text-xl font-semibold text-text-primary mb-2">
+              We will reach out to you!
+            </h3>
             <p className="text-text-secondary text-sm">
               Our team will send your brand insights to your email shortly.
             </p>
@@ -208,13 +252,21 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
               Get insights for your brand
             </h2>
             <p className="text-text-muted text-sm mb-6">
-              Enter your details and we&apos;ll send you a comprehensive brand analysis via email.
+              Enter your details and we&apos;ll send you a comprehensive brand
+              analysis via email.
             </p>
 
-            <form id="learn-more-form" onSubmit={handleSubmit} className="space-y-4">
+            <form
+              id="learn-more-form"
+              onSubmit={handleSubmit}
+              className="space-y-4"
+            >
               {/* Brand Name */}
               <div>
-                <label htmlFor="brandName" className="block text-sm text-text-secondary mb-1.5">
+                <label
+                  htmlFor="brandName"
+                  className="block text-sm text-text-secondary mb-1.5"
+                >
                   Brand Name
                 </label>
                 <input
@@ -240,7 +292,10 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm text-text-secondary mb-1.5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm text-text-secondary mb-1.5"
+                >
                   Email
                 </label>
                 <input
@@ -265,9 +320,7 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
               </div>
 
               {/* Error message */}
-              {error && (
-                <p className="text-red-400 text-sm">{error}</p>
-              )}
+              {error && <p className="text-red-400 text-sm">{error}</p>}
             </form>
 
             {/* Submit button - outside form space-y-4 for proper spacing */}
@@ -279,9 +332,9 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ isOpen, onClose, initia
                 w-full mt-8 px-6 py-3
                 text-sm font-medium
                 rounded-lg
-                text-text-primary
-                bg-[#22C55E]
-                hover:bg-[#16A34A]
+                text-bg-base
+                bg-text-primary
+                hover:bg-text-secondary
                 disabled:opacity-50 disabled:cursor-not-allowed
                 active:scale-[0.98]
                 transition-all duration-300

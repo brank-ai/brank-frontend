@@ -20,7 +20,7 @@ const pricingTiers = [
       'Sentiment analysis',
       '100 custom prompts',
     ],
-    ctaText: 'Start Free',
+    ctaText: 'Contact Us',
     isPopular: false,
   },
   {
@@ -39,7 +39,7 @@ const pricingTiers = [
       'Export reports (CSV / PDF)',
       'Content recommendations for LLM pickup',
     ],
-    ctaText: 'Book a Demo',
+    ctaText: 'Contact Us',
   },
   {
     title: 'Advanced',
@@ -55,7 +55,7 @@ const pricingTiers = [
       'API access',
       'Dedicated Slack / support',
     ],
-    ctaText: 'Contact Sales',
+    ctaText: 'Contact Us',
     isPopular: false,
   },
 ];
@@ -73,11 +73,12 @@ export default function PricingPage() {
         {/* Hero Section */}
         <Reveal variant="fadeIn" duration={1.0} initiallyVisible>
           <div className="text-center mb-12 sm:mb-16 md:mb-20">
-            <h1 className="text-text-primary text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-4 sm:mb-6">
+            <h1 className="text-text-primary text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold mb-4 sm:mb-6">
               Simple, transparent pricing
             </h1>
             <p className="text-text-muted text-base sm:text-lg md:text-xl max-w-2xl mx-auto">
-              Choose the plan that's right for your team. All plans include a 14-day free trial.
+              Choose the plan that's right for your team. All plans include a
+              14-day free trial.
             </p>
           </div>
         </Reveal>
@@ -113,4 +114,3 @@ export default function PricingPage() {
     </div>
   );
 }
-

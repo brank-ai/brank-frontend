@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Reveal, RotatingText, LearnMoreModal } from '@/components/ui';
 import LogoTicker from '@/components/ui/LogoTicker';
 import { LandingPageResponse } from '@/types/backend';
@@ -12,6 +12,30 @@ interface HeroSectionProps {
 export default function HeroSection({ brandData }: HeroSectionProps) {
   const [brandName, setBrandName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+
+  useEffect(() => {
+    // Show after 1 second if at top
+    const timer = setTimeout(() => {
+      if (window.scrollY < 50) {
+        setShowScrollIndicator(true);
+      }
+    }, 1000);
+
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setShowScrollIndicator(false);
+      } else {
+        setShowScrollIndicator(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timer);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,39 +52,58 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
           {/* Main Headline - Positioned absolutely above the search bar */}
           <div className="absolute bottom-full w-full flex flex-col items-center mb-10 sm:mb-14 md:mb-18">
             {/* Animated Logo */}
-            <Reveal trigger="mount" variant="fadeUp" delay={0.1} duration={2.0} y={16} initiallyVisible={false}>
+            <Reveal
+              trigger="mount"
+              variant="fadeUp"
+              delay={0.1}
+              duration={2.0}
+              y={16}
+              initiallyVisible={false}
+            >
               <div className="mb-2 sm:mb-4">
-                 <div
-                   className="
+                <div
+                  className="
                      w-32 h-12 sm:w-48 sm:h-16 md:w-64 md:h-20
                      bg-[linear-gradient(to_right,white_0%,white_45%,#22C55E_49%,#22C55E_51%,white_55%,white_100%)]
                      bg-[length:400%_auto]
                      animate-shine-wave-slow
                    "
-                   style={{
-                     maskImage: 'url(/images/brank-logo.svg)',
-                     maskRepeat: 'no-repeat',
-                     maskPosition: 'center',
-                     maskSize: 'contain',
-                     WebkitMaskImage: 'url(/images/brank-logo.svg)',
-                     WebkitMaskRepeat: 'no-repeat',
-                     WebkitMaskPosition: 'center',
-                     WebkitMaskSize: 'contain'
-                   }}
-                 />
+                  style={{
+                    maskImage: 'url(/images/brank-logo.svg)',
+                    maskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    maskSize: 'contain',
+                    WebkitMaskImage: 'url(/images/brank-logo.svg)',
+                    WebkitMaskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    WebkitMaskSize: 'contain',
+                  }}
+                />
               </div>
             </Reveal>
 
-            <Reveal trigger="mount" variant="fadeUp" delay={0.25} duration={2.0} y={16} initiallyVisible={false}>
+            <Reveal
+              trigger="mount"
+              variant="fadeUp"
+              delay={0.25}
+              duration={2.0}
+              y={16}
+              initiallyVisible={false}
+            >
               <div className="w-full sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px] overflow-visible">
                 <h1 className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-text-primary flex flex-col sm:flex-row sm:items-center items-center gap-2 md:gap-3 sm:pl-24 md:pl-32 lg:pl-40 overflow-visible">
-                  <span className="shrink-0 text-glow">Track your brand across</span>
+                  <span className="shrink-0 text-glow">
+                    Track your brand across
+                  </span>
                   <RotatingText
                     items={[
                       { name: 'ChatGPT', logo: '/images/LLMs/chatgpt.svg' },
                       { name: 'Gemini', logo: '/images/LLMs/gemini.svg' },
                       { name: 'Grok', logo: '/images/LLMs/grok.svg' },
-                      { name: 'Perplexity', logo: '/images/LLMs/perplexity.svg' },
+                      {
+                        name: 'Perplexity',
+                        logo: '/images/LLMs/perplexity.svg',
+                      },
                     ]}
                     rotationInterval={2500}
                     className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl"
@@ -71,7 +114,12 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
           </div>
 
           {/* Search Bar - Deep Field (Depressed) Style */}
-          <Reveal trigger="mount" variant="fadeIn" duration={2.0} initiallyVisible={false}>
+          <Reveal
+            trigger="mount"
+            variant="fadeIn"
+            duration={2.0}
+            initiallyVisible={false}
+          >
             <form
               onSubmit={handleSubmit}
               className="
@@ -87,7 +135,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
                 type="text"
                 placeholder="Get Brank's analysis of your brand."
                 value={brandName}
-                onChange={(e) => setBrandName(e.target.value)}
+                onChange={e => setBrandName(e.target.value)}
                 className="
                   flex-1 min-w-0
                   bg-transparent
@@ -111,7 +159,13 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
                   transition-colors duration-300
                 "
               >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <svg
+                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                >
                   <circle cx="11" cy="11" r="8" />
                   <path d="m21 21-4.35-4.35" />
                 </svg>
@@ -120,11 +174,56 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
           </Reveal>
 
           {/* Logo Ticker - Infinite scroll of trusted brands */}
-          <Reveal trigger="mount" variant="fadeIn" delay={0.5} duration={2.0} initiallyVisible={false}>
+          <Reveal
+            trigger="mount"
+            variant="fadeIn"
+            delay={0.5}
+            duration={2.0}
+            initiallyVisible={false}
+          >
             <div className="w-full mt-20 sm:mt-24 md:mt-32">
               <LogoTicker />
             </div>
           </Reveal>
+        </div>
+      </div>
+
+      {/* Scroll Down Indicator - Modern & Visible */}
+      <div
+        className={`absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 transition-opacity duration-500 ${
+          showScrollIndicator ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Animated Chevrons */}
+        <div className="flex flex-col items-center relative h-10">
+          <svg
+            className="w-6 h-6 text-white/40 absolute top-0 animate-bounce"
+            style={{ animationDuration: '2s' }}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+          <svg
+            className="w-6 h-6 text-white absolute top-3 animate-bounce"
+            style={{ animationDuration: '2s', animationDelay: '0.15s' }}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
         </div>
       </div>
 
