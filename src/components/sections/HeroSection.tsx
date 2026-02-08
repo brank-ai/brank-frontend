@@ -1,18 +1,32 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { Reveal, RotatingText, LearnMoreModal } from '@/components/ui';
 import LogoTicker from '@/components/ui/LogoTicker';
+import { useTypingPlaceholder } from '@/hooks/useTypingPlaceholder';
 import { LandingPageResponse } from '@/types/backend';
 
 interface HeroSectionProps {
   brandData?: LandingPageResponse;
 }
 
+const isValidDomain = (value: string): boolean => {
+  const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  return domainRegex.test(value.trim());
+};
+
+const PLACEHOLDER_PHRASES = [
+  "Get Brank's analysis of your brand",
+  'Google.com',
+  'Apple.com',
+];
+
 export default function HeroSection({ brandData }: HeroSectionProps) {
   const [brandName, setBrandName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const animatedPlaceholder = useTypingPlaceholder(PLACEHOLDER_PHRASES);
 
   useEffect(() => {
     // Show after 1 second if at top
@@ -39,9 +53,12 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (brandName.trim()) {
-      setIsModalOpen(true);
+    if (!brandName.trim()) return;
+    if (!isValidDomain(brandName)) {
+      toast.error('Please enter a valid domain (e.g. google.com, apple.com)');
+      return;
     }
+    setIsModalOpen(true);
   };
 
   return (
@@ -93,7 +110,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
               <div className="w-full sm:w-[500px] md:w-[650px] lg:w-[800px] xl:w-[900px] overflow-visible">
                 <h1 className="font-sans text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-text-primary flex flex-col sm:flex-row sm:items-center items-center gap-2 md:gap-3 sm:pl-24 md:pl-32 lg:pl-40 overflow-visible">
                   <span className="shrink-0 text-glow">
-                    Track your brand across
+                    Own your brand's LLM funnels
                   </span>
                   <RotatingText
                     items={[
@@ -133,7 +150,7 @@ export default function HeroSection({ brandData }: HeroSectionProps) {
             >
               <input
                 type="text"
-                placeholder="Get Brank's analysis of your brand."
+                placeholder={animatedPlaceholder}
                 value={brandName}
                 onChange={e => setBrandName(e.target.value)}
                 className="

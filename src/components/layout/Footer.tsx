@@ -9,19 +9,18 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="w-full bg-bg-base py-8 sm:py-16 md:py-20 border-t border-subtle relative shadow-[0_-1px_0_0_rgba(255,255,255,0.03)_inset]">
+      <footer className="w-full bg-bg-base py-8 sm:py-16 md:py-20">
         {/* Volumetric Top Highlight Gradient */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Main CTA Section */}
-          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          {/* <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <h2 className="text-text-primary text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-medium tracking-tight leading-tight mb-4 sm:mb-6 md:mb-10">
               If AI doesn't know{' '}
               <span className="italic text-glow">about your brand,</span>{' '}
               consumers won't either.
             </h2>
 
-            {/* CTA Button - Volumetric White Style */}
             <div className="flex items-center justify-center">
               <button
                 onClick={() => setIsModalOpen(true)}
@@ -43,7 +42,7 @@ export default function Footer() {
                 Learn More
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Footer Links - Subtle divider */}
           <div
@@ -66,12 +65,12 @@ export default function Footer() {
                 </h4>
                 <ul className="space-y-2 sm:space-y-3 text-text-muted text-xs sm:text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <button
+                      onClick={() => setIsModalOpen(true)}
                       className="hover:text-text-primary transition-colors duration-300"
                     >
                       Contact us
-                    </a>
+                    </button>
                   </li>
                   <li>
                     <a
@@ -101,7 +100,8 @@ export default function Footer() {
                 <ul className="hidden md:flex md:flex-col space-y-2 sm:space-y-3 text-text-muted text-xs sm:text-sm">
                   <li>
                     <a
-                      href="#"
+                      href="https://x.com/brank_ai"
+                      target="_blank"
                       className="hover:text-text-primary transition-colors duration-300"
                     >
                       Twitter

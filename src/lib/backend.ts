@@ -1,17 +1,33 @@
 import { BackendMetricResponse, LandingPageResponse } from '@/types/backend';
 
 /**
- * Maps frontend brand display names to backend API keys
+ * Maps brand display names → website domains (used for API calls)
  */
-export const BRAND_KEY_MAP: Record<string, string> = {
-  'Asics': 'asics',
-  'Coinbase': 'coinbase',
-  'Cult': 'cult.fit',
-  'Decathlon': 'decathlon',
-  'LeetCode': 'leetcode',
-  'Nothing': 'nothing',
-  'Zerodha': 'zerodha',
+export const BRAND_WEBSITE_MAP: Record<string, string> = {
+  Samsung: 'samsung.com',
+  Besdharwad: 'besdharwad.com',
+  Apple: 'apple.com',
+  Coinbase: 'coinbase.com',
+  Zerodha: 'zerodha.com',
+  Amazon: 'amazon.com',
+  Nothing: 'nothing.tech',
+  Decathlon: 'decathlon.com',
+  Cult: 'cult.fit',
+  Asics: 'asics.com',
+  LeetCode: 'leetcode.com',
+  Google: 'google.com',
+  Hero: 'heromotocorp.com',
+  Pampers: 'pampers.com',
+  Browserstack: 'browserstack.com',
+  Zomato: 'zomato.com',
 };
+
+/**
+ * Reverse map: website domain → display name
+ */
+export const DOMAIN_BRAND_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(BRAND_WEBSITE_MAP).map(([name, domain]) => [domain, name])
+);
 
 /**
  * Get metrics for a brand from the backend API

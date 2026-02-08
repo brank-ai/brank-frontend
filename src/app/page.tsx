@@ -2,6 +2,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import HeroSection from '@/components/sections/HeroSection';
 import MainContentSection from '@/components/sections/MainContentSection';
+import ChatGPTDemoSection from '@/components/sections/ChatGPTDemoSection';
 import { getLandingPageData } from '@/lib/backend';
 
 export default async function Home() {
@@ -20,6 +21,7 @@ export default async function Home() {
       <main>
         <HeroSection brandData={brandData} />
         <MainContentSection />
+        <ChatGPTDemoSection />
       </main>
       <Footer />
     </div>
