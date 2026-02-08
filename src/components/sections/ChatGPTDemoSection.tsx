@@ -579,7 +579,7 @@ export default function ChatGPTDemoSection() {
 
   return (
     <div className="w-full bg-bg-base overflow-hidden">
-      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02] 2xl:min-h-screen 2xl:flex 2xl:flex-col 2xl:justify-center">
         <Reveal variant="fadeUp" duration={1.2} y={30}>
           {/* Desktop Layout */}
           <div className="hidden sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 items-end">
