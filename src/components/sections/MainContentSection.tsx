@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Reveal } from '@/components/ui';
 
@@ -205,9 +205,8 @@ function ChatGPTIcon({ className = '' }: { className?: string }) {
 
 function GeminiIcon({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm0 3.6c4.636 0 8.4 3.764 8.4 8.4s-3.764 8.4-8.4 8.4S3.6 16.636 3.6 12 7.364 3.6 12 3.6z" />
-      <path d="M12 6l1.5 3.5L17 11l-3.5 1.5L12 16l-1.5-3.5L7 11l3.5-1.5z" />
+    <svg className={className} viewBox="0 0 28 28" fill="currentColor">
+      <path d="M14 28C14 21.373 8.627 16 2 16C8.627 16 14 10.627 14 4C14 10.627 19.373 16 26 16C19.373 16 14 21.373 14 28Z" />
     </svg>
   );
 }
@@ -677,13 +676,6 @@ function ImproveScreenContent({ activeFeature }: ImproveScreenContentProps) {
       {
         url: 'https://apple.com',
         value: '38%',
-        impact: 'MEDIUM IMPACT',
-        impactColor: 'bg-orange-500',
-        dotColor: 'bg-orange-500',
-      },
-      {
-        url: 'https://samsung.com',
-        value: '35.5%',
         impact: 'MEDIUM IMPACT',
         impactColor: 'bg-orange-500',
         dotColor: 'bg-orange-500',
@@ -1217,6 +1209,34 @@ export default function MainContentSection() {
   const [knowActiveFeature, setKnowActiveFeature] = useState(0);
   const [improveActiveFeature, setImproveActiveFeature] = useState(0);
 
+  // Disrupt transition states
+  const [knowDisplayed, setKnowDisplayed] = useState(0);
+  const [knowVisible, setKnowVisible] = useState(true);
+  const [improveDisplayed, setImproveDisplayed] = useState(0);
+  const [improveVisible, setImproveVisible] = useState(true);
+
+  // Disrupt transition for Know section
+  useEffect(() => {
+    if (knowActiveFeature === knowDisplayed) return;
+    setKnowVisible(false);
+    const timer = setTimeout(() => {
+      setKnowDisplayed(knowActiveFeature);
+      setTimeout(() => setKnowVisible(true), 60);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [knowActiveFeature, knowDisplayed]);
+
+  // Disrupt transition for Improve section
+  useEffect(() => {
+    if (improveActiveFeature === improveDisplayed) return;
+    setImproveVisible(false);
+    const timer = setTimeout(() => {
+      setImproveDisplayed(improveActiveFeature);
+      setTimeout(() => setImproveVisible(true), 60);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [improveActiveFeature, improveDisplayed]);
+
   const knowFeatures = [
     {
       title: 'Mentions',
@@ -1262,10 +1282,8 @@ export default function MainContentSection() {
             <div className="order-1">
               <Badge>Visibility Intelligence</Badge>
               <SectionHeading>
-                <SectionHeading>
-              Discover How AI models <br className="md:hidden" />
-              <span className="text-text-muted">represent your brand.</span>
-            </SectionHeading>
+                Discover How AI models <br className="md:hidden" />
+                <span className="text-text-muted">represent your brand.</span>
               </SectionHeading>
               <SectionText>
                 Measure your brand's visibility, sentiment, and positioning across <br className='hidden md:block'/> AI responses 
@@ -1289,7 +1307,21 @@ export default function MainContentSection() {
             <div className="relative order-2">
               <div className="bg-gradient-surface p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-soft-tile border border-white/[0.02]">
                 <ConsoleScreen className="aspect-[4/3]">
-                  <KnowScreenContent activeFeature={knowActiveFeature} />
+                  <div
+                    className={`w-full transition-all duration-500 ${
+                      knowVisible
+                        ? 'opacity-100 scale-100 translate-y-0'
+                        : 'opacity-0 scale-[0.88] translate-y-4'
+                    }`}
+                    style={{
+                      filter: knowVisible ? 'blur(0px) brightness(1)' : 'blur(14px) brightness(0.5)',
+                      transitionTimingFunction: knowVisible
+                        ? 'cubic-bezier(0.16, 1, 0.3, 1)'
+                        : 'cubic-bezier(0.55, 0, 1, 0.45)',
+                    }}
+                  >
+                    <KnowScreenContent activeFeature={knowDisplayed} />
+                  </div>
                 </ConsoleScreen>
               </div>
               <div className="absolute -inset-10 bg-[#22C55E]/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
@@ -1335,7 +1367,21 @@ export default function MainContentSection() {
             <div className="relative lg:order-1">
               <div className="bg-gradient-surface p-2 sm:p-3 rounded-2xl sm:rounded-3xl shadow-soft-tile border border-white/[0.02]">
                 <ConsoleScreen className="aspect-[4/3]">
-                  <ImproveScreenContent activeFeature={improveActiveFeature} />
+                  <div
+                    className={`w-full transition-all duration-500 ${
+                      improveVisible
+                        ? 'opacity-100 scale-100 translate-y-0'
+                        : 'opacity-0 scale-[0.88] translate-y-4'
+                    }`}
+                    style={{
+                      filter: improveVisible ? 'blur(0px) brightness(1)' : 'blur(14px) brightness(0.5)',
+                      transitionTimingFunction: improveVisible
+                        ? 'cubic-bezier(0.16, 1, 0.3, 1)'
+                        : 'cubic-bezier(0.55, 0, 1, 0.45)',
+                    }}
+                  >
+                    <ImproveScreenContent activeFeature={improveDisplayed} />
+                  </div>
                 </ConsoleScreen>
               </div>
               <div className="absolute -inset-10 bg-blue-500/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
@@ -1401,9 +1447,9 @@ export default function MainContentSection() {
       {/* ==========================================
           SECTION 3: CREATE (The Forge)
          ========================================== */}
-      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
+      {/* <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.02]">
         <Reveal variant="fadeUp" duration={1.2} y={30}>
-          {/* Header */}
+
           <div className="text-left sm:text-center max-w-3xl mx-auto md:mb-10 mb-8">
             <Badge>Content Forge</Badge>
             <SectionHeading>
@@ -1416,19 +1462,19 @@ export default function MainContentSection() {
             </SectionText>
           </div>
 
-          {/* Full Width Visual */}
+
           <div className="bg-gradient-surface p-2 sm:p-4 rounded-2xl sm:rounded-[2rem] shadow-soft-tile border border-white/[0.02]">
             <ConsoleScreen className="aspect-[3/4] sm:aspect-[21/10] min-h-[380px] sm:min-h-[380px]">
               <CreateScreenContent />
             </ConsoleScreen>
           </div>
 
-          {/* Decorative Background Glow */}
+
           <div className="relative">
             <div className="absolute -inset-20 bg-white/5 blur-[120px] -z-10 rounded-full pointer-events-none" />
           </div>
         </Reveal>
-      </section>
+      </section> */}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Reveal, SlowProgressBar } from '@/components/ui';
+import { DOMAIN_BRAND_MAP } from '@/lib/backend';
 
 const steps: ReadonlyArray<{ name: string; insight: string }> = [
   {
@@ -27,7 +28,8 @@ function ProgressContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const brand = searchParams.get('brand');
-  
+  const displayName = useMemo(() => brand ? (DOMAIN_BRAND_MAP[brand] || brand) : '', [brand]);
+
   const [currentStep, setCurrentStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
@@ -106,7 +108,7 @@ function ProgressContent() {
           <>
             {/* Main Heading */}
             <h1 className="text-text-primary text-3xl sm:text-4xl font-light mb-8 text-center">
-              Analyzing <span className="text-glow font-normal">{brand}</span>...
+              Analyzing <span className="text-glow font-normal">{displayName}</span>...
             </h1>
 
             {/* Slow Progress Bar */}

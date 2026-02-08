@@ -6,6 +6,7 @@ import { PromptItem, PromptsPagination } from '@/types/backend';
 
 interface PromptsSectionProps {
   brandName: string;
+  brandDomain?: string;
   className?: string;
 }
 
@@ -20,6 +21,7 @@ const PROMPTS_PER_PAGE = 10;
 
 const PromptsSection: React.FC<PromptsSectionProps> = ({
   brandName,
+  brandDomain,
   className,
 }) => {
   const [state, setState] = useState<PromptsState>({
@@ -35,7 +37,7 @@ const PromptsSection: React.FC<PromptsSectionProps> = ({
 
       try {
         const params = new URLSearchParams({
-          brand_name: brandName,
+          ...(brandDomain ? { website: brandDomain } : { brand_name: brandName }),
           page: page.toString(),
           per_page: PROMPTS_PER_PAGE.toString(),
         });
@@ -66,7 +68,7 @@ const PromptsSection: React.FC<PromptsSectionProps> = ({
         }));
       }
     },
-    [brandName]
+    [brandName, brandDomain]
   );
 
   useEffect(() => {

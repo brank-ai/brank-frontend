@@ -6,7 +6,7 @@ import { Reveal, Tooltip } from '@/components/ui';
 import { ComparisonCard } from '@/components/analytics/ComparisonCard';
 import { CitationCard } from '@/components/analytics/CitationCard';
 import { PromptsSection } from '@/components/analytics/PromptsSection';
-import { getMetrics } from '@/lib/backend';
+import { getMetrics, DOMAIN_BRAND_MAP } from '@/lib/backend';
 import { BackendMetricResponse } from '@/types/backend';
 import { LLMComparison, CitationLLM } from '@/types';
 import { cn } from '@/lib/utils';
@@ -207,13 +207,15 @@ interface AnalyticsPageProps {
 export default async function AnalyticsPage({
   searchParams,
 }: AnalyticsPageProps) {
-  const brandName = searchParams?.brand || 'Unknown Brand';
+  const brandParam = searchParams?.brand || 'Unknown Brand';
+  // Use the domain for API calls, resolve display name for UI
+  const brandName = DOMAIN_BRAND_MAP[brandParam] || brandParam;
 
   let metricsData: BackendMetricResponse | null = null;
   let error: string | null = null;
 
   try {
-    metricsData = await getMetrics(brandName);
+    metricsData = await getMetrics(brandParam);
   } catch (err) {
     error = err instanceof Error ? err.message : 'Failed to load analytics';
     console.error('Analytics fetch error:', err);
@@ -408,16 +410,13 @@ export default async function AnalyticsPage({
                       position="bottom"
                     >
                       <button className="text-text-subtle hover:text-text-muted transition-all duration-150 active:scale-95 flex items-center">
-                        <svg
-                          className="w-4 h-4 sm:w-[18px] sm:h-[18px]"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M12 16v-4M12 8h.01" />
-                        </svg>
+                        <Image
+                          src="/images/info.svg"
+                          alt="info"
+                          width={18}
+                          height={18}
+                          className="w-4 h-4 sm:w-[18px] sm:h-[18px] invert opacity-40"
+                        />
                       </button>
                     </Tooltip>
                   </div>
@@ -638,7 +637,7 @@ export default async function AnalyticsPage({
 
         {/* Prompts Overview */}
         <Reveal delay={0.1} duration={0.6}>
-          <PromptsSection brandName={brandName} />
+          <PromptsSection brandName={brandName} brandDomain={brandParam} />
         </Reveal>
       </main>
 

@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 const logos = [
-  { name: 'Asics', src: '/images/brand-logos/Asics.svg' },
-  { name: 'Coinbase', src: '/images/brand-logos/Coinbase.svg' },
-  { name: 'Cult', src: '/images/brand-logos/Cult.svg' },
-  { name: 'Decathlon', src: '/images/brand-logos/Decathlon.svg' },
-  { name: 'LeetCode', src: '/images/brand-logos/LeetCode.svg' },
-  { name: 'Nothing', src: '/images/brand-logos/Nothing.svg' },
-  { name: 'Zerodha', src: '/images/brand-logos/Zerodha.svg' },
+  { name: 'Asics', src: '/images/brand-logos/Asics.svg', website: 'asics.com' },
+  { name: 'Coinbase', src: '/images/brand-logos/Coinbase.svg', website: 'coinbase.com' },
+  { name: 'Cult', src: '/images/brand-logos/Cult.svg', website: 'cult.fit' },
+  { name: 'Decathlon', src: '/images/brand-logos/Decathlon.svg', website: 'decathlon.com' },
+  { name: 'LeetCode', src: '/images/brand-logos/LeetCode.svg', website: 'leetcode.com' },
+  { name: 'Nothing', src: '/images/brand-logos/Nothing.svg', website: 'nothing.tech' },
+  { name: 'Zerodha', src: '/images/brand-logos/Zerodha.svg', website: 'zerodha.com' },
 ];
 
 // ------------------------------------------------------------------
@@ -178,7 +178,7 @@ interface BrandInsights {
 }
 
 // Desktop Ticker Item - hover to expand, click to navigate
-function DesktopTickerItem({ logo }: { logo: { name: string; src: string } }) {
+function DesktopTickerItem({ logo }: { logo: { name: string; src: string; website: string } }) {
   const router = useRouter();
   const [insights, setInsights] = useState<BrandInsights>({
     mentions: { phrase: '', percent: 0 },
@@ -205,7 +205,7 @@ function DesktopTickerItem({ logo }: { logo: { name: string; src: string } }) {
   }, []);
 
   const handleClick = () => {
-    router.push(`/progress?brand=${encodeURIComponent(logo.name)}`);
+    router.push(`/progress?brand=${encodeURIComponent(logo.website)}`);
   };
 
   return (
@@ -301,7 +301,7 @@ function DesktopTickerItem({ logo }: { logo: { name: string; src: string } }) {
 }
 
 // Mobile Card - updated to match desktop style
-function MobileCard({ logo }: { logo: { name: string; src: string } }) {
+function MobileCard({ logo }: { logo: { name: string; src: string; website: string } }) {
   const router = useRouter();
   const [insights, setInsights] = useState<BrandInsights>({
     mentions: { phrase: '', percent: 0 },
@@ -327,7 +327,7 @@ function MobileCard({ logo }: { logo: { name: string; src: string } }) {
   }, []);
 
   const handleClick = () => {
-    router.push(`/progress?brand=${encodeURIComponent(logo.name)}`);
+    router.push(`/progress?brand=${encodeURIComponent(logo.website)}`);
   };
 
   return (
