@@ -64,6 +64,14 @@ export default function Footer() {
                   About
                 </h4>
                 <ul className="space-y-2 sm:space-y-3 text-text-muted text-xs sm:text-sm">
+                  {/* <li>
+                    <a
+                      href="/blog"
+                      className="hover:text-text-primary transition-colors duration-300"
+                    >
+                      Blog
+                    </a>
+                  </li> */}
                   <li>
                     <button
                       onClick={() => setIsModalOpen(true)}

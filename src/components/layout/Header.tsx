@@ -28,12 +28,11 @@ export default function Header() {
 
           {/* Navigation & CTA */}
           <div className="flex items-center gap-6 sm:gap-8">
-            {/* Pricing Link - commented out for now */}
             {/* <Link
-              href="/pricing"
+              href="/blog"
               className="text-text-muted hover:text-text-primary transition-colors duration-300 text-sm font-medium"
             >
-              Pricing
+              Blog
             </Link> */}
 
             {/* CTA Button - Volumetric Soft Tile Style v2.0 */}

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Toaster } from 'sonner';
+import StyledComponentsRegistry from '@/lib/StyledComponentsRegistry';
 import './globals.css';
 
 const geistSans = localFont({
@@ -15,10 +16,80 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Brank.AI - Measure and improve how AI recommends your brand',
-  description: 'Track and improve how AI surfaces your brand',
+  metadataBase: new URL('https://www.brank.ai'),
+  title: {
+    default: 'Brank.AI - Measure and improve how AI recommends your brand',
+    template: '%s | Brank.AI',
+  },
+  description:
+    'Track and improve how AI models like ChatGPT, Gemini, Perplexity, and Claude mention, rank, and recommend your brand. AI brand monitoring and visibility platform.',
+  applicationName: 'Brank.AI',
+  keywords: [
+    'AI brand monitoring',
+    'AI brand visibility',
+    'LLM brand tracking',
+    'ChatGPT brand recommendations',
+    'AI search optimization',
+    'brand AI presence',
+    'AI SEO',
+    'LLM optimization',
+    'Gemini brand visibility',
+    'Perplexity brand tracking',
+    'AI brand analytics',
+    'brand mention tracking',
+    'AEO Indexing',
+    'GEO Indexing',
+    'AEO brand performance',
+    'GEO brand performance',
+    'AEO brand visibility',
+    'GEO brand visibility',
+  ],
+  authors: [{ name: 'Brank.AI', url: 'https://www.brank.ai' }],
+  creator: 'Brank.AI',
+  publisher: 'Brank Inc',
   icons: {
     icon: '/images/brank-logo.svg',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'Brank.AI',
+    title: 'Brank.AI - Measure and improve how AI recommends your brand',
+    description:
+      'Track and improve how AI models like ChatGPT, Gemini, Perplexity, and Claude mention, rank, and recommend your brand.',
+    url: 'https://www.brank.ai',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@brank_ai',
+    creator: '@brank_ai',
+    title: 'Brank.AI - Measure and improve how AI recommends your brand',
+    description:
+      'Track and improve how AI models like ChatGPT, Gemini, Perplexity, and Claude mention, rank, and recommend your brand.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-snippet': -1,
+    'max-video-preview': -1,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://www.brank.ai',
+  },
+  other: {
+    'theme-color': '#050505',
+    // Google Search Console — replace with your verification code
+    // 'google-site-verification': 'YOUR_GOOGLE_VERIFICATION_CODE',
+    // Bing Webmaster Tools — replace with your verification code
+    // 'msvalidate.01': 'YOUR_BING_VERIFICATION_CODE',
   },
 };
 
@@ -29,10 +100,35 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Brank.AI',
+              url: 'https://www.brank.ai',
+              logo: 'https://www.brank.ai/images/brank-logo.svg',
+              description:
+                'AI brand monitoring and visibility platform. Track how ChatGPT, Gemini, Perplexity, and Claude recommend your brand.',
+              sameAs: ['https://x.com/brank_ai'],
+              foundingDate: '2024',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                url: 'https://www.brank.ai',
+              },
+            }),
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <StyledComponentsRegistry>
+          {children}
+        </StyledComponentsRegistry>
         <Toaster
           theme="dark"
           position="top-center"
