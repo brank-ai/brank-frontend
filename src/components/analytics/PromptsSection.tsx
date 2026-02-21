@@ -169,11 +169,11 @@ const PromptsSection: React.FC<PromptsSectionProps> = ({
       setState(prev => ({ ...prev, isLoading: true, error: null }));
 
       try {
-        const params = new URLSearchParams({
-          ...(brandDomain ? { website: brandDomain } : { brand_name: brandName }),
-          page: page.toString(),
-          per_page: PROMPTS_PER_PAGE.toString(),
-        });
+        const params = new URLSearchParams();
+        if (brandDomain) params.set('website', brandDomain);
+        else params.set('brand_name', brandName);
+        params.set('page', page.toString());
+        params.set('per_page', PROMPTS_PER_PAGE.toString());
 
         const response = await fetch(`/api/prompts?${params.toString()}`);
 
